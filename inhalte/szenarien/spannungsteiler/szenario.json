@@ -1,0 +1,72 @@
+{
+  "id": "spannungsteiler",
+  "version": 1,
+  "titel": "Übung: Spannungsteiler am Sensor",
+  "kurzbeschreibung": "Kurze Übung zur Elektrotechnik: Ein Temperatursensor hängt an einem Spannungsteiler. Rechnen mit eigenen Zahlen, dann eine Verständnisfrage zur Belastung.",
+  "fach": "Grundlagen der Elektrotechnik",
+  "zielgruppe": "Bachelor, 1.–2. Semester",
+  "dauer_minuten": 8,
+  "sprache": "de",
+  "lizenz": "CC-BY-4.0",
+  "urheber": ["Panagiotis Herbe"],
+  "schlagworte": ["Spannungsteiler", "Reihenschaltung", "Ohmsches Gesetz", "Belasteter Spannungsteiler"],
+  "lernziele": [
+    { "id": "LZ1", "text": "Die Teilspannung eines unbelasteten Spannungsteilers berechnen" },
+    { "id": "LZ2", "text": "Die Wirkung einer Last auf einen Spannungsteiler qualitativ beurteilen" }
+  ],
+  "indikatoren": [],
+  "parameter": {
+    "U": { "werte": [5, 12, 24], "einheit": "V" },
+    "R1": { "min": 1, "max": 10, "schritt": 1, "einheit": "kΩ" },
+    "R2": { "min": 1, "max": 10, "schritt": 1, "einheit": "kΩ" }
+  },
+  "start": "aufbau",
+  "knoten": {
+    "aufbau": {
+      "typ": "szene",
+      "titel": "Der Aufbau",
+      "bild": { "datei": "medien/schaltung.svg", "alt": "Schaltplan: Quelle U, in Reihe die Widerstände R1 und R2; die Spannung U2 wird über R2 abgegriffen." },
+      "text": "Ein Mikrocontroller misst eine Spannung über einen Spannungsteiler: Quelle U = {U} V, oben R1 = {R1} kΩ, unten R2 = {R2} kΩ. Gemessen wird die Spannung U2 über R2.",
+      "optionen": [{ "id": "los", "text": "Los geht's", "ziel": "teilspannung" }]
+    },
+    "teilspannung": {
+      "typ": "aufgabe",
+      "titel": "Teilspannung",
+      "mechanik": "zahl",
+      "frage": "Wie groß ist U2 (in V), solange nichts angeschlossen ist? (U = {U} V, R1 = {R1} kΩ, R2 = {R2} kΩ)",
+      "einheit": "V",
+      "loesung": "U * R2 / (R1 + R2)",
+      "toleranz_prozent": 1,
+      "typische_fehler": [
+        { "formel": "U * R1 / (R1 + R2)", "rueckmeldung": "Das ist die Spannung über R1. Gemessen wird über R2." },
+        { "formel": "U * R2 / R1", "rueckmeldung": "Im Nenner steht der Gesamtwiderstand der Reihenschaltung, R1 + R2." }
+      ],
+      "punkte": 10,
+      "lernziel": "LZ1",
+      "hinweis": "Durch beide Widerstände fließt derselbe Strom I = U / (R1 + R2).",
+      "rueckmeldung": { "richtig": "Richtig.", "falsch": "Beide Widerstände führen denselben Strom." },
+      "erklaerung": "U2 = U · R2 / (R1 + R2) = {U} V · {R2} / ({R1} + {R2}) = {= U * R2 / (R1 + R2) : 2} V.",
+      "weiter": "last"
+    },
+    "last": {
+      "typ": "aufgabe",
+      "titel": "Belastung",
+      "mechanik": "auswahl",
+      "frage": "Jetzt wird ein Eingang mit endlichem Widerstand parallel zu R2 angeschlossen. Was passiert mit U2?",
+      "optionen": [
+        { "id": "sinkt", "text": "U2 sinkt", "richtig": true, "rueckmeldung": "Richtig: R2 parallel zur Last ist kleiner als R2, damit bekommt der untere Teil einen kleineren Anteil der Spannung." },
+        { "id": "steigt", "text": "U2 steigt", "rueckmeldung": "Eine Parallelschaltung verringert den Widerstand des unteren Zweigs, sie erhöht ihn nicht." },
+        { "id": "gleich", "text": "U2 bleibt gleich", "rueckmeldung": "Das gilt nur für einen unendlich großen Lastwiderstand. Jede reale Last zieht Strom." }
+      ],
+      "punkte": 10,
+      "lernziel": "LZ2",
+      "weiter": "ende"
+    },
+    "ende": {
+      "typ": "ende",
+      "ergebnis": "erfolg",
+      "titel": "Übung abgeschlossen",
+      "text": "Faustregel aus der Praxis: Der Lastwiderstand sollte mindestens zehnmal größer sein als R2, damit der Messfehler klein bleibt."
+    }
+  }
+}

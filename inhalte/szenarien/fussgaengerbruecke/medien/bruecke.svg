@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" role="img" aria-labelledby="t">
+  <title id="t">Stahl-Fachwerkbrücke über einen Bach mit markiertem Riss am Zugband</title>
+  <rect width="640" height="300" fill="#eef4f7"/>
+  <path d="M0 190 Q160 170 320 188 T640 186 V300 H0Z" fill="#cfe3c4"/>
+  <path d="M170 228 Q320 262 470 228 L470 300 L170 300Z" fill="#7fb6d5"/>
+  <path d="M190 246 q30 -6 60 0 M300 258 q30 -6 60 0 M390 248 q30 -6 60 0" stroke="#e8f3f9" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="70" cy="120" r="44" fill="#8fbf7c"/><rect x="64" y="150" width="12" height="44" fill="#7a5a3c"/>
+  <circle cx="575" cy="110" r="50" fill="#8fbf7c"/><rect x="569" y="146" width="12" height="46" fill="#7a5a3c"/>
+  <rect x="120" y="196" width="60" height="34" fill="#b9b2a5"/><rect x="460" y="196" width="60" height="34" fill="#b9b2a5"/>
+  <g stroke="#3d5a73" stroke-width="7" stroke-linecap="round" fill="none">
+    <path d="M150 196 L490 196"/>
+    <path d="M150 196 L235 126 L320 196 L405 126 L490 196"/>
+    <path d="M235 126 L405 126"/>
+  </g>
+  <g stroke="#3d5a73" stroke-width="3"><path d="M150 168 L490 168" stroke-dasharray="2 10"/></g>
+  <g fill="#3d5a73"><circle cx="150" cy="196" r="7"/><circle cx="235" cy="126" r="7"/><circle cx="320" cy="196" r="7"/><circle cx="405" cy="126" r="7"/><circle cx="490" cy="196" r="7"/></g>
+  <path d="M276 188 l6 7 l-5 4 l6 6" stroke="#c0392b" stroke-width="3" fill="none"/>
+  <g stroke="#c0392b" stroke-width="4" fill="none" stroke-linecap="round"><path d="M250 262 L276 210"/><path d="M276 210 l-12 6 M276 210 l1 13"/></g>
+  <text x="196" y="285" font-family="system-ui, sans-serif" font-size="18" fill="#7a1f16" font-weight="600">Riss am Zugband</text>
+</svg>

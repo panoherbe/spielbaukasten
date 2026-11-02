@@ -1,0 +1,15 @@
+{
+  "name": "spielbaukasten",
+  "version": "0.1.0",
+  "description": "Baukasten für Serious Games in der ingenieurwissenschaftlichen Lehre (Teaser-Prototyp)",
+  "license": "Apache-2.0",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "start": "node src/server/start.js",
+    "test": "node --test --test-reporter=spec test/*.test.js",
+    "pruefe": "node tools/pruefe.js inhalte/szenarien/*/szenario.json",
+    "oer": "node tools/oer-export.js"
+  }
+}

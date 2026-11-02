@@ -1,0 +1,159 @@
+{
+  "zeitpunkt": "2026-11-02T21:59:23.082Z",
+  "app": "http://spielbaukasten:8080",
+  "umgebung": {
+    "axe": "https://cdn.jsdelivr.net/npm/axe-core@4.10.2/axe.min.js",
+    "app": {
+      "ok": true,
+      "version": "0.1.0",
+      "szenarienVersionen": 2
+    },
+    "node": "v24.22.2",
+    "browser": "Chrome/157.0.8103.27"
+  },
+  "last": [
+    {
+      "personen": 50,
+      "denkzeitMs": null,
+      "anfragen": 550,
+      "fehler": 0,
+      "abgebrochen": 0,
+      "ersterFehler": null,
+      "dauerSekunden": 0.4,
+      "anfragenJeSekunde": 1534.9,
+      "latenzMs": {
+        "p50": 23.9,
+        "p95": 47.4,
+        "p99": 205.3,
+        "max": 269.3
+      },
+      "ergebnisse": {
+        "erfolg": 50
+      }
+    },
+    {
+      "personen": 200,
+      "denkzeitMs": null,
+      "anfragen": 2173,
+      "fehler": 0,
+      "abgebrochen": 0,
+      "ersterFehler": null,
+      "dauerSekunden": 1,
+      "anfragenJeSekunde": 2177.5,
+      "latenzMs": {
+        "p50": 46.8,
+        "p95": 90.8,
+        "p99": 785.7,
+        "max": 875.5
+      },
+      "ergebnisse": {
+        "erfolg": 200
+      }
+    },
+    {
+      "personen": 300,
+      "denkzeitMs": [
+        1000,
+        5000
+      ],
+      "anfragen": 3275,
+      "fehler": 0,
+      "abgebrochen": 0,
+      "ersterFehler": null,
+      "dauerSekunden": 39.1,
+      "anfragenJeSekunde": 83.7,
+      "latenzMs": {
+        "p50": 1.3,
+        "p95": 68.6,
+        "p99": 159.1,
+        "max": 166.9
+      },
+      "ergebnisse": {
+        "erfolg": 300
+      }
+    }
+  ],
+  "browser": {
+    "erstesLaden-desktop": {
+      "domFertigMs": 22,
+      "geladenMs": 22,
+      "bisBedienbarMs": 44,
+      "dateien": 11,
+      "bytes": 41233,
+      "fremdeHosts": [],
+      "wandzeitMs": 45
+    },
+    "durchgespielt-desktop": {
+      "ergebnis": "erfolg",
+      "sekunden": 5.704
+    },
+    "fortschritt-desktop": "1× abgeschlossen, bestes Ergebnis 89 %",
+    "erstesLaden-telefon": {
+      "domFertigMs": 15,
+      "geladenMs": 16,
+      "bisBedienbarMs": 44,
+      "dateien": 11,
+      "bytes": 41233,
+      "fremdeHosts": [],
+      "wandzeitMs": 45
+    },
+    "durchgespielt-telefon": {
+      "ergebnis": "erfolg",
+      "sekunden": 4.306
+    },
+    "fortschritt-telefon": "1× abgeschlossen, bestes Ergebnis 89 %",
+    "auswertungKennzahlen": [
+      "552 Personen",
+      "552 Versuche",
+      "552 abgeschlossen",
+      "88 % mittlere Punktquote",
+      "552 Erfolg",
+      "0 Teilerfolg",
+      "0 Misserfolg"
+    ]
+  },
+  "barrierefreiheit": {
+    "anmeldung": {
+      "verstoesse": [],
+      "bestanden": 23
+    },
+    "uebersicht": {
+      "verstoesse": [],
+      "bestanden": 20
+    },
+    "desktop-szene-meldung": {
+      "verstoesse": [],
+      "bestanden": 27
+    },
+    "desktop-rueckmeldung": {
+      "verstoesse": [],
+      "bestanden": 26
+    },
+    "desktop-aufgabe-pruefschritte": {
+      "verstoesse": [],
+      "bestanden": 26
+    },
+    "desktop-aufgabe-diagonale": {
+      "verstoesse": [],
+      "bestanden": 29
+    },
+    "desktop-aufgabe-falsch": {
+      "verstoesse": [],
+      "bestanden": 29
+    },
+    "desktop-ende": {
+      "verstoesse": [],
+      "bestanden": 26
+    },
+    "lehrende-auswertung": {
+      "verstoesse": [],
+      "bestanden": 24
+    }
+  },
+  "offline": {
+    "groesseKB": 76,
+    "ergebnis": "erfolg",
+    "netzanfragenNachDemLaden": 0,
+    "lizenzhinweis": "„Riss an der Fußgängerbrücke“ von Panagiotis Herbe, Lizenz CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Offline-Fassung, Fortschritt bleibt auf diesem Gerät. Erstellt mit dem Spielbaukasten (Apache 2.0)."
+  }
+}

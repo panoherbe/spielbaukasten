@@ -1,0 +1,645 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Spielbaukasten",
+    "version": "0.1.0",
+    "description": "Schnittstelle des Spielbaukastens. Anmeldung über ein HttpOnly-Cookie; schreibende Anfragen nur als application/json und von derselben Herkunft. Fehler kommen als {\"fehler\": \"…\"} auf Deutsch.",
+    "license": {
+      "name": "Apache-2.0",
+      "identifier": "Apache-2.0"
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sitzung": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sbk_sitzung"
+      }
+    }
+  },
+  "paths": {
+    "/api/gesundheit": {
+      "get": {
+        "summary": "Betriebszustand",
+        "tags": [
+          "öffentlich"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        }
+      }
+    },
+    "/api/openapi.json": {
+      "get": {
+        "summary": "Diese Beschreibung",
+        "tags": [
+          "öffentlich"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        }
+      }
+    },
+    "/api/anmelden/studierende": {
+      "post": {
+        "summary": "Beitritt mit Kurscode; liefert Pseudonym und persönlichen Code",
+        "tags": [
+          "öffentlich"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "kurscode": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anmelden/wiederkehr": {
+      "post": {
+        "summary": "Anmeldung mit persönlichem Code (anderes Gerät)",
+        "tags": [
+          "öffentlich"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "wiederkehrcode": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anmelden/lehrende": {
+      "post": {
+        "summary": "Anmeldung Lehrende mit dem Schlüssel der Instanz",
+        "tags": [
+          "öffentlich"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "schluessel": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/abmelden": {
+      "post": {
+        "summary": "Sitzung beenden",
+        "tags": [
+          "alle"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/ich": {
+      "get": {
+        "summary": "Eigene Rolle, Pseudonym, Kurs",
+        "tags": [
+          "alle"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "Alle eigenen Daten löschen (Art. 17 DSGVO)",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/ich/daten": {
+      "get": {
+        "summary": "Alle eigenen Daten als JSON (Art. 15 DSGVO)",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/szenarien": {
+      "get": {
+        "summary": "Freigegebene Szenarien mit eigenem Fortschritt",
+        "tags": [
+          "alle"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/versuche": {
+      "post": {
+        "summary": "Neuen Versuch starten; liefert die erste Ansicht",
+        "tags": [
+          "alle"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "szenario": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/versuche/{id}": {
+      "get": {
+        "summary": "Versuch fortsetzen: aktuelle Ansicht",
+        "tags": [
+          "alle"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/versuche/{id}/ereignisse": {
+      "post": {
+        "summary": "Entscheidung, Antwort oder Hinweis; der Server bewertet und liefert die neue Ansicht. 409, wenn nr nicht der nächste Schritt ist; 422 bei unmöglichen Ereignissen",
+        "tags": [
+          "alle"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nr": {
+                    "type": "integer"
+                  },
+                  "ereignis": {
+                    "type": "object",
+                    "properties": {
+                      "typ": {
+                        "enum": [
+                          "wahl",
+                          "antwort",
+                          "hinweis"
+                        ]
+                      },
+                      "knoten": {
+                        "type": "string"
+                      },
+                      "option": {
+                        "type": "string"
+                      },
+                      "antwort": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/kurse": {
+      "get": {
+        "summary": "Kurse mit Code und Freigaben",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Kurs anlegen; liefert den Kurscode",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "szenarien": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/kurse/{id}/szenarien": {
+      "put": {
+        "summary": "Freigegebene Szenarien eines Kurses setzen",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "szenarien": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/szenarien": {
+      "get": {
+        "summary": "Alle Szenarien (neueste Version)",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Szenario als neue Version hochladen (422 mit Fehlerliste)",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/szenarien/pruefen": {
+      "post": {
+        "summary": "Szenario nur prüfen",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/auswertung": {
+      "get": {
+        "summary": "Summen je Szenario und Kurs, erst ab Mindestgruppe",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "parameters": [
+          {
+            "name": "szenario",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "kurs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/xapi": {
+      "get": {
+        "summary": "xAPI-Statements (pseudonym) für Learning Record Stores",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "parameters": [
+          {
+            "name": "szenario",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "kurs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/oer/{id}": {
+      "get": {
+        "summary": "OER-Export: eigenständige HTML-Datei",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "text/html"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/oer/{id}/metadaten": {
+      "get": {
+        "summary": "AMB-Metadaten des OER-Exports",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    }
+  }
+}

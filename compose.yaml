@@ -1,0 +1,28 @@
+# Start:   docker compose up -d     →  http://localhost:8080  (Lehrende: /lehrende)
+# Tests:   docker compose run --rm test
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:${SBK_PORT:-8080}:8080"
+    environment:
+      SBK_LEHRENDE_SCHLUESSEL: ${SBK_LEHRENDE_SCHLUESSEL:-demo-lehrende}   # für echten Einsatz ändern
+      SBK_DEMO_KURSCODE: ${SBK_DEMO_KURSCODE:-DEMO}
+      SBK_AUFBEWAHRUNG_TAGE: ${SBK_AUFBEWAHRUNG_TAGE:-180}
+      SBK_BASIS_URL: ${SBK_BASIS_URL:-http://localhost:8080}
+    volumes:
+      - daten:/daten
+    restart: unless-stopped
+
+  test:
+    image: node:24-alpine
+    profiles: ["test"]
+    working_dir: /app
+    environment:
+      NODE_NO_WARNINGS: "1"
+    volumes:
+      - .:/app:ro
+    command: ["node", "--test", "--test-reporter=spec", "test/*.test.js"]
+
+volumes:
+  daten:

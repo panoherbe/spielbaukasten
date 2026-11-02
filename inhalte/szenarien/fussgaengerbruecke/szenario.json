@@ -1,0 +1,251 @@
+{
+  "id": "fussgaengerbruecke",
+  "version": 1,
+  "titel": "Riss an der Fußgängerbrücke",
+  "kurzbeschreibung": "Entscheidungsspiel zur Technischen Mechanik: Ein Riss an einer kleinen Fachwerkbrücke auf dem Campus, fünf Tage vor einem Fest. Sie entscheiden, prüfen, rechnen und verantworten die Freigabe.",
+  "fach": "Technische Mechanik / Stahlbau",
+  "zielgruppe": "Bachelor Maschinenbau, Bauingenieurwesen, Wirtschaftsingenieurwesen, 2.–3. Semester",
+  "dauer_minuten": 20,
+  "sprache": "de",
+  "lizenz": "CC-BY-4.0",
+  "urheber": ["Panagiotis Herbe"],
+  "schlagworte": ["Fachwerk", "Knotengleichgewicht", "Stabkraft", "Spannung", "Nettoquerschnitt", "Bauwerksprüfung", "Serious Game"],
+  "lernziele": [
+    { "id": "LZ1", "text": "Stabkräfte in einem einfachen Fachwerk mit dem Knotengleichgewicht bestimmen" },
+    { "id": "LZ2", "text": "Die Spannung in einem geschwächten Querschnitt berechnen und einen vereinfachten Tragfähigkeitsnachweis führen" },
+    { "id": "LZ3", "text": "Prüfschritte und Sicherheitsentscheidungen bei einem Schaden an einem Tragwerk begründen" }
+  ],
+  "indikatoren": [
+    { "id": "sicherheit", "name": "Sicherheit", "start": 50, "min": 0, "max": 100, "einheit": "%" },
+    { "id": "budget", "name": "Budget", "start": 10, "min": 0, "max": 10, "einheit": "T€" },
+    { "id": "tage", "name": "Tage bis zum Fest", "start": 5, "min": 0, "max": 5, "einheit": "" }
+  ],
+  "parameter": {
+    "F": { "min": 30, "max": 60, "schritt": 5, "einheit": "kN" },
+    "theta": { "werte": [30, 45, 60], "einheit": "°" }
+  },
+  "start": "meldung",
+  "knoten": {
+    "meldung": {
+      "typ": "szene",
+      "titel": "Eine Meldung am Montagmorgen",
+      "bild": { "datei": "medien/bruecke.svg", "alt": "Kleine Stahl-Fachwerkbrücke über einen Bach, ein Pfeil markiert einen Riss am unteren Zugband." },
+      "text": "Sie sind seit drei Wochen Ingenieurin oder Ingenieur in der Bauabteilung der Hochschule. Der Hausmeister meldet: **Am Zugband der kleinen Stahlbrücke über den Bach ist ein Riss zu sehen.** Die Brücke ist offen, täglich gehen Hunderte darüber. In fünf Tagen ist das Campusfest, dann wird es voll.\n\nWas tun Sie zuerst?",
+      "optionen": [
+        {
+          "id": "sperren",
+          "text": "Brücke sofort sperren und Umleitung ausschildern, dann prüfen",
+          "effekte": { "sicherheit": 20 },
+          "bewertung": "gut",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Richtig: Bei Verdacht auf einen Schaden an einem tragenden Bauteil wird zuerst die Gefahr abgewehrt, dann geprüft. Eine Sperrung lässt sich jederzeit aufheben, ein Einsturz nicht.",
+          "ziel": "pruefschritte"
+        },
+        {
+          "id": "offen_lassen",
+          "text": "Brücke offen lassen und sich den Riss erst einmal ansehen",
+          "effekte": { "sicherheit": -15 },
+          "bewertung": "schlecht",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Riskant: Bis Sie wissen, wie groß der Schaden ist, gehen weiter Menschen über ein möglicherweise geschwächtes Tragwerk. Zuerst sichern, dann prüfen.",
+          "ziel": "pruefschritte"
+        }
+      ]
+    },
+    "pruefschritte": {
+      "typ": "aufgabe",
+      "titel": "Wie gehen Sie vor?",
+      "mechanik": "reihenfolge",
+      "frage": "Bringen Sie die Prüfschritte in eine sinnvolle Reihenfolge.",
+      "elemente": [
+        { "id": "unterlagen", "text": "Bestandsunterlagen holen: Pläne, Statik, letzte Prüfberichte" },
+        { "id": "sicht", "text": "Sichtprüfung vor Ort: Lage und Länge des Risses messen, fotografieren" },
+        { "id": "kraft", "text": "Kraft im betroffenen Bauteil berechnen" },
+        { "id": "nachweis", "text": "Restquerschnitt nachweisen: Reicht die Tragfähigkeit noch?" },
+        { "id": "massnahme", "text": "Maßnahme festlegen und dokumentieren: Sperrung, Auflagen oder Reparatur" }
+      ],
+      "versuche": 2,
+      "punkte": 10,
+      "lernziel": "LZ3",
+      "hinweis": "Erst wissen, was geplant war; dann sehen, was ist; dann rechnen; dann entscheiden.",
+      "rueckmeldung": { "richtig": "Genau: Unterlagen, Befund, Rechnung, Nachweis, Entscheidung.", "falsch": "Ohne Pläne wissen Sie nicht, welches Bauteil welche Kraft trägt; ohne Befund nicht, wie groß der Rest ist." },
+      "erklaerung": "Die Rechnung braucht die Pläne (Geometrie, Querschnitte) und den Befund (wie viel Querschnitt der Riss kostet). Die Entscheidung kommt zuletzt und wird schriftlich festgehalten.",
+      "effekte_richtig": { "sicherheit": 5, "tage": -1 },
+      "effekte_falsch": { "tage": -1 },
+      "weiter": "modell"
+    },
+    "modell": {
+      "typ": "szene",
+      "titel": "Das Fachwerk als Modell",
+      "bild": { "datei": "medien/fachwerk.svg", "alt": "Dreiecksfachwerk: zwei Diagonalen D unter dem Winkel theta zur Horizontalen, unten das Zugband Z, oben greift die Last F an; links ein Festlager, rechts ein Loslager." },
+      "text": "Laut Statik lässt sich das betroffene Feld als **Dreieck** berechnen: zwei Diagonalen unter dem Winkel θ = {theta}° zur Horizontalen, unten das **Zugband**, oben die Last **F = {F} kN** (Menschengruppe und Eigengewicht, charakteristischer Wert). Die Stäbe sind gelenkig verbunden, das Eigengewicht der Stäbe ist in F enthalten.\n\nDer Riss sitzt im Zugband. Um ihn zu bewerten, brauchen Sie zuerst die Kräfte in den Stäben.",
+      "optionen": [
+        { "id": "rechnen", "text": "Zur Berechnung", "ziel": "diagonale" }
+      ]
+    },
+    "diagonale": {
+      "typ": "aufgabe",
+      "titel": "Kraft in der Diagonale",
+      "mechanik": "zahl",
+      "frage": "Wie groß ist die Druckkraft in **einer** Diagonale? Geben Sie den Betrag in kN an (F = {F} kN, θ = {theta}°).",
+      "einheit": "kN",
+      "loesung": "F / (2 * sind(theta))",
+      "toleranz_prozent": 2,
+      "typische_fehler": [
+        { "formel": "F / (2 * cosd(theta))", "rueckmeldung": "Sinus und Kosinus vertauscht? Die Last F ist vertikal; sie wird von den vertikalen Anteilen der Diagonalen getragen." },
+        { "formel": "F / sind(theta)", "rueckmeldung": "Es gibt zwei Diagonalen; jede trägt die Hälfte der Last." },
+        { "formel": "F / 2", "rueckmeldung": "Die Hälfte der Last stimmt, aber die Diagonale ist geneigt. Die Stabkraft ist größer als ihr vertikaler Anteil." }
+      ],
+      "versuche": 2,
+      "punkte": 10,
+      "lernziel": "LZ1",
+      "hinweis": "Schneiden Sie den oberen Knoten frei. Summe der vertikalen Kräfte: Die vertikalen Anteile beider Diagonalen halten F das Gleichgewicht.",
+      "rueckmeldung": { "richtig": "Richtig.", "falsch": "Zeichnen Sie den oberen Knoten mit allen drei Kräften." },
+      "erklaerung": "Oberer Knoten, vertikal: 2 · D · sin θ = F, also D = F / (2 · sin θ) = {= F / (2 * sind(theta)) : 2} kN (Druck).",
+      "weiter": "zugband"
+    },
+    "zugband": {
+      "typ": "aufgabe",
+      "titel": "Kraft im Zugband",
+      "mechanik": "zahl",
+      "frage": "Wie groß ist die Zugkraft Z im Zugband (in kN)?",
+      "einheit": "kN",
+      "loesung": "F / (2 * tand(theta))",
+      "toleranz_prozent": 2,
+      "typische_fehler": [
+        { "formel": "F * tand(theta) / 2", "rueckmeldung": "Tangens statt Kotangens? Am Auflagerknoten zählt der horizontale Anteil der Diagonale: D · cos θ." },
+        { "formel": "F / (2 * sind(theta))", "rueckmeldung": "Das ist die Kraft in der Diagonale. Gesucht ist ihr horizontaler Anteil, den das Zugband aufnimmt." }
+      ],
+      "versuche": 2,
+      "punkte": 10,
+      "lernziel": "LZ1",
+      "hinweis": "Schneiden Sie einen unteren Knoten frei. Horizontal hält das Zugband dem horizontalen Anteil der Diagonale das Gleichgewicht.",
+      "rueckmeldung": { "richtig": "Richtig. Das Zugband hält die beiden Auflager zusammen.", "falsch": "Welcher Anteil der Diagonalkraft wirkt horizontal?" },
+      "erklaerung": "Unterer Knoten, horizontal: Z = D · cos θ = F / (2 · tan θ) = {= F / (2 * tand(theta)) : 2} kN (Zug).",
+      "weiter": "spannung"
+    },
+    "spannung": {
+      "typ": "aufgabe",
+      "titel": "Spannung am Riss",
+      "mechanik": "zahl",
+      "frage": "Das Zugband ist ein Flachstahl 40 × 8 mm aus S235 (Streckgrenze f_y = 235 N/mm²). Der Riss geht über die halbe Breite; es bleiben 20 × 8 mm = **160 mm²**.\n\nVereinfachtes Lehrmodell (kein vollständiger Nachweis nach Eurocode 3): Bemessungsspannung σ_Ed = 1,5 · Z / A_netto. Wie groß ist σ_Ed in N/mm²?",
+      "einheit": "N/mm²",
+      "loesung": "1.5 * F / (2 * tand(theta)) * 1000 / 160",
+      "toleranz_prozent": 2,
+      "stellen": 1,
+      "typische_fehler": [
+        { "formel": "F / (2 * tand(theta)) * 1000 / 160", "rueckmeldung": "Der Teilsicherheitsbeiwert 1,5 auf der Lastseite fehlt." },
+        { "formel": "1.5 * F / (2 * tand(theta)) * 1000 / 320", "rueckmeldung": "Das ist der ungeschwächte Querschnitt. Am Riss trägt nur der Rest: 160 mm²." },
+        { "formel": "1.5 * F / (2 * sind(theta)) * 1000 / 160", "rueckmeldung": "Sie haben die Diagonalkraft eingesetzt; der Riss sitzt im Zugband." }
+      ],
+      "versuche": 2,
+      "punkte": 15,
+      "lernziel": "LZ2",
+      "hinweis": "1 kN = 1000 N. Spannung = Kraft / Fläche, mit der Fläche, die am Riss noch trägt.",
+      "rueckmeldung": { "richtig": "Richtig.", "falsch": "Prüfen Sie Einheit, Fläche und den Faktor 1,5." },
+      "erklaerung": "σ_Ed = 1,5 · {= F / (2 * tand(theta)) : 2} kN · 1000 / 160 mm² = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 : 1} N/mm². Ausnutzung η = σ_Ed / f_y = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 / 235 : 2}.",
+      "weiter": "nachweis"
+    },
+    "nachweis": {
+      "typ": "verzweigung",
+      "regeln": [
+        { "wenn": "1.5 * F / (2 * tand(theta)) * 1000 / 160 <= 235", "ziel": "entscheidung_reserve" }
+      ],
+      "sonst": "entscheidung_ueberlastet"
+    },
+    "entscheidung_reserve": {
+      "typ": "szene",
+      "titel": "Der Nachweis ist erfüllt – und jetzt?",
+      "text": "Mit σ_Ed = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 : 1} N/mm² ≤ 235 N/mm² ist der vereinfachte Nachweis am Restquerschnitt **erfüllt** (η = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 / 235 : 2}). Der Riss ist trotzdem da. Noch {tage : 0} Tage bis zum Fest, Budget {budget : 0} T€.\n\nWie entscheiden Sie?",
+      "optionen": [
+        {
+          "id": "freigeben",
+          "text": "Freigeben – die Rechnung zeigt ja Reserve",
+          "effekte": { "sicherheit": -30 },
+          "bewertung": "schlecht",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Der Nachweis gilt für den heutigen Rest. Ein Riss in einem Zugglied wächst unter wiederholter Belastung weiter (Ermüdung). Ohne Reparatur und Kontrolle ist eine Freigabe nicht vertretbar.",
+          "ziel": "abschluss"
+        },
+        {
+          "id": "auflagen",
+          "text": "Bis zur Reparatur nur mit Auflagen öffnen: höchstens 10 Personen gleichzeitig, Riss markieren, tägliche Sichtkontrolle; Reparatur nach dem Fest",
+          "effekte": { "sicherheit": 10, "budget": -6 },
+          "bewertung": "neutral",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Vertretbar, weil der Nachweis Reserve zeigt und Last und Riss überwacht werden. Am Festtag ist eine Personenbegrenzung aber schwer durchzusetzen; sicherer wäre die Reparatur vorher.",
+          "ziel": "abschluss"
+        },
+        {
+          "id": "reparatur",
+          "text": "Gesperrt lassen und sofort reparieren: beidseitig aufgeschraubte Laschen über den Riss (2 Tage), danach freigeben",
+          "effekte": { "sicherheit": 25, "budget": -6, "tage": -2 },
+          "bewertung": "gut",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Gut entschieden: Die Laschen übernehmen die Kraft über den Riss hinweg, die Brücke ist zum Fest wieder voll nutzbar. Der Austausch des Zugbands kann regulär geplant werden.",
+          "ziel": "abschluss"
+        }
+      ]
+    },
+    "entscheidung_ueberlastet": {
+      "typ": "szene",
+      "titel": "Der Nachweis ist nicht erfüllt",
+      "text": "Mit σ_Ed = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 : 1} N/mm² > 235 N/mm² ist der vereinfachte Nachweis am Restquerschnitt **nicht erfüllt** (η = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 / 235 : 2}). Noch {tage : 0} Tage bis zum Fest, Budget {budget : 0} T€.\n\nWie entscheiden Sie?",
+      "optionen": [
+        {
+          "id": "freigeben",
+          "text": "Freigeben – die Brücke steht seit Jahren",
+          "effekte": { "sicherheit": -40 },
+          "bewertung": "schlecht",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Nicht vertretbar: Unter der angesetzten Last reicht der Restquerschnitt rechnerisch nicht. Dass die Brücke bisher gehalten hat, sagt nichts über die nächste volle Belastung.",
+          "ziel": "abschluss"
+        },
+        {
+          "id": "begrenzen",
+          "text": "Mit Personenbegrenzung öffnen",
+          "effekte": { "sicherheit": -30 },
+          "bewertung": "schlecht",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Eine Begrenzung hilft nur, wenn die reduzierte Last neu nachgewiesen und überwacht wird. Ohne diesen Nachweis bleibt es eine Vermutung.",
+          "ziel": "abschluss"
+        },
+        {
+          "id": "reparatur",
+          "text": "Gesperrt lassen und sofort reparieren: beidseitig aufgeschraubte Laschen über den Riss (2 Tage), Umleitung bleibt bis dahin",
+          "effekte": { "sicherheit": 25, "budget": -6, "tage": -2 },
+          "bewertung": "gut",
+          "lernziel": "LZ3",
+          "rueckmeldung": "Richtig: Der Restquerschnitt reicht nicht, also bleibt die Brücke zu, bis die Laschen die Kraft übernehmen.",
+          "ziel": "abschluss"
+        }
+      ]
+    },
+    "abschluss": {
+      "typ": "verzweigung",
+      "regeln": [
+        { "wenn": "sicherheit >= 90", "ziel": "ende_erfolg" },
+        { "wenn": "sicherheit >= 50", "ziel": "ende_teilerfolg" }
+      ],
+      "sonst": "ende_misserfolg"
+    },
+    "ende_erfolg": {
+      "typ": "ende",
+      "ergebnis": "erfolg",
+      "titel": "Sicher zum Fest",
+      "text": "Die Brücke trägt wieder mit voller Reserve, das Fest kann kommen. Sie haben zuerst gesichert, dann systematisch geprüft und nach der Rechnung entschieden. Sicherheit {sicherheit : 0} %, Restbudget {budget : 0} T€."
+    },
+    "ende_teilerfolg": {
+      "typ": "ende",
+      "ergebnis": "teilerfolg",
+      "titel": "Gut gegangen – diesmal",
+      "text": "Es ist nichts passiert, aber nicht jede Entscheidung hatte genug Reserve: entweder war die Brücke ungeprüft offen, oder sie ist nur mit Auflagen in Betrieb. Sicherheit {sicherheit : 0} %. Spielen Sie den Fall noch einmal und achten Sie auf die Reihenfolge Sichern – Prüfen – Entscheiden."
+    },
+    "ende_misserfolg": {
+      "typ": "ende",
+      "ergebnis": "misserfolg",
+      "titel": "Die Bauaufsicht sperrt die Brücke",
+      "text": "Bei der Kontrolle vor dem Fest sperrt die Bauaufsicht die Brücke: Ein gerissenes Zugglied ohne Reparatur und ohne Überwachung ist nicht freizugeben. Sicherheit {sicherheit : 0} %. Die Rechnung war der halbe Weg; die Verantwortung für die Entscheidung bleibt."
+    }
+  }
+}
