@@ -3,10 +3,10 @@
 **Lernspiele für die Ingenieurlehre: Studierende spielen im Browser, Lehrende sehen, wo die Gruppe hängt, und neue
 Spiele entstehen als Datei statt als Programm. Das läuft heute – ansehen, selbst ausprobieren, nachprüfen.**
 
-[![Rundgang durch den Spielbaukasten: Beitritt mit Kurscode, Entscheidungsspiel mit Rechenaufgaben und Rückmeldung zu typischen Fehlern, Telefon, Auswertung für Lehrende, Prüfung einer Spieldatei, Export als Offline-Datei](medien/rundgang.gif)](medien/rundgang.mp4)
+![Rundgang durch den Spielbaukasten: Beitritt mit Kurscode, Entscheidungsspiel mit Rechenaufgaben und Rückmeldung zu typischen Fehlern, Telefon, Auswertung für Lehrende, Prüfung einer Spieldatei, Export als Offline-Datei](medien/rundgang.gif)
 
 <sub>Rundgang, 88 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 03.11.2026 an einer laufenden Installation.
-[Als Video (MP4, 2,1 MB)](medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
+[Video herunterladen (MP4, 2,1 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
 
 ## Was Sie brauchen → läuft hier schon
 
@@ -30,9 +30,10 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 02.11.2026](nachweis/PROTOKOLL
 
 ## In zwei Minuten selbst prüfen
 
-1. **Ohne Installation spielen:** [Offline-Fassung herunterladen](https://github.com/panoherbe/spielbaukasten/releases/download/v0.1.0/fussgaengerbruecke-v1.html) (eine HTML-Datei, 76 KB) und per
-   Doppelklick im Browser öffnen. Das Brückenspiel läuft vollständig, ohne Server und ohne Internet; der Fortschritt
-   bleibt auf Ihrem Gerät. (Gemessen in Chrome.)
+1. **Ohne Installation spielen:** die [Offline-Fassung](demo/fussgaengerbruecke-v1.html) öffnen, rechts über dem
+   Quelltext auf „Download raw file“ (Pfeil nach unten) klicken, die Datei (76 KB) per Doppelklick im Browser öffnen.
+   Das Brückenspiel läuft vollständig, ohne Server und ohne Internet; der Fortschritt bleibt auf Ihrem Gerät.
+   (Gemessen in Chrome.)
 2. **Die ganze Anwendung starten** – mit [Docker Desktop](https://www.docker.com/products/docker-desktop/), drei
    Befehle:
    ```bash
