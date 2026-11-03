@@ -1,0 +1,52 @@
+{
+  "@context": [
+    "https://w3id.org/kim/amb/context.jsonld",
+    {
+      "@language": "de"
+    }
+  ],
+  "id": "https://github.com/panoherbe/spielbaukasten/blob/main/demo/fussgaengerbruecke-v1.html",
+  "type": [
+    "LearningResource"
+  ],
+  "name": "Riss an der Fußgängerbrücke",
+  "description": "Entscheidungsspiel zur Technischen Mechanik: Ein Riss an einer kleinen Fachwerkbrücke auf dem Campus, fünf Tage vor einem Fest. Sie entscheiden, prüfen, rechnen und verantworten die Freigabe. Lernziele: Stabkräfte in einem einfachen Fachwerk mit dem Knotengleichgewicht bestimmen; Die Spannung in einem geschwächten Querschnitt berechnen und einen vereinfachten Tragfähigkeitsnachweis führen; Prüfschritte und Sicherheitsentscheidungen bei einem Schaden an einem Tragwerk begründen.",
+  "creator": [
+    {
+      "type": "Person",
+      "name": "Panagiotis Herbe"
+    }
+  ],
+  "license": {
+    "id": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "inLanguage": [
+    "de"
+  ],
+  "isAccessibleForFree": true,
+  "learningResourceType": [
+    {
+      "id": "http://w3id.org/kim/hcrt/educational_game",
+      "prefLabel": {
+        "de": "Lernspiel"
+      }
+    }
+  ],
+  "keywords": [
+    "Fachwerk",
+    "Knotengleichgewicht",
+    "Stabkraft",
+    "Spannung",
+    "Nettoquerschnitt",
+    "Bauwerksprüfung",
+    "Serious Game"
+  ],
+  "dateCreated": "2026-11-03",
+  "encoding": [
+    {
+      "type": "MediaObject",
+      "encodingFormat": "text/html",
+      "contentUrl": "https://github.com/panoherbe/spielbaukasten/blob/main/demo/fussgaengerbruecke-v1.html"
+    }
+  ]
+}
