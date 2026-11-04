@@ -61,7 +61,7 @@ drei Folgen, die für den Einsatz in der Lehre zählen:
 |---|---|---|
 | Schnittstelle | REST/JSON, beschrieben in `docs/openapi.json`, Test prüft Vollständigkeit | — |
 | Lernstand an Lernplattform / LRS | xAPI-Statements je Versuch (`/api/lehrende/xapi`) | Statements direkt an einen LRS senden |
-| Moodle | — (laut Aufgabe nicht Teil des Auftrags) | LTI 1.3 Launch + Assignment and Grade Services |
+| Moodle | — (nicht Teil dieses Prototyps) | LTI 1.3 Launch + Assignment and Grade Services |
 | Anmeldung | Kurscode/Pseudonym, Schlüssel für Lehrende | SAML/OIDC der Hochschule in `sicherheit.js` |
 | Inhalte | JSON-Dateien und Upload | grafischer Editor, der dieselbe Datei schreibt |
 | OER | HTML-Datei + AMB-Metadaten | Veröffentlichung in einem OER-Repositorium |
