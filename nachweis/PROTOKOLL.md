@@ -78,7 +78,8 @@ Datei (`file://`, ohne Server) im Browser auf Telefonbreite durchgespielt: **Erf
 
 `bilder/`: 13 Zustände auf Desktop (`desktop-*`), 13 auf Telefonbreite (`telefon-*`), 3 der Lehrenden-Oberfläche
 (`lehrende-*`), das Ende der Offline-Fassung (`offline-ende.png`). Der persönliche Code ist im Foto der Beitrittsseite
-ersetzt.
+ersetzt. Die Bildschirmfotos stammen vom 02.11.2026; ihre Fußzeile nennt die damalige Lizenz Apache 2.0 (seit
+04.11.2026 AGPL-3.0).
 
 ## 7. Nicht gemessen
 

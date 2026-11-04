@@ -1,7 +1,7 @@
 {
   "name": "spielbaukasten",
   "version": "0.1.0",
-  "description": "Baukasten für Serious Games in der ingenieurwissenschaftlichen Lehre (Teaser-Prototyp)",
+  "description": "Baukasten für Serious Games in der ingenieurwissenschaftlichen Lehre (Prototyp)",
   "license": "AGPL-3.0-only",
   "type": "module",
   "private": true,
