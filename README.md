@@ -99,7 +99,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 02.11.2026](nachweis/PROTOKOLL
 | 1:15 | Jedes Spiel lässt sich als offene Lernressource (OER) exportieren … |
 | 1:16 | … als eine einzige HTML-Datei (76 KB). Sie läuft ohne Server und ohne Internet, mit Lizenzhinweis. |
 | 1:20 | **Gemessen am 02.11.2026:** 32 von 32 automatischen Tests bestanden · 300 Studierende gleichzeitig, 0 Fehler, 95 % der Antworten unter 0,07 s · Barrierefreiheit automatisch geprüft (WCAG 2.2 AA): 0 Verstöße in 9 Ansichten · erste Seite 41 KB, keine Dateien von fremden Servern. |
-| 1:24 | **Selbst prüfen:** die Offline-Fassung herunterladen und im Browser öffnen, oder die ganze Anwendung mit einem Befehl starten. Quellcode offen, AGPL-3.0. |
+| 1:24 | **Selbst prüfen:** die Offline-Fassung herunterladen und im Browser öffnen, oder die ganze Anwendung mit drei Befehlen starten. Quellcode offen, AGPL-3.0. |
 
 </details>
 
