@@ -5,8 +5,8 @@
     "version": "0.1.0",
     "description": "Schnittstelle des Spielbaukastens. Anmeldung über ein HttpOnly-Cookie; schreibende Anfragen nur als application/json und von derselben Herkunft. Fehler kommen als {\"fehler\": \"…\"} auf Deutsch.",
     "license": {
-      "name": "Apache-2.0",
-      "identifier": "Apache-2.0"
+      "name": "AGPL-3.0-only",
+      "identifier": "AGPL-3.0-only"
     }
   },
   "components": {

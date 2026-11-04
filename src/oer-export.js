@@ -78,7 +78,7 @@ export function oerPaket(szenario, { medienVerzeichnis, basisUrl = 'http://local
 <body>
 <header class="leiste"><span class="marke"><span class="marke-zeichen" aria-hidden="true">◆</span> ${esc(szenario.titel)}</span></header>
 <main id="inhalt" class="inhalt"><noscript><p class="karte">Dieses Lernspiel braucht JavaScript.</p></noscript></main>
-<footer class="fuss">${esc(lizenzhinweis(szenario))}. Offline-Fassung, Fortschritt bleibt auf diesem Gerät. Erstellt mit dem Spielbaukasten (Apache 2.0).</footer>
+<footer class="fuss">${esc(lizenzhinweis(szenario))}. Offline-Fassung, Fortschritt bleibt auf diesem Gerät. Erstellt mit dem Spielbaukasten (AGPL-3.0).</footer>
 <script type="application/json" id="szenario-daten">${json(szenario)}</script>
 <script type="application/json" id="medien-daten">${json(medienAlsDaten(szenario, medienVerzeichnis))}</script>
 <script>${skript}</script>

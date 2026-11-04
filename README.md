@@ -5,7 +5,7 @@ Spiele entstehen als Datei statt als Programm. Das läuft heute – ansehen, sel
 
 ![Rundgang durch den Spielbaukasten: Beitritt mit Kurscode, Entscheidungsspiel mit Rechenaufgaben und Rückmeldung zu typischen Fehlern, Telefon, Auswertung für Lehrende, Prüfung einer Spieldatei, Export als Offline-Datei](medien/rundgang.gif)
 
-<sub>Rundgang, 88 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 03.11.2026 an einer laufenden Installation.
+<sub>Rundgang, 89 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 04.11.2026 an einer laufenden Installation.
 [Video herunterladen (MP4, 2,1 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
 
 ## Was Sie brauchen → läuft hier schon
@@ -23,7 +23,7 @@ Spiele entstehen als Datei statt als Programm. Das läuft heute – ansehen, sel
 | Schlank und sicher | erste Seite 11 Dateien, 41 KB, keine Dateien von fremden Servern (02.11.2026); Lösungen und Formeln verlassen den Server nicht |
 | Geprüfte Qualität | 32 von 32 automatischen Tests bestanden (02.11.2026) |
 | Anschluss an Lernplattformen | xAPI-Ausgabe und eine dokumentierte Schnittstelle (OpenAPI) |
-| Offen und übergabefähig | Quellcode unter Apache 2.0, keine Fremdbibliotheken zur Laufzeit, Dokumentation auf Deutsch |
+| Offen und übergabefähig | Quellcode unter AGPL-3.0, keine Fremdbibliotheken zur Laufzeit, Dokumentation auf Deutsch |
 
 Jede Zahl steht mit Messweg im [Messprotokoll vom 02.11.2026](nachweis/PROTOKOLL.md) (Version 0.1.0; Rohdaten
 `nachweis/messwerte.json`).
@@ -53,7 +53,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 02.11.2026](nachweis/PROTOKOLL
   Offline-Export. Das Projekt beginnt nicht bei null.
 - **Mehr Projektzeit für das, was zählt:** Ihre Anforderungen, Ihre Inhalte, Tests mit Studierenden und Lehrenden.
   Ein erster testbarer Stand steht früh.
-- **Keine Bindung an einen Anbieter:** offener Quellcode (Apache 2.0), keine Fremdbibliotheken zur Laufzeit,
+- **Keine Bindung an einen Anbieter:** offener Quellcode (AGPL-3.0), keine Fremdbibliotheken zur Laufzeit,
   Dokumentation auf Deutsch. Das Framework lässt sich ohne mich betreiben und weiterentwickeln.
 
 ## So sieht es aus
@@ -82,24 +82,24 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 02.11.2026](nachweis/PROTOKOLL
 | 0:17 | Entscheidungen bekommen eine fachliche Rückmeldung und verändern die Lage: Sicherheit, Budget, Tage bis zum Fest. |
 | 0:21 | Aufgabe: die Prüfschritte in eine sinnvolle Reihenfolge bringen. |
 | 0:24 | Richtig geordnet: Unterlagen, Befund, Rechnung, Nachweis, Entscheidung. |
-| 0:26 | Das Fachwerk als Modell. Jede Person bekommt eigene Zahlen für Last und Winkel. |
-| 0:29 | Rechenaufgabe mit eigenen Zahlen. Wir antworten absichtlich mit einem typischen Fehler … |
-| 0:32 | … und das System erkennt ihn und erklärt: Die Last verteilt sich auf zwei Diagonalen. Dann der zweite Versuch. |
-| 0:37 | Richtig – mit Rechenweg zum Nachlesen. |
+| 0:27 | Das Fachwerk als Modell. Jede Person bekommt eigene Zahlen für Last und Winkel. |
+| 0:30 | Rechenaufgabe mit eigenen Zahlen. Wir antworten absichtlich mit einem typischen Fehler … |
+| 0:33 | … und das System erkennt ihn und erklärt: Die Last verteilt sich auf zwei Diagonalen. Dann der zweite Versuch. |
+| 0:38 | Richtig – mit Rechenweg zum Nachlesen. |
 | 0:40 | Die Aufgaben bauen aufeinander auf: erst die Kraft im Zugband … |
-| 0:42 | … dann die Spannung am Riss, nach einem vereinfachten Lehrmodell. |
+| 0:43 | … dann die Spannung am Riss, nach einem vereinfachten Lehrmodell. |
 | 0:48 | Was folgt aus der Rechnung? Wieder eine Entscheidung mit Folgen. |
-| 0:52 | Am Ende: Ergebnis, Punkte und der Stand je Lernziel. |
-| 0:56 | **Auf dem Telefon:** Dasselbe Spiel im Browser des Telefons wie am Rechner. Keine App, keine Installation, keine Dateien von fremden Servern. |
-| 0:59 | Lehrende melden sich mit dem Schlüssel ihrer Installation an. |
-| 1:02 | Die Auswertung zeigt, wo die Gruppe hängt: je Aufgabe der Anteil „im ersten Versuch richtig“ und die häufigsten Fehler. (Zahlen: 200 simulierte Studierende aus einem Lasttest und die Durchläufe dieses Rundgangs.) |
-| 1:06 | Nur Summen, erst ab drei Personen. Keine Namen, keine E-Mail-Adressen. |
-| 1:09 | Neue Lernspiele sind Dateien, keine Programmierung. Hier eine Datei mit einem Tippfehler in einer Formel … |
-| 1:11 | … die Prüfung findet ihn und nennt die Stelle, auf Deutsch. Jede hochgeladene Version bleibt erhalten. |
-| 1:14 | Jedes Spiel lässt sich als offene Lernressource (OER) exportieren … |
+| 0:53 | Am Ende: Ergebnis, Punkte und der Stand je Lernziel. |
+| 0:57 | **Auf dem Telefon:** Dasselbe Spiel im Browser des Telefons wie am Rechner. Keine App, keine Installation, keine Dateien von fremden Servern. |
+| 1:00 | Lehrende melden sich mit dem Schlüssel ihrer Installation an. |
+| 1:03 | Die Auswertung zeigt, wo die Gruppe hängt: je Aufgabe der Anteil „im ersten Versuch richtig“ und die häufigsten Fehler. (Zahlen: 200 simulierte Studierende aus einem Lasttest und die Durchläufe dieses Rundgangs.) |
+| 1:07 | Nur Summen, erst ab drei Personen. Keine Namen, keine E-Mail-Adressen. |
+| 1:10 | Neue Lernspiele sind Dateien, keine Programmierung. Hier eine Datei mit einem Tippfehler in einer Formel … |
+| 1:12 | … die Prüfung findet ihn und nennt die Stelle, auf Deutsch. Jede hochgeladene Version bleibt erhalten. |
+| 1:15 | Jedes Spiel lässt sich als offene Lernressource (OER) exportieren … |
 | 1:16 | … als eine einzige HTML-Datei (76 KB). Sie läuft ohne Server und ohne Internet, mit Lizenzhinweis. |
-| 1:19 | **Gemessen am 02.11.2026:** 32 von 32 automatischen Tests bestanden · 300 Studierende gleichzeitig, 0 Fehler, 95 % der Antworten unter 0,07 s · Barrierefreiheit automatisch geprüft (WCAG 2.2 AA): 0 Verstöße in 9 Ansichten · erste Seite 41 KB, keine Dateien von fremden Servern. |
-| 1:24 | **Selbst prüfen:** die Offline-Fassung herunterladen und im Browser öffnen, oder die ganze Anwendung mit einem Befehl starten. Quellcode offen, Apache 2.0. |
+| 1:20 | **Gemessen am 02.11.2026:** 32 von 32 automatischen Tests bestanden · 300 Studierende gleichzeitig, 0 Fehler, 95 % der Antworten unter 0,07 s · Barrierefreiheit automatisch geprüft (WCAG 2.2 AA): 0 Verstöße in 9 Ansichten · erste Seite 41 KB, keine Dateien von fremden Servern. |
+| 1:24 | **Selbst prüfen:** die Offline-Fassung herunterladen und im Browser öffnen, oder die ganze Anwendung mit einem Befehl starten. Quellcode offen, AGPL-3.0. |
 
 </details>
 
@@ -115,6 +115,10 @@ Ein Prototyp, in wenigen Tagen gebaut, um zu zeigen, dass die Architektur trägt
 | Fachlich geprüfte Inhalte; die Beispiele sind vereinfachte Lehrmodelle, nicht von Fachlehrenden geprüft | Ihre Inhalte und Lernziele, mit Ihren Lehrenden |
 | Ihr Erscheinungsbild; die Gestaltung ist bewusst schlicht | Gestaltung nach Ihren Vorgaben |
 | Nicht gemessen: echte Geräte, Safari und Firefox, Bildschirmleser, Nutzung durch Studierende, Dauerbetrieb hinter HTTPS | Usability-Tests mit Studierenden und Lehrenden, Erprobung im Semester, Abnahmetest |
+
+## Lizenz
+
+Ab 04.11.2026 AGPL-3.0. Frühere Stände bis Commit [`414f6d6`](https://github.com/panoherbe/spielbaukasten/tree/414f6d6) bleiben unter Apache-2.0. Auftraggeber erhalten im Auftrag die vertraglich vereinbarte Lizenz.
 
 ## Kontakt
 
@@ -244,9 +248,10 @@ docker compose -p spielbaukasten-nachweis -f compose.nachweis.yaml down -v
 
 ### Rundgang und Bilder
 
-Aufgenommen am 03.11.2026 mit Playwright (Chromium) an einer laufenden Installation dieses Repositorys; 200
+Aufgenommen am 04.11.2026 (nach dem Lizenzwechsel neu) mit Playwright (Chromium) an einer laufenden Installation
+dieses Repositorys; 200
 simulierte Studierende aus dem Lasttest (`test/last.js`) füllen die Auswertung. Untertitel und Mauszeiger sind in die
 Seite gezeichnet, das Video hat keinen Ton. Die Messwerte stammen aus dem Protokoll vom 02.11.2026, nicht aus der
 Aufnahme.
 
-Lizenz: Apache 2.0 für den Code, CC BY 4.0 für die beiden Beispielszenarien.
+Lizenz: AGPL-3.0 für den Code (bis Commit `414f6d6` Apache-2.0), CC BY 4.0 für die beiden Beispielszenarien.
