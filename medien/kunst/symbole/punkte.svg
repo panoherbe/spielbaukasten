@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="pu-t">
+<title id="pu-t">Punkte: goldener Stern</title>
+<!-- Spielbaukasten · Bild: Panagiotis Herbe · CC BY 4.0 -->
+<defs><linearGradient id="pu-a" x2=".6" y2="1"><stop offset="0" stop-color="#ffe78f"/><stop offset="1" stop-color="#f2a900"/></linearGradient></defs><path d="M32.0 8.0L24.9 24.3L7.3 26.0L20.6 37.7L16.7 55.0L32.0 46.0L47.3 55.0L43.4 37.7L56.7 26.0L39.1 24.3Z" fill="url(#pu-a)" stroke="#a86e00" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 8 25 25 32 34Z" fill="#fff" opacity=".35"/><path d="M32 34 57 26 39 39Z" fill="#000" opacity=".08"/><path d="M51 4l1.8 5.2L58 11l-5.2 1.8L51 18l-1.8-5.2L44 11l5.2-1.8Z" fill="#fff3b0" stroke="#d99a00" stroke-width="1.2" stroke-linejoin="round"/>
+</svg>

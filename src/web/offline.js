@@ -9,6 +9,7 @@ import { spieler } from './spieler.js';
 
 const szenario = JSON.parse(document.getElementById('szenario-daten').textContent);
 const medien = JSON.parse(document.getElementById('medien-daten').textContent);
+const grafik = JSON.parse(document.getElementById('grafik-daten').textContent);
 const SPEICHER = `spielbaukasten:${szenario.id}:v${szenario.version}`;
 
 function lade() {
@@ -34,6 +35,7 @@ z = { ...z, rueckmeldung: null };
 
 const p = spieler(document.getElementById('inhalt'), {
   medienUrl: (datei) => medien[datei] ?? '',
+  grafikUrl: (name) => grafik[name] ?? '',
   sende: async (e) => {
     const neu = wende(szenario, z, e);
     if (neu.rueckmeldung?.art !== 'ungueltig') { stand.ereignisse.push(e); speichere(stand); }

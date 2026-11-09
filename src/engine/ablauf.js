@@ -55,7 +55,7 @@ function betrete(szenario, z, ziel) {
     z.knoten = id;
     z.versuche = 0;
     z.hinweis = false;
-    if (k.typ === 'aufgabe') z.maxPunkte += k.punkte ?? 10;
+    if (k.typ === 'aufgabe') { z.maxPunkte += k.punkte ?? 10; if (k.hinweis) z.statistik.mitHinweis++; }
     if (k.typ === 'ende') { z.beendet = true; z.ergebnis = k.ergebnis; }
     return;
   }
@@ -71,6 +71,8 @@ export function starte(szenario, seed) {
     knoten: null, versuche: 0, hinweis: false,
     punkte: 0, maxPunkte: 0, beendet: false, ergebnis: null,
     lernziele: {}, schritte: 0, rueckmeldung: null,
+    // Zähler für die Auszeichnungen am Ende (src/engine/wertung.js)
+    statistik: { aufgaben: 0, ersterVersuch: 0, hinweise: 0, mitHinweis: 0, entscheidungen: 0, gut: 0 },
   };
   betrete(szenario, z, szenario.start);
   return z;
@@ -93,6 +95,7 @@ export function wende(szenario, alt, e) {
     const o = verfuegbareOptionen(szenario, z).find((x) => x.id === e.option);
     if (!o) throw new SpielFehler(`Option „${e.option}“ ist hier nicht verfügbar`);
     wirke(szenario, z, o.effekte);
+    if (o.bewertung) { z.statistik.entscheidungen++; if (o.bewertung === 'gut') z.statistik.gut++; }
     if (o.lernziel) lernzielBuchen(z, o.lernziel, o.bewertung === 'schlecht' ? 'offen' : 'sicher');
     z.rueckmeldung = o.rueckmeldung ? { art: o.bewertung ?? 'neutral', text: o.rueckmeldung, effekte: o.effekte ?? {} } : null;
     z.schritte++;
@@ -103,6 +106,7 @@ export function wende(szenario, alt, e) {
   if (e.typ === 'hinweis') {
     if (k.typ !== 'aufgabe' || !k.hinweis) throw new SpielFehler('Für diesen Knoten gibt es keinen Hinweis');
     z.hinweis = true;
+    z.statistik.hinweise++;
     return z;
   }
 
@@ -116,18 +120,21 @@ export function wende(szenario, alt, e) {
     z.schritte++;
     const max = k.versuche ?? 2;
     if (b.richtig) {
+      z.statistik.aufgaben++;
+      if (z.versuche === 1) z.statistik.ersterVersuch++;
       const anteil = (z.versuche === 1 ? 1 : ZWEITER_VERSUCH) * (z.hinweis ? 1 - HINWEIS_ABZUG : 1);
       z.punkte += Math.round((k.punkte ?? 10) * anteil * 10) / 10;
       lernzielBuchen(z, k.lernziel, z.versuche === 1 && !z.hinweis ? 'sicher' : 'mit_hilfe');
       wirke(szenario, z, k.effekte_richtig);
-      z.rueckmeldung = { art: 'richtig', text: b.rueckmeldung ?? 'Richtig.', versuch: z.versuche, erklaerung: k.erklaerung };
+      z.rueckmeldung = { art: 'richtig', text: b.rueckmeldung ?? 'Richtig.', versuch: z.versuche, erklaerung: k.erklaerung, effekte: k.effekte_richtig ?? {} };
       betrete(szenario, z, k.weiter);
     } else if (z.versuche < max) {
       z.rueckmeldung = { art: 'falsch', typ: b.typ, text: b.rueckmeldung ?? 'Prüfen Sie Ihren Rechenweg.', nochVersuche: max - z.versuche, hinweisMoeglich: Boolean(k.hinweis) && !z.hinweis };
     } else {
+      z.statistik.aufgaben++;
       lernzielBuchen(z, k.lernziel, 'offen');
       wirke(szenario, z, k.effekte_falsch);
-      z.rueckmeldung = { art: 'aufgeloest', typ: b.typ, text: b.rueckmeldung ?? 'Leider nicht richtig.', loesung: mechanik.loesung(k, w), erklaerung: k.erklaerung };
+      z.rueckmeldung = { art: 'aufgeloest', typ: b.typ, text: b.rueckmeldung ?? 'Leider nicht richtig.', loesung: mechanik.loesung(k, w), erklaerung: k.erklaerung, effekte: k.effekte_falsch ?? {} };
       betrete(szenario, z, k.weiter);
     }
     return z;

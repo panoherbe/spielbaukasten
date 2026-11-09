@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { erstelleApp } from '../src/server/app.js';
 import { raeumeAuf } from '../src/server/db.js';
 import { neuerLoeser } from './hilfe/loeser.js';
@@ -13,7 +14,7 @@ const stumm = { info() {}, warn() {}, error() {} };
 before(async () => {
   verzeichnis = mkdtempSync(join(tmpdir(), 'sbk-'));
   app = erstelleApp({
-    datenbank: join(verzeichnis, 'test.sqlite'), inhalte: new URL('../inhalte/szenarien', import.meta.url).pathname,
+    datenbank: join(verzeichnis, 'test.sqlite'), inhalte: fileURLToPath(new URL('../inhalte/szenarien', import.meta.url)),
     lehrendeSchluessel: 'geheim-test', demoKurscode: 'DEMO', aufbewahrungTage: 180, minGruppe: 3,
     basisUrl: 'http://test.local', log: stumm, version: 'test',
   });
@@ -126,7 +127,7 @@ test('Schreibende Anfragen fremder Herkunft und Pfade außerhalb werden abgewies
   assert.equal((await c('GET', '/../package.json')).status, 404);
   assert.equal((await c('GET', '/%2e%2e/package.json')).status, 404);
   assert.equal((await c('GET', '/medien/fussgaengerbruecke/..%2fszenario.json')).status, 404);
-  assert.equal((await c('GET', '/medien/fussgaengerbruecke/medien/bruecke.svg')).status, 200);
+  assert.equal((await c('GET', '/medien/fussgaengerbruecke/medien/meldung.svg')).status, 200);
   const ohneJson = await fetch(`${basis}/api/anmelden/studierende`, { method: 'POST', body: 'kurscode=DEMO', headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
   assert.equal(ohneJson.status, 415);
 });
@@ -135,7 +136,7 @@ test('Bremse: nach 20 falschen Codes je Minute ist Schluss, richtige Codes zähl
   // eigene Instanz, damit die Sperre die anderen Tests nicht trifft
   const dir = mkdtempSync(join(tmpdir(), 'sbk-bremse-'));
   const zweite = erstelleApp({
-    datenbank: join(dir, 'b.sqlite'), inhalte: new URL('../inhalte/szenarien', import.meta.url).pathname,
+    datenbank: join(dir, 'b.sqlite'), inhalte: fileURLToPath(new URL('../inhalte/szenarien', import.meta.url)),
     lehrendeSchluessel: 'x', demoKurscode: 'DEMO', aufbewahrungTage: 180, log: stumm, version: 'test',
   });
   await new Promise((ok) => zweite.server.listen(0, '127.0.0.1', ok));
@@ -183,7 +184,8 @@ test('Lehrende: Kurs anlegen, Szenario prüfen und hochladen, Auswertung erst ab
   assert.ok(xapi.every((s) => s.actor.account.homePage === 'http://test.local' && !s.actor.mbox));
 
   const kaputt = JSON.parse(readFileSync(new URL('../inhalte/szenarien/spannungsteiler/szenario.json', import.meta.url), 'utf8'));
-  kaputt.version = 2;
+  const geladen = kaputt.version;
+  kaputt.version = geladen + 1;
   kaputt.knoten.last.weiter = 'nirgendwo';
   const p = await l('POST', '/api/lehrende/szenarien', kaputt);
   assert.equal(p.status, 422);
@@ -192,13 +194,13 @@ test('Lehrende: Kurs anlegen, Szenario prüfen und hochladen, Auswertung erst ab
   kaputt.titel = 'Übung: Spannungsteiler (überarbeitet)';
   assert.equal((await l('POST', '/api/lehrende/szenarien', kaputt)).status, 201);
   const neu = (await teilnehmende[0]('POST', '/api/versuche', { szenario: 'spannungsteiler' })).json;
-  assert.equal(neu.szenario.version, 2);
-  // alte Versuche rechnen weiter mit Version 1
+  assert.equal(neu.szenario.version, geladen + 1);
+  // alte Versuche rechnen weiter mit ihrer Version
   assert.equal((await l('GET', `/api/lehrende/auswertung?szenario=spannungsteiler&kurs=${kurs.id}`)).json.beendet, 3);
 
   const oer = await l('GET', '/api/lehrende/oer/fussgaengerbruecke');
   assert.equal(oer.status, 200);
-  assert.match(oer.kopf.get('content-disposition'), /fussgaengerbruecke-v1\.html/);
+  assert.match(oer.kopf.get('content-disposition'), /fussgaengerbruecke-v2\.html/);
   const meta = (await l('GET', '/api/lehrende/oer/fussgaengerbruecke/metadaten')).json;
   assert.equal(meta.license.id, 'https://creativecommons.org/licenses/by/4.0/');
 });

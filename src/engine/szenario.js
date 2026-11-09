@@ -7,6 +7,8 @@ import { MECHANIKEN } from './mechaniken/index.js';
 
 export const KNOTENTYPEN = ['szene', 'aufgabe', 'verzweigung', 'ende'];
 export const LIZENZEN = ['CC-BY-4.0', 'CC-BY-SA-4.0', 'CC0-1.0'];
+/** Symbole für Indikatoren; die Oberfläche hat für jedes ein Zeichen (src/web/symbole.js). */
+export const INDIKATOR_SYMBOLE = ['sicherheit', 'budget', 'tage'];
 
 function ziele(k) {
   if (k.typ === 'szene') return (k.optionen ?? []).map((o) => o.ziel);
@@ -28,6 +30,17 @@ export function pruefeSzenario(s) {
   if (!LIZENZEN.includes(s.lizenz)) f('lizenz', `lizenz muss eine offene Lizenz sein: ${LIZENZEN.join(', ')}`);
   if (!Array.isArray(s.urheber) || s.urheber.length === 0) f('urheber', 'urheber fehlt (für die Namensnennung der Lizenz)');
 
+  // Bilder: { datei, alt } mit einem Pfad im Szenario-Ordner
+  const bild = (pfad, b) => {
+    if (b !== undefined && (typeof b?.datei !== 'string' || !b.datei)) f(pfad, 'Bild braucht „datei“, z. B. { "datei": "medien/bild.svg", "alt": "…" }');
+  };
+  bild('titelbild', s.titelbild);
+  if (s.figur !== undefined) {
+    if (!s.figur?.name) f('figur.name', 'Figur braucht einen Namen');
+    if (!s.figur?.bild) f('figur.bild', 'Figur braucht ein Bild');
+    for (const feld of ['bild', 'zufrieden', 'besorgt']) bild(`figur.${feld}`, s.figur?.[feld]);
+  }
+
   const lernziele = new Set();
   (s.lernziele ?? []).forEach((lz, i) => {
     if (!lz.id || !lz.text) f(`lernziele[${i}]`, 'Lernziel braucht id und text');
@@ -39,6 +52,7 @@ export function pruefeSzenario(s) {
   (s.indikatoren ?? []).forEach((ind, i) => {
     if (!ind.id || !ind.name) f(`indikatoren[${i}]`, 'Indikator braucht id und name');
     if (!(ind.min <= ind.start && ind.start <= ind.max)) f(`indikatoren[${i}]`, 'Es muss min ≤ start ≤ max gelten');
+    if (ind.symbol !== undefined && !INDIKATOR_SYMBOLE.includes(ind.symbol)) f(`indikatoren[${i}].symbol`, `symbol muss einer von ${INDIKATOR_SYMBOLE.join(', ')} sein`);
     indikatoren.add(ind.id);
   });
 
@@ -74,6 +88,7 @@ export function pruefeSzenario(s) {
     if (!/^[a-z0-9_-]+$/.test(id)) f(p, 'Knoten-id nur aus a–z, 0–9, „_“, „-“');
     if (!KNOTENTYPEN.includes(k.typ)) { f(`${p}.typ`, `typ muss einer von ${KNOTENTYPEN.join(', ')} sein`); continue; }
     if (k.lernziel && !lernziele.has(k.lernziel)) f(`${p}.lernziel`, `Lernziel „${k.lernziel}“ gibt es nicht`);
+    bild(`${p}.bild`, k.bild);
     if (k.typ === 'szene') {
       if (!k.text) f(`${p}.text`, 'Szene braucht einen Text');
       if (!Array.isArray(k.optionen) || k.optionen.length === 0) f(`${p}.optionen`, 'Szene braucht mindestens eine Option');
@@ -104,6 +119,21 @@ export function pruefeSzenario(s) {
       if (!['erfolg', 'teilerfolg', 'misserfolg'].includes(k.ergebnis)) f(`${p}.ergebnis`, 'ergebnis: erfolg, teilerfolg oder misserfolg');
     }
     ziele(k).forEach((z) => { if (z !== undefined && !ids.has(z)) f(p, `Ziel „${z}“ gibt es nicht`); });
+  }
+
+  // Kapitel für die Fortschrittskarte: [{ titel, knoten: [id, …] }]; jeder sichtbare Knoten gehört in eines
+  if (s.kapitel !== undefined) {
+    if (!Array.isArray(s.kapitel)) f('kapitel', 'kapitel muss eine Liste sein');
+    else {
+      s.kapitel.forEach((kap, i) => {
+        if (!kap?.titel) f(`kapitel[${i}].titel`, 'Kapitel braucht einen Titel');
+        if (!Array.isArray(kap?.knoten) || kap.knoten.length === 0) f(`kapitel[${i}].knoten`, 'Kapitel braucht eine Liste von Knoten');
+        else for (const id of kap.knoten) if (!ids.has(id)) f(`kapitel[${i}].knoten`, `Knoten „${id}“ gibt es nicht`);
+      });
+      for (const [id, k] of Object.entries(knoten)) {
+        if (k.typ !== 'verzweigung' && !s.kapitel.some((kap) => kap?.knoten?.includes?.(id))) warnungen.push({ pfad: `knoten.${id}`, meldung: 'Knoten steht in keinem Kapitel; die Fortschrittskarte zeigt dort kein aktuelles Kapitel' });
+      }
+    }
   }
 
   // Erreichbarkeit: jeder Knoten vom Start aus, und von jedem Knoten aus ein Ende

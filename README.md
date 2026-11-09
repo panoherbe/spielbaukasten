@@ -18,7 +18,7 @@ Spiele entstehen als Datei statt als Programm. Das läuft heute – ansehen, sel
 | Datenschutz | keine Namen, keine E-Mail-Adressen, zufällige Pseudonyme; Auswertung nur als Summen ab 3 Personen; Löschen auf Knopfdruck |
 | Neue Inhalte ohne Programmierung | Lernspiele sind Dateien; die Prüfung meldet Fehler auf Deutsch mit Fundstelle; jede Version bleibt erhalten |
 | Offene Lernressourcen (OER) | Export als eine einzige HTML-Datei (76 KB), läuft ohne Server und ohne Internet: 0 Netzanfragen (02.11.2026); Metadaten nach dem Profil AMB |
-| Viele Studierende gleichzeitig | 300 gleichzeitig mit Denkzeit: 0 Fehler, 95 % der Antworten unter 0,07 s; 200 im selben Augenblick: 0 Fehler (02.11.2026) |
+| Viele Studierende gleichzeitig | Lasttest mit 300 simulierten Studierenden gleichzeitig, mit Denkzeit: 0 Fehler, 95 % der Antworten unter 0,07 s; 200 simulierte im selben Augenblick: 0 Fehler (02.11.2026) |
 | Barrierefreiheit | automatische Prüfung mit axe-core (WCAG 2.0/2.1 A und AA, WCAG 2.2 AA): 0 Verstöße in 9 Ansichten (02.11.2026) |
 | Schlank und sicher | erste Seite 11 Dateien, 41 KB, keine Dateien von fremden Servern (02.11.2026); Lösungen und Formeln verlassen den Server nicht |
 | Geprüfte Qualität | 32 von 32 automatischen Tests bestanden (02.11.2026) |
@@ -98,7 +98,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 02.11.2026](nachweis/PROTOKOLL
 | 1:12 | … die Prüfung findet ihn und nennt die Stelle, auf Deutsch. Jede hochgeladene Version bleibt erhalten. |
 | 1:15 | Jedes Spiel lässt sich als offene Lernressource (OER) exportieren … |
 | 1:16 | … als eine einzige HTML-Datei (76 KB). Sie läuft ohne Server und ohne Internet, mit Lizenzhinweis. |
-| 1:20 | **Gemessen am 02.11.2026:** 32 von 32 automatischen Tests bestanden · 300 Studierende gleichzeitig, 0 Fehler, 95 % der Antworten unter 0,07 s · Barrierefreiheit automatisch geprüft (WCAG 2.2 AA): 0 Verstöße in 9 Ansichten · erste Seite 41 KB, keine Dateien von fremden Servern. |
+| 1:20 | **Gemessen am 02.11.2026:** 32 von 32 automatischen Tests bestanden · Lasttest mit 300 simulierten Studierenden gleichzeitig, 0 Fehler, 95 % der Antworten unter 0,07 s · Barrierefreiheit automatisch geprüft (WCAG 2.2 AA): 0 Verstöße in 9 Ansichten · erste Seite 41 KB, keine Dateien von fremden Servern. |
 | 1:24 | **Selbst prüfen:** die Offline-Fassung herunterladen und im Browser öffnen, oder die ganze Anwendung mit drei Befehlen starten. Quellcode offen, AGPL-3.0. |
 
 </details>
@@ -216,7 +216,7 @@ docker compose run --rm test                          # 32 Unit- und Schnittstel
 node tools/pruefe.js inhalte/szenarien/*/szenario.json  # Szenarien prüfen
 ```
 
-Die Nachweis-Messung (Last mit 50 und 200 gleichzeitigen Personen und 300 mit Denkzeit, Durchspielen im echten
+Die Nachweis-Messung (Lasttest mit 50 und 200 simulierten Personen im selben Augenblick und 300 simulierten mit Denkzeit, Durchspielen im echten
 Chrome auf Desktop- und Telefonbreite, Barrierefreiheit mit axe-core, Offline-Fassung):
 
 ```bash
@@ -239,8 +239,8 @@ docker compose -p spielbaukasten-nachweis -f compose.nachweis.yaml down -v
 
 ### Technische Grenzen
 
-- SQLite genügt für eine Instanz mit einigen hundert gleichzeitigen Personen (gemessen: 300 mit Denkzeit und 200 im
-  selben Augenblick, siehe Protokoll); für mehr wäre PostgreSQL vorgesehen (Datenzugriff in `src/server/db.js`
+- SQLite genügt für eine Instanz mit einigen hundert gleichzeitigen Personen (gemessen im Lasttest mit simulierten
+  Studierenden: 300 mit Denkzeit und 200 im selben Augenblick, siehe Protokoll); für mehr wäre PostgreSQL vorgesehen (Datenzugriff in `src/server/db.js`
   gekapselt).
 - Gestaltung über Variablen in `src/web/styles.css` anpassbar.
 - Die Fachinhalte der Beispielszenarien sind Lehrbeispiele (vereinfachtes Lehrmodell, kein vollständiger Nachweis

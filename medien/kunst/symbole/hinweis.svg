@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="hi-t">
+<title id="hi-t">Hinweis: leuchtende Glühbirne</title>
+<!-- Spielbaukasten · Bild: Panagiotis Herbe · CC BY 4.0 -->
+<defs><linearGradient id="hi-a" x2=".6" y2="1"><stop offset="0" stop-color="#fff6bf"/><stop offset="1" stop-color="#ffc531"/></linearGradient></defs><path d="M32 2v5M10 12l4 3.5M54 12l-4 3.5M4 30h5M55 30h5" stroke="#f2b632" stroke-width="3" stroke-linecap="round"/><path d="M23 41c-5-4-9-9-9-15a18 18 0 0 1 36 0c0 6-4 11-9 15v4H23Z" fill="url(#hi-a)" stroke="#a86e00" stroke-width="2.5" stroke-linejoin="round"/><path d="M27 40v-8l-3-5M37 40v-8l3-5M27 32h10" stroke="#e07a00" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 22a13 13 0 0 1 8-8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/><rect x="22" y="45" width="20" height="6" rx="2.5" fill="#8a96a3" stroke="#4f5b67" stroke-width="2"/><rect x="24" y="51" width="16" height="6" rx="2.5" fill="#6b7785" stroke="#4f5b67" stroke-width="2"/><path d="M28 59h8" stroke="#4f5b67" stroke-width="3" stroke-linecap="round"/>
+</svg>

@@ -1,6 +1,6 @@
 {
   "id": "fussgaengerbruecke",
-  "version": 1,
+  "version": 2,
   "titel": "Riss an der Fußgängerbrücke",
   "kurzbeschreibung": "Entscheidungsspiel zur Technischen Mechanik: Ein Riss an einer kleinen Fachwerkbrücke auf dem Campus, fünf Tage vor einem Fest. Sie entscheiden, prüfen, rechnen und verantworten die Freigabe.",
   "fach": "Technische Mechanik / Stahlbau",
@@ -10,15 +10,35 @@
   "lizenz": "CC-BY-4.0",
   "urheber": ["Panagiotis Herbe"],
   "schlagworte": ["Fachwerk", "Knotengleichgewicht", "Stabkraft", "Spannung", "Nettoquerschnitt", "Bauwerksprüfung", "Serious Game"],
+  "titelbild": {
+    "datei": "medien/titel-fussgaengerbruecke.svg",
+    "alt": "Eine Stahl-Fachwerkbrücke über einem Bach im Abendlicht, Menschen gehen hinüber; eine rote Markierung zeigt einen Riss im Zugband, im Hintergrund wird ein Festzelt aufgebaut."
+  },
+  "figur": {
+    "name": "Bauleitung",
+    "bild": {
+      "datei": "medien/bauleitung.svg",
+      "alt": "Spielfigur Bauleitung: Person mit weißem Schutzhelm, oranger Warnweste mit Reflexstreifen, einem Tablet mit Fachwerkskizze und einer Planrolle; freundlicher Blick."
+    },
+    "zufrieden": { "datei": "medien/bauleitung-freude.svg", "alt": "Spielfigur Bauleitung, erfreut: lachend, mit Helm, Warnweste, Tablet und Planrolle." },
+    "besorgt": { "datei": "medien/bauleitung-sorge.svg", "alt": "Spielfigur Bauleitung, besorgt: mit hochgezogenen Augenbrauen, Helm, Warnweste, Tablet und Planrolle." }
+  },
   "lernziele": [
     { "id": "LZ1", "text": "Stabkräfte in einem einfachen Fachwerk mit dem Knotengleichgewicht bestimmen" },
     { "id": "LZ2", "text": "Die Spannung in einem geschwächten Querschnitt berechnen und einen vereinfachten Tragfähigkeitsnachweis führen" },
     { "id": "LZ3", "text": "Prüfschritte und Sicherheitsentscheidungen bei einem Schaden an einem Tragwerk begründen" }
   ],
   "indikatoren": [
-    { "id": "sicherheit", "name": "Sicherheit", "start": 50, "min": 0, "max": 100, "einheit": "%" },
-    { "id": "budget", "name": "Budget", "start": 10, "min": 0, "max": 10, "einheit": "T€" },
-    { "id": "tage", "name": "Tage bis zum Fest", "start": 5, "min": 0, "max": 5, "einheit": "" }
+    { "id": "sicherheit", "name": "Sicherheit", "start": 50, "min": 0, "max": 100, "einheit": "%", "symbol": "sicherheit" },
+    { "id": "budget", "name": "Budget", "start": 10, "min": 0, "max": 10, "einheit": "T€", "symbol": "budget" },
+    { "id": "tage", "name": "Tage bis zum Fest", "start": 5, "min": 0, "max": 5, "einheit": "", "symbol": "tage" }
+  ],
+  "kapitel": [
+    { "titel": "Lage", "knoten": ["meldung"] },
+    { "titel": "Prüfen", "knoten": ["pruefschritte"] },
+    { "titel": "Rechnen", "knoten": ["modell", "diagonale", "zugband", "spannung"] },
+    { "titel": "Entscheiden", "knoten": ["entscheidung_reserve", "entscheidung_ueberlastet"] },
+    { "titel": "Ergebnis", "knoten": ["ende_erfolg", "ende_teilerfolg", "ende_misserfolg"] }
   ],
   "parameter": {
     "F": { "min": 30, "max": 60, "schritt": 5, "einheit": "kN" },
@@ -29,8 +49,12 @@
     "meldung": {
       "typ": "szene",
       "titel": "Eine Meldung am Montagmorgen",
-      "bild": { "datei": "medien/bruecke.svg", "alt": "Kleine Stahl-Fachwerkbrücke über einen Bach, ein Pfeil markiert einen Riss am unteren Zugband." },
-      "text": "Sie sind seit drei Wochen Ingenieurin oder Ingenieur in der Bauabteilung der Hochschule. Der Hausmeister meldet: **Am Zugband der kleinen Stahlbrücke über den Bach ist ein Riss zu sehen.** Die Brücke ist offen, täglich gehen Hunderte darüber. In fünf Tagen ist das Campusfest, dann wird es voll.\n\nWas tun Sie zuerst?",
+      "bild": {
+        "datei": "medien/meldung.svg",
+        "alt": "Montagmorgen an der Fußgängerbrücke: Menschen gehen über die Stahl-Fachwerkbrücke, der Hausmeister zeigt auf eine Markierung am Riss im Untergurt, dem Zugband."
+      },
+      "sprechblase": "Der Hausmeister hat gerade angerufen. Was tun Sie zuerst?",
+      "text": "Sie sind seit drei Wochen Ingenieurin oder Ingenieur in der Bauabteilung der Hochschule. Der Hausmeister meldet: **Am Zugband der kleinen Stahlbrücke über den Bach ist ein Riss zu sehen.** Die Brücke ist offen, täglich gehen Hunderte darüber. In fünf Tagen ist das Campusfest, dann wird es voll.",
       "optionen": [
         {
           "id": "sperren",
@@ -55,6 +79,11 @@
     "pruefschritte": {
       "typ": "aufgabe",
       "titel": "Wie gehen Sie vor?",
+      "bild": {
+        "datei": "medien/pruefschritte.svg",
+        "alt": "Schreibtisch der Bauleitung von oben: ein Bestandsplan der Fachwerkbrücke mit rot umkreister Stelle, eine Planrolle, eine Mappe mit Prüfbericht, Foto und Prüfstempel, ein Zollstock, ein Taschenrechner, eine Kamera, ein Schutzhelm und eine Tasse Kaffee."
+      },
+      "sprechblase": "Jetzt systematisch: In welcher Reihenfolge prüfen Sie?",
       "mechanik": "reihenfolge",
       "frage": "Bringen Sie die Prüfschritte in eine sinnvolle Reihenfolge.",
       "elemente": [
@@ -68,7 +97,10 @@
       "punkte": 10,
       "lernziel": "LZ3",
       "hinweis": "Erst wissen, was geplant war; dann sehen, was ist; dann rechnen; dann entscheiden.",
-      "rueckmeldung": { "richtig": "Genau: Unterlagen, Befund, Rechnung, Nachweis, Entscheidung.", "falsch": "Ohne Pläne wissen Sie nicht, welches Bauteil welche Kraft trägt; ohne Befund nicht, wie groß der Rest ist." },
+      "rueckmeldung": {
+        "richtig": "Genau: Unterlagen, Befund, Rechnung, Nachweis, Entscheidung.",
+        "falsch": "Ohne Pläne wissen Sie nicht, welches Bauteil welche Kraft trägt; ohne Befund nicht, wie groß der Rest ist."
+      },
       "erklaerung": "Die Rechnung braucht die Pläne (Geometrie, Querschnitte) und den Befund (wie viel Querschnitt der Riss kostet). Die Entscheidung kommt zuletzt und wird schriftlich festgehalten.",
       "effekte_richtig": { "sicherheit": 5, "tage": -1 },
       "effekte_falsch": { "tage": -1 },
@@ -77,15 +109,23 @@
     "modell": {
       "typ": "szene",
       "titel": "Das Fachwerk als Modell",
-      "bild": { "datei": "medien/fachwerk.svg", "alt": "Dreiecksfachwerk: zwei Diagonalen D unter dem Winkel theta zur Horizontalen, unten das Zugband Z, oben greift die Last F an; links ein Festlager, rechts ein Loslager." },
+      "bild": {
+        "datei": "medien/modell.svg",
+        "alt": "Blaupause des Modells: ein Dreiecksfachwerk aus zwei Diagonalen D unter dem Winkel θ und dem Zugband Z unten, oben greift die Last F an; links ein Festlager, rechts ein Loslager, im Zugband ist der Riss rot markiert. Eine kleine Karte zeigt, welches Feld der Brücke gemeint ist.",
+        "skizze": true
+      },
+      "sprechblase": "Ich brauche Ihre Zahlen bis heute Abend. Zuerst die Stabkräfte.",
       "text": "Laut Statik lässt sich das betroffene Feld als **Dreieck** berechnen: zwei Diagonalen unter dem Winkel θ = {theta}° zur Horizontalen, unten das **Zugband**, oben die Last **F = {F} kN** (Menschengruppe und Eigengewicht, charakteristischer Wert). Die Stäbe sind gelenkig verbunden, das Eigengewicht der Stäbe ist in F enthalten.\n\nDer Riss sitzt im Zugband. Um ihn zu bewerten, brauchen Sie zuerst die Kräfte in den Stäben.",
-      "optionen": [
-        { "id": "rechnen", "text": "Zur Berechnung", "ziel": "diagonale" }
-      ]
+      "optionen": [{ "id": "rechnen", "text": "Zur Berechnung", "ziel": "diagonale" }]
     },
     "diagonale": {
       "typ": "aufgabe",
       "titel": "Kraft in der Diagonale",
+      "bild": {
+        "datei": "medien/diagonale.svg",
+        "alt": "Blaupause: Der obere Knoten des Fachwerks ist freigeschnitten und vergrößert. Die Last F drückt von oben, die beiden Diagonalkräfte D drücken entlang der Stäbe auf den Knoten, θ ist der Winkel zwischen Diagonale und Horizontaler.",
+        "skizze": true
+      },
       "mechanik": "zahl",
       "frage": "Wie groß ist die Druckkraft in **einer** Diagonale? Geben Sie den Betrag in kN an (F = {F} kN, θ = {theta}°).",
       "einheit": "kN",
@@ -107,6 +147,11 @@
     "zugband": {
       "typ": "aufgabe",
       "titel": "Kraft im Zugband",
+      "bild": {
+        "datei": "medien/zugband.svg",
+        "alt": "Blaupause: Der linke Auflagerknoten ist freigeschnitten und vergrößert. Von unten wirkt die Auflagerkraft F/2, die Diagonalkraft D drückt schräg auf den Knoten, das Zugband Z zieht waagerecht nach rechts; θ liegt zwischen Zugband und Diagonale.",
+        "skizze": true
+      },
       "mechanik": "zahl",
       "frage": "Wie groß ist die Zugkraft Z im Zugband (in kN)?",
       "einheit": "kN",
@@ -127,6 +172,11 @@
     "spannung": {
       "typ": "aufgabe",
       "titel": "Spannung am Riss",
+      "bild": {
+        "datei": "medien/spannung.svg",
+        "alt": "Blaupause: Das Zugband ist am Riss geschnitten. Links zieht die Kraft Z, an der Schnittfläche wirkt die Spannung σ nur im oberen, unversehrten Teil; unten ist der Riss rot. Rechts der Querschnitt: oben der tragende Rest, unten der gerissene Teil.",
+        "skizze": true
+      },
       "mechanik": "zahl",
       "frage": "Das Zugband ist ein Flachstahl 40 × 8 mm aus S235 (Streckgrenze f_y = 235 N/mm²). Der Riss geht über die halbe Breite; es bleiben 20 × 8 mm = **160 mm²**.\n\nVereinfachtes Lehrmodell (kein vollständiger Nachweis nach Eurocode 3): Bemessungsspannung σ_Ed = 1,5 · Z / A_netto. Wie groß ist σ_Ed in N/mm²?",
       "einheit": "N/mm²",
@@ -148,15 +198,18 @@
     },
     "nachweis": {
       "typ": "verzweigung",
-      "regeln": [
-        { "wenn": "1.5 * F / (2 * tand(theta)) * 1000 / 160 <= 235", "ziel": "entscheidung_reserve" }
-      ],
+      "regeln": [{ "wenn": "1.5 * F / (2 * tand(theta)) * 1000 / 160 <= 235", "ziel": "entscheidung_reserve" }],
       "sonst": "entscheidung_ueberlastet"
     },
     "entscheidung_reserve": {
       "typ": "szene",
       "titel": "Der Nachweis ist erfüllt – und jetzt?",
-      "text": "Mit σ_Ed = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 : 1} N/mm² ≤ 235 N/mm² ist der vereinfachte Nachweis am Restquerschnitt **erfüllt** (η = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 / 235 : 2}). Der Riss ist trotzdem da. Noch {tage : 0} Tage bis zum Fest, Budget {budget : 0} T€.\n\nWie entscheiden Sie?",
+      "bild": {
+        "datei": "medien/entscheidung_reserve.svg",
+        "alt": "Nachmittag an der gesperrten Brücke: Absperrschranken an beiden Enden, ein Umleitungsschild, die Bauleitung mit Tablet. Eine Anzeige der Ausnutzung η steht im grünen Bereich unter 1, der Riss bleibt markiert."
+      },
+      "sprechblase": "Die Rechnung zeigt Reserve, der Riss ist trotzdem da. Wie entscheiden Sie?",
+      "text": "Mit σ_Ed = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 : 1} N/mm² ≤ 235 N/mm² ist der vereinfachte Nachweis am Restquerschnitt **erfüllt** (η = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 / 235 : 2}). Der Riss ist trotzdem da. Noch {tage : 0} Tage bis zum Fest, Budget {budget : 0} T€.",
       "optionen": [
         {
           "id": "freigeben",
@@ -190,7 +243,12 @@
     "entscheidung_ueberlastet": {
       "typ": "szene",
       "titel": "Der Nachweis ist nicht erfüllt",
-      "text": "Mit σ_Ed = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 : 1} N/mm² > 235 N/mm² ist der vereinfachte Nachweis am Restquerschnitt **nicht erfüllt** (η = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 / 235 : 2}). Noch {tage : 0} Tage bis zum Fest, Budget {budget : 0} T€.\n\nWie entscheiden Sie?",
+      "bild": {
+        "datei": "medien/entscheidung_ueberlastet.svg",
+        "alt": "Abendrot an der gesperrten Brücke: Absperrschranken, Umleitungsschild, die Bauleitung mit Tablet. Die Anzeige der Ausnutzung η steht im roten Bereich über 1, der Riss ist rot markiert."
+      },
+      "sprechblase": "Der Restquerschnitt reicht nicht. Wie entscheiden Sie?",
+      "text": "Mit σ_Ed = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 : 1} N/mm² > 235 N/mm² ist der vereinfachte Nachweis am Restquerschnitt **nicht erfüllt** (η = {= 1.5 * F / (2 * tand(theta)) * 1000 / 160 / 235 : 2}). Noch {tage : 0} Tage bis zum Fest, Budget {budget : 0} T€.",
       "optionen": [
         {
           "id": "freigeben",
@@ -223,28 +281,40 @@
     },
     "abschluss": {
       "typ": "verzweigung",
-      "regeln": [
-        { "wenn": "sicherheit >= 90", "ziel": "ende_erfolg" },
-        { "wenn": "sicherheit >= 50", "ziel": "ende_teilerfolg" }
-      ],
+      "regeln": [{ "wenn": "sicherheit >= 90", "ziel": "ende_erfolg" }, { "wenn": "sicherheit >= 50", "ziel": "ende_teilerfolg" }],
       "sonst": "ende_misserfolg"
     },
     "ende_erfolg": {
       "typ": "ende",
       "ergebnis": "erfolg",
       "titel": "Sicher zum Fest",
+      "bild": {
+        "datei": "medien/ende_erfolg.svg",
+        "alt": "Abend des Campusfests: Lichterketten über der reparierten Brücke, Feuerwerk, Menschen gehen hinüber. Am Zugband sitzen verschraubte Laschen über dem Riss, ein grüner Haken markiert die Reparatur."
+      },
+      "sprechblase": "Starke Arbeit. Das Fest kann kommen!",
       "text": "Die Brücke trägt wieder mit voller Reserve, das Fest kann kommen. Sie haben zuerst gesichert, dann systematisch geprüft und nach der Rechnung entschieden. Sicherheit {sicherheit : 0} %, Restbudget {budget : 0} T€."
     },
     "ende_teilerfolg": {
       "typ": "ende",
       "ergebnis": "teilerfolg",
       "titel": "Gut gegangen – diesmal",
+      "bild": {
+        "datei": "medien/ende_teilerfolg.svg",
+        "alt": "Bewölkter Abend: Die Brücke ist mit Auflagen offen. Ein Schild begrenzt die Zahl der Personen, am Ende der Brücke warten Menschen, der Riss ist gelb markiert und die Bauleitung leuchtet ihn mit einer Lampe an."
+      },
+      "sprechblase": "Gut gegangen – aber das war knapp.",
       "text": "Es ist nichts passiert, aber nicht jede Entscheidung hatte genug Reserve: entweder war die Brücke ungeprüft offen, oder sie ist nur mit Auflagen in Betrieb. Sicherheit {sicherheit : 0} %. Spielen Sie den Fall noch einmal und achten Sie auf die Reihenfolge Sichern – Prüfen – Entscheiden."
     },
     "ende_misserfolg": {
       "typ": "ende",
       "ergebnis": "misserfolg",
       "titel": "Die Bauaufsicht sperrt die Brücke",
+      "bild": {
+        "datei": "medien/ende_misserfolg.svg",
+        "alt": "Regen am Festabend: Die Bauaufsicht hat die Brücke gesperrt. Bauzäune an beiden Enden, ein Verbotsschild für Fußgänger, am Riss hängt ein rotes Prüfschild. Menschen mit Regenschirmen stehen davor."
+      },
+      "sprechblase": "Das hätten wir anders lösen müssen.",
       "text": "Bei der Kontrolle vor dem Fest sperrt die Bauaufsicht die Brücke: Ein gerissenes Zugglied ohne Reparatur und ohne Überwachung ist nicht freizugeben. Sicherheit {sicherheit : 0} %. Die Rechnung war der halbe Weg; die Verantwortung für die Entscheidung bleibt."
     }
   }
