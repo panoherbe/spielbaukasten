@@ -1,9 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-<defs><linearGradient id="ohnehinweis-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#e0a100"/></linearGradient><linearGradient id="ohnehinweis-i" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffcf4d"/><stop offset="1" stop-color="#d98e00"/></linearGradient></defs>
-<path d="M52 112 40 154l20-10 14 16 10-44zM108 112l12 42-20-10-14 16-10-44z" fill="#d98e00"/>
-<circle cx="80" cy="74" r="64" fill="url(#ohnehinweis-g)"/>
-<circle cx="80" cy="74" r="54" fill="url(#ohnehinweis-i)"/>
-<circle cx="80" cy="74" r="54" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/>
-<path d="M42 52a46 46 0 0 1 76 0" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="6" stroke-linecap="round"/>
-<g transform="translate(46 40) scale(2.83)" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.8.6 1.1 1.3 1.1 2.2h5c0-.9.3-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="ohne-t">
+<title id="ohne-t">Auszeichnung „Ohne Hinweis“: goldene Medaille mit orangener Mitte und einer leuchtenden Glühbirne</title>
+<!-- Spielbaukasten · Bild: Panagiotis Herbe · CC BY 4.0 -->
+<defs>
+<linearGradient id="ohne-go" x2="0" y2="1"><stop offset="0" stop-color="#fff0b3"/><stop offset=".45" stop-color="#ffcf3f"/><stop offset="1" stop-color="#c98a00"/></linearGradient>
+<linearGradient id="ohne-gr" x2="0" y2="1"><stop offset="0" stop-color="#b37400"/><stop offset="1" stop-color="#ffe08a"/></linearGradient>
+<radialGradient id="ohne-in" cx=".4" cy=".32" r=".8"><stop offset="0" stop-color="#ffb240"/><stop offset="1" stop-color="#c45f00"/></radialGradient>
+</defs>
+<path d="M50 104 34 152l18-7 12 14 14-46z" fill="#c45f00"/><path d="M110 104l16 48-18-7-12 14-14-46z" fill="#c45f00"/>
+<path d="M50 104 34 152l18-7 12 14 14-46z" fill="#000" opacity=".18"/><path d="M58 108l-9 30M102 108l9 30" stroke="#fff" stroke-opacity=".3" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="80" cy="140" rx="34" ry="5" fill="#000" opacity=".12"/>
+<path d="M80.0 6.0L89.4 12.7L100.4 9.2L107.2 18.5L118.8 18.6L122.4 29.6L133.4 33.2L133.5 44.8L142.8 51.6L139.3 62.6L146.0 72.0L139.3 81.4L142.8 92.4L133.5 99.2L133.4 110.8L122.4 114.4L118.8 125.4L107.2 125.5L100.4 134.8L89.4 131.3L80.0 138.0L70.6 131.3L59.6 134.8L52.8 125.5L41.2 125.4L37.6 114.4L26.6 110.8L26.5 99.2L17.2 92.4L20.7 81.4L14.0 72.0L20.7 62.6L17.2 51.6L26.5 44.8L26.6 33.2L37.6 29.6L41.2 18.6L52.8 18.5L59.6 9.2L70.6 12.7Z" fill="url(#ohne-go)" stroke="#a86f00" stroke-width="1.5" stroke-linejoin="round"/>
+<circle cx="80" cy="72" r="54" fill="url(#ohne-gr)"/>
+<circle cx="80" cy="72" r="49" fill="url(#ohne-in)"/>
+<circle cx="80" cy="72" r="49" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="2.5"/>
+<path d="M40 56a44 44 0 0 1 62-25" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="7" stroke-linecap="round"/>
+<g transform="translate(51 43) scale(2.42)" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(.5 .7)"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.8.6 1.1 1.4 1.1 2.2h5c0-.8.3-1.6 1.1-2.2A6 6 0 0 0 12 3z"/><path d="M12 7.5v3"/></g></g>
+<g transform="translate(51 43) scale(2.42)" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.8.6 1.1 1.4 1.1 2.2h5c0-.8.3-1.6 1.1-2.2A6 6 0 0 0 12 3z"/><path d="M12 7.5v3"/></g>
+<path d="M124 22l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" fill="#fff6d6"/><circle cx="34" cy="112" r="2.5" fill="#fff6d6"/>
 </svg>

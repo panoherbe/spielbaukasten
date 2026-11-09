@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-labelledby="au-t">
+<title id="au-t">Blaupause des Aufbaus: Eine Quelle U speist zwei Widerstände in Reihe, oben R1, unten R2; R2 ist der Temperaturfühler. Die Spannung U2 über R2 führt zum Messeingang eines Mikrocontrollers.</title>
+<!-- Spielbaukasten · Bild: Panagiotis Herbe · CC BY 4.0 -->
+<defs>
+<linearGradient id="au-bp" x2="0" y2="1"><stop offset="0" stop-color="#103154"/><stop offset="1" stop-color="#0a1b31"/></linearGradient>
+<radialGradient id="au-bh" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#2a6aa8" stop-opacity=".45"/><stop offset="1" stop-color="#2a6aa8" stop-opacity="0"/></radialGradient>
+<pattern id="au-r1" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#9cccff" stroke-opacity=".07"/></pattern>
+<pattern id="au-r2" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0H0V120" fill="none" stroke="#9cccff" stroke-opacity=".15"/></pattern>
+<filter id="au-gl" filterUnits="userSpaceOnUse" x="0" y="0" width="960" height="480"><feGaussianBlur stdDeviation="4"/></filter>
+<style>text{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:700;paint-order:stroke;stroke:#0a1b31;stroke-width:6px;stroke-linejoin:round}.au-s{font-family:system-ui,sans-serif;font-style:normal;font-weight:600;letter-spacing:.08em}</style>
+<path id="au-dr" d="M230 110H520V150M520 230V270M520 350V390H230V290M230 210V110M520 250H690M520 390H690"/>
+</defs>
+<rect width="960" height="480" fill="url(#au-bp)"/><rect width="960" height="480" fill="url(#au-bh)"/><rect width="960" height="480" fill="url(#au-r1)"/><rect width="960" height="480" fill="url(#au-r2)"/>
+<rect x="14" y="14" width="932" height="452" rx="14" fill="none" stroke="#9cccff" stroke-opacity=".3" stroke-width="2"/>
+<path d="M14 44V14h30M916 14h30v30M946 436v30h-30M44 466H14v-30" fill="none" stroke="#9cccff" stroke-opacity=".7" stroke-width="3"/>
+<!-- Leitungen mit Leuchten -->
+<use href="#au-dr" stroke="#6fb6ff" stroke-width="14" opacity=".4" filter="url(#au-gl)" fill="none"/>
+<use href="#au-dr" stroke="#eaf3ff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<!-- Quelle -->
+<circle cx="230" cy="250" r="40" fill="#0b2140" stroke="#eaf3ff" stroke-width="6"/>
+<path d="M230 210V290" stroke="#eaf3ff" stroke-width="6"/>
+<path d="M150 210V280" stroke="#ff7a59" stroke-width="5" stroke-linecap="round"/><path d="M150 298l11-20h-22z" fill="#ff7a59"/>
+<text x="122" y="262" font-size="38" fill="#ff7a59" text-anchor="middle">U</text>
+<text x="262" y="200" font-size="28" fill="#eaf3ff" text-anchor="middle" class="au-s" style="font-size:22px">+</text>
+<!-- R1 -->
+<rect x="500" y="150" width="40" height="80" rx="3" fill="#0b2140" stroke="#6cc4ff" stroke-width="6"/>
+<text x="472" y="202" font-size="34" fill="#6cc4ff" text-anchor="middle">R<tspan font-size="22" dy="8">1</tspan></text>
+<!-- R2 als Temperaturfühler -->
+<rect x="500" y="270" width="40" height="80" rx="3" fill="#0b2140" stroke="#5ee0a3" stroke-width="6"/>
+<path d="M486 360L556 262" stroke="#5ee0a3" stroke-width="4" stroke-linecap="round"/><path d="M556 262h-18" stroke="#5ee0a3" stroke-width="4" stroke-linecap="round"/>
+<text x="472" y="322" font-size="34" fill="#5ee0a3" text-anchor="middle">R<tspan font-size="22" dy="8">2</tspan></text>
+<g transform="translate(410 262)"><rect x="-9" y="0" width="18" height="58" rx="9" fill="#0b2140" stroke="#eaf3ff" stroke-width="3.5"/><circle cx="0" cy="66" r="14" fill="#ff7a59" stroke="#eaf3ff" stroke-width="3.5"/><path d="M0 64V22" stroke="#ff7a59" stroke-width="7" stroke-linecap="round"/></g>
+<!-- Knoten -->
+<circle cx="520" cy="250" r="9" fill="#ffd25a"/><circle cx="520" cy="390" r="9" fill="#ffd25a"/>
+<!-- U2 -->
+<path d="M598 272V332" stroke="#ffd25a" stroke-width="5" stroke-linecap="round"/><path d="M598 350l11-20h-22z" fill="#ffd25a"/>
+<text x="634" y="324" font-size="34" fill="#ffd25a" text-anchor="middle">U<tspan font-size="22" dy="8">2</tspan></text>
+<!-- Mikrocontroller -->
+<g><rect x="690" y="200" width="190" height="220" rx="16" fill="#0b223f" stroke="#9cccff" stroke-width="4"/>
+<path d="M710 200v-16M740 200v-16M770 200v-16M800 200v-16M830 200v-16M860 200v-16M710 420v16M740 420v16M770 420v16M800 420v16M830 420v16M860 420v16" stroke="#9cccff" stroke-width="5" stroke-linecap="round"/>
+<circle cx="690" cy="250" r="8" fill="#ffd25a"/><circle cx="690" cy="390" r="8" fill="#eaf3ff"/>
+<text x="785" y="292" font-size="44" fill="#eaf3ff" text-anchor="middle">µC</text>
+<text x="785" y="330" fill="#9cccff" text-anchor="middle" class="au-s" style="font-size:17px;stroke-width:4px">MESSEINGANG</text>
+<rect x="720" y="352" width="130" height="38" rx="8" fill="#06182e" stroke="#9cccff" stroke-opacity=".6" stroke-width="2"/>
+<path d="M734 371h16M758 371h16M782 371h16M806 371h16" stroke="#5ee0a3" stroke-width="6" stroke-linecap="round" opacity=".9"/></g>
+<!-- Strom im Kreis -->
+<g fill="#ffd25a"><circle cx="300" cy="110" r="5"/><circle cx="380" cy="110" r="5"/><circle cx="460" cy="110" r="5"/><circle cx="440" cy="390" r="5"/><circle cx="330" cy="390" r="5"/></g>
+<text x="60" y="64" fill="#9cccff" class="au-s" style="font-size:18px;stroke-width:4px">SPANNUNGSTEILER AM SENSOR</text>
+</svg>

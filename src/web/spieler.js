@@ -121,9 +121,9 @@ export function spieler(wurzel, backend) {
   function buehne(attrs, b, ueberschrift, { figur = null, inhalt, unten = null, bildflaeche = null }) {
     const aufBild = b && !b.skizze;
     return h('article', { ...attrs, class: `karte buehne ${attrs.class ?? ''}${b || bildflaeche ? '' : ' ohne-bild'}` },
-      bildflaeche ?? (b ? h('div', { class: `buehne-bild${b.skizze ? ' skizze' : ''}` },
+      bildflaeche ?? (b ? h('div', { class: `buehne-bild${b.skizze ? ' skizze' : ''}` }, h('div', { class: 'bild-rahmen' },
         aufBild ? h('div', { class: 'buehne-ueberschrift' }, ueberschrift) : null,
-        h('img', { src: backend.medienUrl(b.datei), alt: b.alt, decoding: 'async', onerror: fehlt })) : null),
+        h('img', { src: backend.medienUrl(b.datei), alt: b.alt, decoding: 'async', onerror: fehlt }))) : null),
       figur,
       h('div', { class: 'buehne-text' }, aufBild ? null : h('div', { class: 'buehne-kopf' }, ueberschrift), inhalt),
       unten);
@@ -189,7 +189,7 @@ export function spieler(wurzel, backend) {
     const b = letztesBild;
     leere(wurzel, anzeige(), buehne({ class: `rueckmeldung ${art.klasse}`, 'data-typ': 'rueckmeldung' }, null, titel, {
       bildflaeche: h('div', { class: `buehne-bild${b ? '' : ' ohne'}` },
-        b ? h('img', { src: backend.medienUrl(b.datei), alt: '', onerror: fehlt }) : null,
+        h('div', { class: 'bild-rahmen' }, b ? h('img', { src: backend.medienUrl(b.datei), alt: '', onerror: fehlt }) : null),
         h('div', { class: 'emblem-flaeche', 'aria-hidden': 'true' },
           h('div', { class: 'emblem' }, symbol(art.zeichen), art.klasse === 'gut' ? h('span', { class: 'funken' }, Array.from({ length: 12 }, () => h('i'))) : null))),
       inhalt: [

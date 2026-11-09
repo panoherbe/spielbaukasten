@@ -7,7 +7,7 @@ const sind = (g) => Math.sin((g * Math.PI) / 180);
 const tand = (g) => Math.tan((g * Math.PI) / 180);
 const runde = (x) => String(Math.round(x * 100) / 100).replace('.', ',');
 
-export function neuerLoeser({ fehlerquote = 0, zufall = Math.random } = {}) {
+export function neuerLoeser({ fehlerquote = 0, wahlStreuung = 0, zufall = Math.random } = {}) {
   const w = {};
   const falschZuerst = new Set();
   return function naechstes(a) {
@@ -20,7 +20,7 @@ export function neuerLoeser({ fehlerquote = 0, zufall = Math.random } = {}) {
 
     if (k.typ === 'szene') {
       const bevorzugt = ['sperren', 'reparatur', 'rechnen', 'los'];
-      const o = k.optionen.find((x) => bevorzugt.includes(x.id)) ?? k.optionen[0];
+      const o = zufall() < wahlStreuung ? k.optionen[Math.floor(zufall() * k.optionen.length)] : k.optionen.find((x) => bevorzugt.includes(x.id)) ?? k.optionen[0];
       return { typ: 'wahl', knoten: k.id, option: o.id };
     }
     let antwort;

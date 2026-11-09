@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" role="img" aria-labelledby="en-t">
+<title id="en-t">Geschafft: Die Platine auf dem Labortisch leuchtet, die grüne Leuchtdiode brennt, und das Anzeigemodul zeigt die Temperatur mit einem Thermometer und einem Haken. Lichtpunkte und Funken feiern den Abschluss.</title>
+<!-- Spielbaukasten · Bild: Panagiotis Herbe · CC BY 4.0 -->
+<defs>
+<linearGradient id="en-wa" x2="0" y2="1"><stop offset="0" stop-color="#123a4f"/><stop offset="1" stop-color="#0a1d2a"/></linearGradient>
+<radialGradient id="en-gw" cx=".5" cy=".45" r=".55"><stop offset="0" stop-color="#3ccf7e" stop-opacity=".35"/><stop offset="1" stop-color="#3ccf7e" stop-opacity="0"/></radialGradient>
+<linearGradient id="en-ti" x2="0" y2="1"><stop offset="0" stop-color="#8a6a48"/><stop offset="1" stop-color="#5b4330"/></linearGradient>
+<linearGradient id="en-pcb" x2="1" y2="1"><stop offset="0" stop-color="#1a7066"/><stop offset="1" stop-color="#0b3936"/></linearGradient>
+<pattern id="en-pd" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r="1" fill="#fff" fill-opacity=".08"/></pattern>
+<linearGradient id="en-mo" x2="0" y2="1"><stop offset="0" stop-color="#4a5562"/><stop offset="1" stop-color="#252c35"/></linearGradient>
+<linearGradient id="en-ch" x2="1" y2="1"><stop offset="0" stop-color="#3a3f48"/><stop offset="1" stop-color="#15181d"/></linearGradient>
+<filter id="en-gl" filterUnits="userSpaceOnUse" x="0" y="0" width="960" height="480"><feGaussianBlur stdDeviation="5"/></filter>
+<filter id="en-sw" filterUnits="userSpaceOnUse" x="0" y="0" width="960" height="480"><feGaussianBlur stdDeviation="8"/></filter>
+<style>.en-s{font-family:system-ui,sans-serif;font-weight:700}</style>
+</defs>
+<rect width="960" height="480" fill="url(#en-wa)"/><rect width="960" height="480" fill="url(#en-gw)"/>
+<!-- Lichtpunkte -->
+<g fill="#ffd36b"><circle cx="120" cy="70" r="4"/><circle cx="210" cy="140" r="3"/><circle cx="830" cy="80" r="4"/><circle cx="760" cy="40" r="3"/><circle cx="620" cy="110" r="3"/><circle cx="330" cy="60" r="3"/></g>
+<g fill="#5effa8" opacity=".8"><circle cx="880" cy="170" r="3"/><circle cx="90" cy="200" r="3"/><circle cx="470" cy="40" r="4"/></g>
+<!-- Funken -->
+<g stroke-linecap="round" stroke-width="5">
+<g transform="translate(170 110)" stroke="#ffd25a"><path d="M0-30V-14M0 14V30M-30 0H-14M14 0H30M-21-21l10 10M11 11l10 10M21-21l-10 10M-11 11l-10 10"/></g>
+<g transform="translate(800 140)" stroke="#6cc4ff"><path d="M0-26V-12M0 12V26M-26 0H-12M12 0H26M-18-18l8 8M10 10l8 8M18-18l-8 8M-10 10l-8 8"/></g>
+<g transform="translate(700 60)" stroke="#ff8a7a"><path d="M0-18V-8M0 8V18M-18 0H-8M8 0H18"/></g>
+</g>
+<!-- Konfetti -->
+<g><rect x="260" y="120" width="12" height="6" rx="2" fill="#ffd25a" transform="rotate(30 266 123)"/><rect x="640" y="160" width="12" height="6" rx="2" fill="#ff8a7a" transform="rotate(-20 646 163)"/><rect x="420" y="90" width="12" height="6" rx="2" fill="#6cc4ff" transform="rotate(60 426 93)"/><rect x="560" y="70" width="12" height="6" rx="2" fill="#5ee0a3" transform="rotate(15 566 73)"/><rect x="890" y="250" width="12" height="6" rx="2" fill="#ffd25a" transform="rotate(-40 896 253)"/><rect x="60" y="260" width="12" height="6" rx="2" fill="#6cc4ff" transform="rotate(25 66 263)"/></g>
+<!-- Tisch -->
+<path d="M0 320H960V480H0Z" fill="url(#en-ti)"/><path d="M0 320H960" stroke="#b08a60" stroke-width="5"/>
+<path d="M0 372C260 364 520 384 960 368M0 430C300 424 560 440 960 428" stroke="#4a3626" stroke-opacity=".35" stroke-width="3" fill="none"/>
+<!-- Platine -->
+<rect x="130" y="196" width="380" height="200" rx="18" fill="#000" opacity=".45" filter="url(#en-sw)" transform="translate(8 14)"/>
+<rect x="124" y="188" width="380" height="200" rx="18" fill="url(#en-pcb)" stroke="#2a8a7c" stroke-width="3"/>
+<rect x="124" y="188" width="380" height="200" rx="18" fill="url(#en-pd)"/>
+<path d="M160 230H300V250M300 330V356H160M300 290H380M460 230V210" stroke="#ffcf6b" stroke-width="12" opacity=".5" filter="url(#en-gl)" fill="none"/>
+<path d="M160 230H300V250M300 330V356H160M300 290H380M460 230V210" stroke="#e8b84a" stroke-width="6" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+<rect x="290" y="250" width="20" height="34" rx="8" fill="#d9bf8c"/><rect x="290" y="296" width="20" height="34" rx="8" fill="#d9bf8c"/>
+<rect x="380" y="250" width="90" height="100" rx="8" fill="url(#en-ch)"/><path d="M394 250v-10M414 250v-10M434 250v-10M454 250v-10M394 350v10M414 350v10M434 350v10M454 350v10" stroke="#aab6bf" stroke-width="5"/>
+<!-- Leuchtdiode -->
+<circle cx="460" cy="202" r="34" fill="#5effa8" opacity=".55" filter="url(#en-gl)"/><circle cx="460" cy="202" r="14" fill="#3ccf7e"/><circle cx="455" cy="197" r="5" fill="#d6ffe7"/>
+<!-- Kabel -->
+<path d="M504 300C560 300 560 250 600 250" stroke="#2b3440" stroke-width="9" fill="none" stroke-linecap="round"/>
+<!-- Anzeige -->
+<rect x="596" y="166" width="260" height="190" rx="20" fill="#000" opacity=".4" filter="url(#en-sw)" transform="translate(8 14)"/>
+<rect x="596" y="166" width="260" height="190" rx="20" fill="url(#en-mo)" stroke="#6b7785" stroke-width="3"/>
+<rect x="616" y="186" width="220" height="150" rx="12" fill="#081a14" stroke="#3ccf7e" stroke-width="3"/>
+<rect x="616" y="186" width="220" height="150" rx="12" fill="#3ccf7e" opacity=".12"/>
+<g transform="translate(662 262)"><rect x="-10" y="-56" width="20" height="62" rx="10" fill="#0b2140" stroke="#eaf3ff" stroke-width="3.5"/><path d="M0 4V-36" stroke="#ff7a59" stroke-width="8" stroke-linecap="round"/><circle cy="14" r="15" fill="#ff7a59" stroke="#eaf3ff" stroke-width="3.5"/></g>
+<path d="M712 224h96M712 252h70M712 280h84" stroke="#5effa8" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+<circle cx="800" cy="300" r="26" fill="#3ccf7e"/><path d="M788 300l9 9 17-18" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="800" cy="300" r="38" fill="#5effa8" opacity=".3" filter="url(#en-gl)"/>
+</svg>

@@ -1,7 +1,8 @@
 // Lasttest: viele Studierende spielen gleichzeitig das Brückenszenario über die echte Schnittstelle.
-//   node test/last.js http://localhost:8080 DEMO 200
+//   node test/last.js http://localhost:8080 DEMO 200 [Streuung]
 // Jede virtuelle Person tritt bei, lädt die Übersicht, startet einen Versuch und spielt ihn zu Ende (30 % der
-// Rechenaufgaben zuerst falsch). Gemessen wird jede einzelne Anfrage.
+// Rechenaufgaben zuerst falsch). Gemessen wird jede einzelne Anfrage. Mit Streuung (0…1) wählt dieser Anteil der
+// Entscheidungen eine zufällige Option, damit eine Demo-Auswertung verschiedene Wege zeigt.
 
 import { neuerLoeser } from './hilfe/loeser.js';
 
@@ -10,7 +11,7 @@ function perzentil(sortiert, p) {
   return sortiert[Math.min(sortiert.length - 1, Math.floor((p / 100) * sortiert.length))];
 }
 
-export async function lasttest({ basis, kurscode, personen, szenario = 'fussgaengerbruecke', denkzeitMs = null }) {
+export async function lasttest({ basis, kurscode, personen, szenario = 'fussgaengerbruecke', denkzeitMs = null, wahlStreuung = 0 }) {
   const pause = () => (denkzeitMs ? new Promise((r) => setTimeout(r, denkzeitMs[0] + Math.random() * (denkzeitMs[1] - denkzeitMs[0]))) : null);
   const zeiten = [];
   let fehler = 0;
@@ -31,7 +32,7 @@ export async function lasttest({ basis, kurscode, personen, szenario = 'fussgaen
   }
   async function person() {
     const cookie = {};
-    const loeser = neuerLoeser({ fehlerquote: 0.3 });
+    const loeser = neuerLoeser({ fehlerquote: 0.3, wahlStreuung });
     await anfrage(cookie, 'POST', '/api/anmelden/studierende', { kurscode });
     await anfrage(cookie, 'GET', '/api/szenarien');
     await pause();
@@ -58,6 +59,6 @@ export async function lasttest({ basis, kurscode, personen, szenario = 'fussgaen
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const [basis = 'http://localhost:8080', kurscode = 'DEMO', personen = '100'] = process.argv.slice(2);
-  console.log(JSON.stringify(await lasttest({ basis, kurscode, personen: Number(personen) }), null, 2));
+  const [basis = 'http://localhost:8080', kurscode = 'DEMO', personen = '100', streuung = '0'] = process.argv.slice(2);
+  console.log(JSON.stringify(await lasttest({ basis, kurscode, personen: Number(personen), wahlStreuung: Number(streuung) }), null, 2));
 }

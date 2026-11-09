@@ -158,6 +158,10 @@ input:not([type="radio"]):not([type="checkbox"]):focus-visible, select:focus-vis
 .oberzeile { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--anzeige-gold); margin-bottom: 10px; }
 .held h1 { font-size: clamp(2.1rem, 4.6vw, 3.3rem); line-height: 1.04; letter-spacing: -0.025em; margin-bottom: 14px; text-shadow: 0 2px 16px rgb(0 0 0 / 0.35); }
 .held p { font-size: 1.12rem; max-width: 520px; color: #e2eaf7; }
+.held:not(.klein) { min-height: 440px; }
+.held-figuren { position: absolute; z-index: 1; right: 3%; bottom: 0; display: flex; align-items: flex-end; pointer-events: none; }
+.held-figuren img { height: 250px; width: auto; filter: drop-shadow(0 10px 18px rgb(0 0 0 / 0.35)); animation: auftauchen 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) 0.2s both; }
+.held-figuren img + img { height: 290px; margin-left: -46px; animation-delay: 0.35s; }
 .held.klein { min-height: 210px; margin-bottom: 22px; }
 .held.klein .held-text { padding-bottom: 30px; }
 .held.klein h1 { font-size: clamp(1.8rem, 3.6vw, 2.5rem); }
@@ -232,10 +236,10 @@ details[open] summary { margin-bottom: 12px; }
 .anzeige.ohne-indikatoren .route { grid-column: 1 / -1; }
 .route { grid-column: 2; list-style: none; margin: 0; padding: 0; display: flex; min-width: 380px; }
 .route-punkt { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; font-size: 0.78rem; text-align: center; color: var(--anzeige-gedaempft); }
-.route-punkt::before { content: ""; position: absolute; top: 13px; right: 50%; width: 100%; height: 3px; background: var(--anzeige-linie); }
+.route-punkt::before { content: ""; position: absolute; z-index: 0; top: 13px; right: 50%; width: 100%; height: 3px; background: var(--anzeige-linie); }
 .route-punkt:first-child::before { display: none; }
 .route-punkt.erledigt::before, .route-punkt.aktuell::before { background: var(--anzeige-gold); }
-.route-marke { position: relative; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 800; font-size: 0.85rem;
+.route-marke { position: relative; z-index: 1; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-weight: 800; font-size: 0.85rem;
   background: var(--anzeige); border: 2px solid var(--anzeige-linie); }
 .route-marke .symbol { width: 16px; height: 16px; stroke-width: 3; }
 .erledigt .route-marke { background: var(--anzeige-gold); border-color: var(--anzeige-gold); color: #241800; }
@@ -250,7 +254,10 @@ details[open] summary { margin-bottom: 12px; }
 .buehne-text { grid-column: 2; grid-row: 1 / span 2; }
 .buehne.ohne-bild > * { grid-column: 1; grid-row: auto; }
 .buehne-bild img { display: block; width: 100%; aspect-ratio: 2 / 1; object-fit: contain; background: #0b1a33; }
-.buehne-ueberschrift { position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 2 / 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
+.bild-rahmen { position: relative; }
+.buehne:not(:has(> .sprechzeile)) > .buehne-bild { grid-row: 1 / span 2; display: flex; flex-direction: column; justify-content: center; min-height: 100%; }
+.buehne-bild::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 80px rgb(0 0 0 / 0.35); }
+.buehne-ueberschrift { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px;
   padding: 20px 22px 18px; color: #fff; background: linear-gradient(to top, rgb(4 10 22 / 0.88) 0%, rgb(4 10 22 / 0.55) 28%, rgb(4 10 22 / 0) 55%); pointer-events: none; }
 .buehne-ueberschrift h2 { margin: 0; font-size: 1.65rem; line-height: 1.15; text-shadow: 0 2px 12px rgb(0 0 0 / 0.5); }
 .kapitel-marke { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--anzeige-gold); }
@@ -338,7 +345,7 @@ fieldset.auswahl { border: none; padding: 0; margin: 0; display: flex; flex-dire
 .rueckmeldung .buehne-bild img { filter: saturate(0.55) brightness(0.45); }
 .rueckmeldung .buehne-bild.ohne img { display: none; }
 .rueckmeldung .buehne-bild.ohne { aspect-ratio: 2 / 1; }
-.emblem-flaeche { position: absolute; left: 0; right: 0; top: 0; aspect-ratio: 2 / 1; display: grid; place-items: center; }
+.emblem-flaeche { position: absolute; inset: 0; display: grid; place-items: center; }
 .emblem { position: relative; display: grid; place-items: center; width: 132px; height: 132px; border-radius: 50%; color: #fff;
   box-shadow: 0 0 0 12px rgb(255 255 255 / 0.16), 0 0 0 26px rgb(255 255 255 / 0.07), 0 18px 46px rgb(0 0 0 / 0.45);
   animation: emblem-ein 0.65s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
@@ -426,7 +433,7 @@ table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
 caption { text-align: left; font-weight: 800; padding: 12px; }
 th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--linie); vertical-align: top; }
 th { background: var(--flaeche-2); font-size: 0.85rem; }
-.kennzahlen { list-style: none; padding: 0; margin: 0 0 18px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.kennzahlen { list-style: none; padding: 0; margin: 0 0 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
 .kennzahl { margin: 0; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr; grid-template-areas: "zeichen wert" "zeichen name"; gap: 0 12px; align-items: center; }
 .kennzahl-zeichen { grid-area: zeichen; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--akzent-hell); color: var(--akzent); }
 .kennzahl-wert { grid-area: wert; font-size: 1.55rem; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
@@ -493,6 +500,7 @@ th { background: var(--flaeche-2); font-size: 0.85rem; }
   .ende-unten { gap: 0; }
   .diagramme { grid-template-columns: 1fr; }
   .merkmale { grid-template-columns: 1fr; }
+  .held-figuren { display: none; }
 }
 
 /* Telefon */
@@ -537,3 +545,17 @@ th { background: var(--flaeche-2); font-size: 0.85rem; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Auswertung: Zeichen in Legende und Balkenzeilen, Tabelle zum Aufklappen */
+.zeichen.klein { width: 22px; height: 22px; }
+.zeichen.klein .symbol { width: 14px; height: 14px; }
+.balkenzeile-name small.bewertung { font-weight: 600; color: var(--gedaempft); }
+.alle-zahlen { margin: 18px 0; }
+.alle-zahlen summary { cursor: pointer; font-weight: 800; }
+.alle-zahlen .tabelle-rahmen { margin-top: 12px; }
+.diagramme { margin-bottom: 18px; }
+.fehler-spalten { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px 28px; }
+.fehler-spalten .entscheidung + .entscheidung { margin-top: 0; padding-top: 0; border-top: none; }
+.diagramm .gestapelt { height: 42px; }
+.ausgang-ring { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--linie); }
+.ausgang-ring .ring-bogen { stroke: var(--gut); }

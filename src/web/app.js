@@ -30,6 +30,8 @@ async function abmelden() {
 function held(titel, text, { klein = false, oberzeile = 'Lernspiele für die Ingenieurlehre' } = {}) {
   return h('section', { class: `held${klein ? ' klein' : ''}` },
     h('img', { class: 'held-bild', src: '/bilder/start.svg', alt: '' }),
+    klein ? null : h('div', { class: 'held-figuren', 'aria-hidden': 'true' },
+      h('img', { src: '/bilder/figur-laborleitung.svg', alt: '' }), h('img', { src: '/bilder/figur-bauleitung.svg', alt: '' })),
     h('div', { class: 'held-text' }, h('p', { class: 'oberzeile' }, symbol('punkte'), oberzeile), titel, text ? h('p', {}, text) : null));
 }
 

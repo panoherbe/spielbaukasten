@@ -14,6 +14,15 @@
     "datei": "medien/titel-spannungsteiler.svg",
     "alt": "Eine leuchtende Platine: eine Batterie, zwei Widerstände in Reihe als Spannungsteiler, ein Mikrocontroller, eine grüne Leuchtdiode und ein Temperaturfühler mit Thermometer; Lichtpunkte zeigen den Strom auf den Leiterbahnen."
   },
+  "figur": {
+    "name": "Laborleitung",
+    "bild": {
+      "datei": "medien/laborleitung.svg",
+      "alt": "Spielfigur Laborleitung: Person mit Laborkittel, Schutzbrille und zusammengebundenen Locken, ein gelbes Messgerät in der Hand; freundlicher Blick."
+    },
+    "zufrieden": { "datei": "medien/laborleitung-freude.svg", "alt": "Spielfigur Laborleitung, erfreut: lachend, mit Laborkittel, Schutzbrille und Messgerät." },
+    "besorgt": { "datei": "medien/laborleitung-sorge.svg", "alt": "Spielfigur Laborleitung, besorgt: mit hochgezogenen Augenbrauen, Laborkittel, Schutzbrille und Messgerät." }
+  },
   "lernziele": [
     { "id": "LZ1", "text": "Die Teilspannung eines unbelasteten Spannungsteilers berechnen" },
     { "id": "LZ2", "text": "Die Wirkung einer Last auf einen Spannungsteiler qualitativ beurteilen" }
@@ -35,14 +44,16 @@
     "aufbau": {
       "typ": "szene",
       "titel": "Der Aufbau",
-      "bild": { "datei": "medien/schaltung.svg", "alt": "Schaltplan: Quelle U, in Reihe die Widerstände R1 und R2; die Spannung U2 wird über R2 abgegriffen." },
+      "bild": { "datei": "medien/aufbau.svg", "alt": "Blaupause des Aufbaus: Eine Quelle U speist zwei Widerstände in Reihe, oben R1, unten R2; R2 ist der Temperaturfühler. Die Spannung U2 über R2 führt zum Messeingang eines Mikrocontrollers.", "skizze": true },
+      "sprechblase": "Unser Temperaturfühler hängt an einem Spannungsteiler. Rechnen Sie mit, bevor ich den Messeingang anschließe?",
       "text": "Ein Mikrocontroller misst eine Spannung über einen Spannungsteiler: Quelle U = {U} V, oben R1 = {R1} kΩ, unten R2 = {R2} kΩ. Gemessen wird die Spannung U2 über R2.",
       "optionen": [{ "id": "los", "text": "Los geht's", "ziel": "teilspannung" }]
     },
     "teilspannung": {
       "typ": "aufgabe",
       "titel": "Teilspannung",
-      "bild": { "datei": "medien/schaltung.svg", "alt": "Schaltplan: Quelle U, in Reihe die Widerstände R1 und R2; die Spannung U2 wird über R2 abgegriffen." },
+      "bild": { "datei": "medien/teilspannung.svg", "alt": "Blaupause zur Teilspannung: Derselbe Strom I fließt durch R1 und R2. Ein Balken rechts teilt die Quellenspannung U in die Teile U1 über R1 und U2 über R2; der Wert von U2 ist mit einem Fragezeichen offen.", "skizze": true },
+      "sprechblase": "Erst ohne Last: Welche Spannung sieht der Messeingang?",
       "mechanik": "zahl",
       "frage": "Wie groß ist U2 (in V), solange nichts angeschlossen ist? (U = {U} V, R1 = {R1} kΩ, R2 = {R2} kΩ)",
       "einheit": "V",
@@ -62,6 +73,8 @@
     "last": {
       "typ": "aufgabe",
       "titel": "Belastung",
+      "bild": { "datei": "medien/last.svg", "alt": "Auf dem Labortisch liegt die Platine mit den Widerständen R1 und R2. Ein Kabel mit Klemme verbindet jetzt ein zusätzliches Anzeigemodul parallel zu R2. Ein Messgerät daneben zeigt ein Fragezeichen: Was geschieht mit U2?" },
+      "sprechblase": "Jetzt hänge ich das Anzeigemodul an. Was zeigt das Messgerät gleich?",
       "mechanik": "auswahl",
       "frage": "Jetzt wird ein Eingang mit endlichem Widerstand parallel zu R2 angeschlossen. Was passiert mit U2?",
       "optionen": [
@@ -77,6 +90,8 @@
       "typ": "ende",
       "ergebnis": "erfolg",
       "titel": "Übung abgeschlossen",
+      "bild": { "datei": "medien/ende.svg", "alt": "Geschafft: Die Platine auf dem Labortisch leuchtet, die grüne Leuchtdiode brennt, und das Anzeigemodul zeigt die Temperatur mit einem Thermometer und einem Haken. Lichtpunkte und Funken feiern den Abschluss." },
+      "sprechblase": "Geschafft! Mit dieser Faustregel misst unser Sensor zuverlässig.",
       "text": "Faustregel aus der Praxis: Der Lastwiderstand sollte mindestens zehnmal größer sein als R2, damit der Messfehler klein bleibt."
     }
   }
