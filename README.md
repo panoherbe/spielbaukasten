@@ -6,7 +6,7 @@ Spiele entstehen als Datei statt als Programm. Das läuft heute – ansehen, sel
 ![Rundgang durch den Spielbaukasten: eine Entscheidung an der Fußgängerbrücke mit sichtbaren Folgen, Beitritt mit Kurscode, Prüfschritte ordnen, Rechenaufgabe mit erkanntem typischem Fehler, Ergebnis mit Sternen und Auszeichnungen, Telefon, Diagramme für Lehrende, Prüfung einer Spieldatei, Offline-Datei](medien/rundgang.gif)
 
 <sub>Rundgang, 89 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 09.11.2026 an einer laufenden Installation.
-[Video herunterladen (MP4, 2,2 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
+[Video herunterladen (MP4, 2,6 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
 
 ## Was Sie brauchen → läuft hier schon
 
@@ -95,9 +95,9 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 09.11.2026](nachweis/PROTOKOLL
 | 0:46 | Die Rechnung ist fertig. Wie entscheiden Sie: freigeben oder reparieren? |
 | 0:51 | Am Ende: Sterne, Punkte und das Fest kann kommen. |
 | 0:54 | Auszeichnungen und der Stand je Lernziel: sicher, mit Hilfe oder noch offen. |
-| 0:58 | **Auf dem Telefon:** die Sensor-Übung im Browser, ohne App und ohne Installation, mit der Laborleitung statt der Bauleitung. Rechnen mit eigenen Zahlen, auch auf dem kleinen Bildschirm. Keine Dateien von fremden Servern. |
+| 0:58 | **Sensor-Übung: Auch auf dem Telefon.** Im Browser, ohne App und ohne Installation. Mit Laborleitung statt Bauleitung. Rechnen mit eigenen Zahlen, auch auf dem kleinen Bildschirm. Keine Dateien von fremden Servern. |
 | 1:03 | Lehrende sehen, wo die Gruppe hängt. Nur Summen, erst ab drei Personen. |
-| 1:06 | Entscheidungen mit Bewertung. Zahlen: 200 simulierte Studierende (aus einem Lasttest, dazu die Durchläufe dieses Rundgangs). |
+| 1:06 | Entscheidungen mit Bewertung. Zahlen: 200 simulierte Studierende. |
 | 1:10 | Neue Spiele sind Dateien. Hier eine mit einem Tippfehler in einer Formel … |
 | 1:12 | … die Prüfung findet ihn und nennt die Stelle, auf Deutsch. |
 | 1:15 | Jedes Spiel auch als offene Lernressource: eine HTML-Datei, ohne Server und ohne Internet. |
@@ -274,7 +274,10 @@ Aufgenommen am 09.11.2026 mit Playwright (Chromium) an einer laufenden Installat
 ohne Docker). 200 simulierte Studierende aus dem Lasttest (`test/last.js`, ein Teil der Entscheidungen zufällig
 gestreut) füllen die Auswertung. Untertitel und Mauszeiger sind in die Seite gezeichnet; dafür ist im Aufnahmebrowser
 die Content-Security-Policy abgeschaltet, die Anwendung selbst ist unverändert. Das Video hat keinen Ton. Die
-Messwerte der Schlusskarte stammen aus dem Protokoll vom 09.11.2026, nicht aus der Aufnahme. Die Bilder auf dieser
+Messwerte der Schlusskarte stammen aus dem Protokoll vom 09.11.2026, nicht aus der Aufnahme. Zwei Stellen sind
+nachträglich ersetzt (09.11.2026): Bei 1:10 zeigte der Aufnahmebrowser den Dateiknopf englisch („Choose File“); das Feld
+ist durch dieselbe Ansicht in einem deutschen Chromium ersetzt („Datei auswählen“). Die Karte bei 0:58 hieß „Dasselbe
+Spiel auf dem Telefon“, zeigt aber die Sensor-Übung; sie heißt jetzt „Auch auf dem Telefon“. Die Bilder auf dieser
 Seite sind am selben Tag mit Playwright entstanden.
 
 Lizenz: AGPL-3.0 für den Code (bis Commit `414f6d6` Apache-2.0), CC BY 4.0 für die beiden Beispielszenarien und
