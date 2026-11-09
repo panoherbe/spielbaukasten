@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="si-t">
+<title id="si-t">Sicherheit: grünes Schild mit Haken</title>
+<!-- Spielbaukasten · Bild: Panagiotis Herbe · CC BY 4.0 -->
+<defs><linearGradient id="si-a" x2=".6" y2="1"><stop offset="0" stop-color="#5fe39a"/><stop offset="1" stop-color="#1e8a52"/></linearGradient></defs><path d="M32 5 53 12.5V30c0 14-9 23.5-21 28.5C20 53.5 11 44 11 30V12.5Z" fill="url(#si-a)" stroke="#135c38" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 9.5 48.5 15.5V30c0 11-7 19-16.5 23.6Z" fill="#000" opacity=".1"/><path d="M32 10 16 15.5V30c0 8 3 14 8 18" stroke="#fff" stroke-opacity=".45" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M22 31l7 7 14-15" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

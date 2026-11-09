@@ -1,6 +1,7 @@
 // Darstellung der Mechanik „auswahl“: Optionsfelder (eine Antwort) oder Kontrollkästchen (mehrere).
 
 import { h } from '../ui.js';
+import { symbol } from '../symbole.js';
 
 export const auswahlListe = {
   typ: 'auswahl',
@@ -18,6 +19,6 @@ export const auswahlListe = {
       },
     },
     h('fieldset', { class: 'auswahl' }, h('legend', { class: 'beschriftung' }, knoten.mehrfach ? 'Alle zutreffenden wählen' : 'Eine Antwort wählen'), felder),
-    h('button', { class: 'knopf knopf-haupt', type: 'submit' }, 'Prüfen'));
+    h('button', { class: 'knopf knopf-haupt', type: 'submit' }, symbol('richtig'), 'Prüfen'));
   },
 };

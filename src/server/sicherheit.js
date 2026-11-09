@@ -83,3 +83,7 @@ export const KOPFZEILEN = {
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
   'Cross-Origin-Opener-Policy': 'same-origin',
 };
+
+// SVG-Bilder dürfen eigene Stilangaben enthalten. Als Bild eingebunden laufen darin nie Skripte; öffnet jemand die
+// Datei direkt, verbietet diese Richtlinie trotzdem jedes Skript und jedes Nachladen.
+export const SVG_KOPFZEILEN = { ...KOPFZEILEN, 'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; img-src data:; sandbox" };

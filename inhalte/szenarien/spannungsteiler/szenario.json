@@ -1,6 +1,6 @@
 {
   "id": "spannungsteiler",
-  "version": 1,
+  "version": 2,
   "titel": "Übung: Spannungsteiler am Sensor",
   "kurzbeschreibung": "Kurze Übung zur Elektrotechnik: Ein Temperatursensor hängt an einem Spannungsteiler. Rechnen mit eigenen Zahlen, dann eine Verständnisfrage zur Belastung.",
   "fach": "Grundlagen der Elektrotechnik",
@@ -10,11 +10,21 @@
   "lizenz": "CC-BY-4.0",
   "urheber": ["Panagiotis Herbe"],
   "schlagworte": ["Spannungsteiler", "Reihenschaltung", "Ohmsches Gesetz", "Belasteter Spannungsteiler"],
+  "titelbild": {
+    "datei": "medien/titel-spannungsteiler.svg",
+    "alt": "Ein Temperatursensor auf einer Platine, daneben ein Messgerät"
+  },
   "lernziele": [
     { "id": "LZ1", "text": "Die Teilspannung eines unbelasteten Spannungsteilers berechnen" },
     { "id": "LZ2", "text": "Die Wirkung einer Last auf einen Spannungsteiler qualitativ beurteilen" }
   ],
   "indikatoren": [],
+  "kapitel": [
+    { "titel": "Aufbau", "knoten": ["aufbau"] },
+    { "titel": "Rechnen", "knoten": ["teilspannung"] },
+    { "titel": "Verstehen", "knoten": ["last"] },
+    { "titel": "Ergebnis", "knoten": ["ende"] }
+  ],
   "parameter": {
     "U": { "werte": [5, 12, 24], "einheit": "V" },
     "R1": { "min": 1, "max": 10, "schritt": 1, "einheit": "kΩ" },
@@ -32,6 +42,7 @@
     "teilspannung": {
       "typ": "aufgabe",
       "titel": "Teilspannung",
+      "bild": { "datei": "medien/schaltung.svg", "alt": "Schaltplan: Quelle U, in Reihe die Widerstände R1 und R2; die Spannung U2 wird über R2 abgegriffen." },
       "mechanik": "zahl",
       "frage": "Wie groß ist U2 (in V), solange nichts angeschlossen ist? (U = {U} V, R1 = {R1} kΩ, R2 = {R2} kΩ)",
       "einheit": "V",
@@ -51,6 +62,7 @@
     "last": {
       "typ": "aufgabe",
       "titel": "Belastung",
+      "bild": { "datei": "medien/szene-labor.svg", "alt": "Laborplatz: Ein Mikrocontroller misst über den Spannungsteiler, ein zweites Gerät wird angeschlossen." },
       "mechanik": "auswahl",
       "frage": "Jetzt wird ein Eingang mit endlichem Widerstand parallel zu R2 angeschlossen. Was passiert mit U2?",
       "optionen": [
@@ -66,6 +78,7 @@
       "typ": "ende",
       "ergebnis": "erfolg",
       "titel": "Übung abgeschlossen",
+      "bild": { "datei": "medien/ende-labor.svg", "alt": "Der Sensor läuft, auf dem Messgerät steht ein stabiler Wert." },
       "text": "Faustregel aus der Praxis: Der Lastwiderstand sollte mindestens zehnmal größer sein als R2, damit der Messfehler klein bleibt."
     }
   }

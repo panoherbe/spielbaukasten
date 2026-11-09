@@ -5,16 +5,28 @@
 import { fuelleText } from './ausdruck.js';
 import { verfuegbareOptionen } from './ablauf.js';
 import { MECHANIKEN } from './mechaniken/index.js';
+import { sterne, auszeichnungen } from './wertung.js';
 
-function bild(szenario, b) {
-  return b ? { datei: b.datei, alt: b.alt ?? '' } : null;
+function bild(b) {
+  return b ? { datei: b.datei, alt: b.alt ?? '', ...(b.skizze ? { skizze: true } : {}) } : null;
+}
+
+function figur(f) {
+  return f ? { name: f.name, bild: bild(f.bild), zufrieden: bild(f.zufrieden), besorgt: bild(f.besorgt) } : null;
+}
+
+/** Kapitelkarte: nur Titel und Stand, keine Knoten, damit sie nichts über den weiteren Weg verrät. */
+function kapitel(szenario, z) {
+  const liste = szenario.kapitel ?? [];
+  const aktuell = liste.findIndex((kap) => kap.knoten.includes(z.knoten));
+  return liste.map((kap, i) => ({ titel: kap.titel, stand: z.beendet || i < aktuell ? 'erledigt' : i === aktuell ? 'aktuell' : 'offen' }));
 }
 
 export function ansicht(szenario, z) {
   const werte = { ...z.parameter, ...z.indikatoren };
   const t = (text) => (text === undefined || text === null ? text : fuelleText(text, werte));
   const k = szenario.knoten[z.knoten];
-  const knoten = { id: z.knoten, typ: k.typ, titel: t(k.titel), text: t(k.text), bild: bild(szenario, k.bild) };
+  const knoten = { id: z.knoten, typ: k.typ, titel: t(k.titel), text: t(k.text), bild: bild(k.bild), sprechblase: t(k.sprechblase) };
 
   if (k.typ === 'szene') {
     knoten.optionen = verfuegbareOptionen(szenario, z).map((o) => ({ id: o.id, text: t(o.text) }));
@@ -42,10 +54,11 @@ export function ansicht(szenario, z) {
   const rueckmeldung = r ? { ...r, text: t(r.text), erklaerung: t(r.erklaerung) } : null;
 
   return {
-    szenario: { id: szenario.id, version: szenario.version, titel: szenario.titel },
+    szenario: { id: szenario.id, version: szenario.version, titel: szenario.titel, figur: figur(szenario.figur) },
     knoten,
     rueckmeldung,
-    indikatoren: (szenario.indikatoren ?? []).map((i) => ({ id: i.id, name: i.name, wert: z.indikatoren[i.id], min: i.min, max: i.max, einheit: i.einheit ?? '' })),
+    indikatoren: (szenario.indikatoren ?? []).map((i) => ({ id: i.id, name: i.name, wert: z.indikatoren[i.id], min: i.min, max: i.max, einheit: i.einheit ?? '', symbol: i.symbol ?? null })),
+    kapitel: kapitel(szenario, z),
     punkte: z.punkte,
     maxPunkte: z.maxPunkte,
     schritte: z.schritte,
@@ -54,5 +67,7 @@ export function ansicht(szenario, z) {
     lernziele: z.beendet
       ? (szenario.lernziele ?? []).map((lz) => ({ id: lz.id, text: lz.text, stufe: z.lernziele[lz.id] ?? 'nicht_geprueft' }))
       : undefined,
+    sterne: z.beendet ? sterne(z.ergebnis, z.maxPunkte ? z.punkte / z.maxPunkte : null) : undefined,
+    auszeichnungen: z.beendet ? auszeichnungen(szenario, z) : undefined,
   };
 }

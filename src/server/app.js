@@ -9,11 +9,12 @@ import { randomUUID } from 'node:crypto';
 
 import { oeffne, transaktion, raeumeAuf } from './db.js';
 import { ladeVerzeichnis, speichereHochgeladen, szenario as ladeSzenario, alleSzenarien, medienPfad, MEDIENTYPEN } from './inhalte.js';
-import { COOKIE, KOPFZEILEN, hash, token, code, normalisiereCode, gleich, pseudonym, leseCookies, cookieKopf, bremse } from './sicherheit.js';
+import { COOKIE, KOPFZEILEN, SVG_KOPFZEILEN, hash, token, code, normalisiereCode, gleich, pseudonym, leseCookies, cookieKopf, bremse } from './sicherheit.js';
 import { starte, wende, spiele, SpielFehler } from '../engine/ablauf.js';
 import { ansicht } from '../engine/ansicht.js';
 import { neuerSeed } from '../engine/zufall.js';
 import { statements } from '../engine/xapi.js';
+import { sterne } from '../engine/wertung.js';
 import { oerPaket } from '../oer-export.js';
 
 const HIER = dirname(fileURLToPath(import.meta.url));
@@ -190,10 +191,12 @@ export function erstelleApp(cfg) {
       const st = db.prepare(`SELECT count(*) AS versuche, sum(beendet) AS beendet, max(CASE WHEN beendet THEN punkte * 1.0 / nullif(max_punkte, 0) END) AS beste,
                              (SELECT id FROM versuch WHERE nutzer_id = ? AND szenario_id = ? AND beendet = 0 ORDER BY aktualisiert DESC LIMIT 1) AS offen
                              FROM versuch WHERE nutzer_id = ? AND szenario_id = ?`).get(n.id, s.id, n.id, s.id);
+      const besteSterne = Math.max(0, ...db.prepare('SELECT ergebnis, punkte, max_punkte FROM versuch WHERE nutzer_id = ? AND szenario_id = ? AND beendet = 1')
+        .all(n.id, s.id).map((v) => sterne(v.ergebnis, v.max_punkte ? v.punkte / v.max_punkte : null)));
       return {
         id: s.id, version: s.version, titel: s.titel, kurzbeschreibung: s.kurzbeschreibung, fach: s.fach, zielgruppe: s.zielgruppe,
-        dauerMinuten: s.dauer_minuten, lernziele: s.lernziele, lizenz: s.lizenz, urheber: s.urheber,
-        eigene: { versuche: st.versuche, beendet: st.beendet ?? 0, besteQuote: st.beste, offenerVersuch: st.offen },
+        dauerMinuten: s.dauer_minuten, lernziele: s.lernziele, lizenz: s.lizenz, urheber: s.urheber, titelbild: s.titelbild ?? null,
+        eigene: { versuche: st.versuche, beendet: st.beendet ?? 0, besteQuote: st.beste, besteSterne, offenerVersuch: st.offen },
       };
     });
   });
@@ -330,6 +333,17 @@ export function erstelleApp(cfg) {
     return { vorzeichen: 'Vorzeichen falsch', einheit: 'Größenordnung (Einheit)' }[typ] ?? 'sonstige';
   }
 
+  // Zähler je Knoten; bei Szenen dazu Text und Bewertung jeder Option, damit die Auswertung sie beschriften kann
+  function neuerKnoten(s, id) {
+    const def = s.knoten[id];
+    const k = { knoten: id, titel: def?.titel ?? id, typ: def?.typ, versuche: 0, ersterVersuchRichtig: 0, aufgeloest: 0, optionen: {}, fehlerarten: {} };
+    if (def?.typ === 'szene') {
+      k.optionenText = Object.fromEntries(def.optionen.map((o) => [o.id, o.text]));
+      k.optionenBewertung = Object.fromEntries(def.optionen.filter((o) => o.bewertung).map((o) => [o.id, o.bewertung]));
+    }
+    return k;
+  }
+
   // Auswertung für Lehrende: nur Summen, und erst ab einer Mindestgruppe (Privacy by Default)
   function auswertung(q) {
     const id = q.get('szenario');
@@ -351,7 +365,7 @@ export function erstelleApp(cfg) {
     for (const row of ereignisse) {
       const d = JSON.parse(row.daten);
       const r = row.ergebnis ? JSON.parse(row.ergebnis) : {};
-      const k = (knoten[d.knoten] ??= { knoten: d.knoten, titel: s.knoten[d.knoten]?.titel ?? d.knoten, typ: s.knoten[d.knoten]?.typ, versuche: 0, ersterVersuchRichtig: 0, aufgeloest: 0, optionen: {}, fehlerarten: {} });
+      const k = (knoten[d.knoten] ??= neuerKnoten(s, d.knoten));
       if (d.typ === 'wahl') k.optionen[d.option] = (k.optionen[d.option] ?? 0) + 1;
       if (d.typ === 'antwort') {
         const erster = !gesehen.has(`${row.versuch_id}/${d.knoten}`);
@@ -364,10 +378,11 @@ export function erstelleApp(cfg) {
         }
       }
     }
+    const reihenfolge = Object.keys(s.knoten);
     return {
       szenario: id, version: s.version, ...basis, quote: basis.quote === null ? null : Math.round(basis.quote * 1000) / 1000,
       ergebnisse: Object.fromEntries(ergebnisse.map((e) => [e.ergebnis, e.n])),
-      knoten: Object.values(knoten),
+      knoten: Object.values(knoten).sort((a, b) => reihenfolge.indexOf(a.knoten) - reihenfolge.indexOf(b.knoten)),
     };
   }
 
@@ -377,7 +392,8 @@ export function erstelleApp(cfg) {
       const [, , sid, ...rest] = pfad.split('/');
       const datei = medienPfad(cfg.inhalte, sid, decodeURIComponent(rest.join('/')));
       if (!datei) return false;
-      res.writeHead(200, { 'Content-Type': MEDIENTYPEN[extname(datei).toLowerCase()], 'Cache-Control': 'public, max-age=3600', ...KOPFZEILEN });
+      const typ = MEDIENTYPEN[extname(datei).toLowerCase()];
+      res.writeHead(200, { 'Content-Type': typ, 'Cache-Control': 'public, max-age=3600', ...(typ === 'image/svg+xml' ? SVG_KOPFZEILEN : KOPFZEILEN) });
       createReadStream(datei).pipe(res);
       return true;
     }
@@ -385,7 +401,7 @@ export function erstelleApp(cfg) {
     const datei = resolve(WEB, '.' + decodeURIComponent(rel));
     if (!datei.startsWith(WEB + sep) || !existsSync(datei) || !statSync(datei).isFile()) return false;
     const typ = TYPEN[extname(datei)] ?? 'application/octet-stream';
-    res.writeHead(200, { 'Content-Type': typ, 'Cache-Control': typ.startsWith('text/html') ? 'no-cache' : 'public, max-age=300', ...KOPFZEILEN });
+    res.writeHead(200, { 'Content-Type': typ, 'Cache-Control': typ.startsWith('text/html') ? 'no-cache' : 'public, max-age=300', ...(typ === 'image/svg+xml' ? SVG_KOPFZEILEN : KOPFZEILEN) });
     createReadStream(datei).pipe(res);
     return true;
   }

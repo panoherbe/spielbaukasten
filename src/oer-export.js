@@ -2,7 +2,7 @@
 // genügt), mit Lizenzhinweis und AMB-Metadaten. Die Module werden ohne Build-Werkzeug zusammengefügt: jedes Modul
 // wird in eine Funktion verpackt, Importe werden zu Zugriffen auf die exportierten Namen.
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve, relative, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ambMetadaten, lizenzhinweis, lizenzUrl } from './engine/oer.js';
@@ -38,17 +38,26 @@ export function buendle(einstieg) {
   return `(() => {\n'use strict';\nconst __module = {};\n${teile.join('\n')}\n})();`;
 }
 
+const alsDaten = (pfad) => `data:${MEDIENTYPEN[extname(pfad).toLowerCase()]};base64,${readFileSync(pfad).toString('base64')}`;
+
+/** Alle Bilder des Szenarios (Titelbild, Figur, Szenen) als data:-Adressen. */
 function medienAlsDaten(szenario, verzeichnis) {
   const out = {};
-  for (const k of Object.values(szenario.knoten)) {
-    const datei = k.bild?.datei;
+  const f = szenario.figur ?? {};
+  const bilder = [szenario.titelbild, f.bild, f.zufrieden, f.besorgt, ...Object.values(szenario.knoten).map((k) => k.bild)];
+  for (const datei of bilder.map((b) => b?.datei)) {
     if (!datei || out[datei]) continue;
     const pfad = resolve(verzeichnis, datei);
-    const typ = MEDIENTYPEN[extname(pfad).toLowerCase()];
-    if (!typ || !pfad.startsWith(resolve(verzeichnis)) || !existsSync(pfad)) continue;
-    out[datei] = `data:${typ};base64,${readFileSync(pfad).toString('base64')}`;
+    if (!MEDIENTYPEN[extname(pfad).toLowerCase()] || !pfad.startsWith(resolve(verzeichnis)) || !existsSync(pfad)) continue;
+    out[datei] = alsDaten(pfad);
   }
   return out;
+}
+
+/** Grafiken der Oberfläche, die der Spieler zeigt (Auszeichnungen am Ende). */
+function grafikAlsDaten() {
+  const ordner = join(SRC, 'web/bilder');
+  return Object.fromEntries(readdirSync(ordner).filter((d) => /^auszeichnung-[a-z-]+\.svg$/.test(d)).map((d) => [d.replace(/\.svg$/, ''), alsDaten(join(ordner, d))]));
 }
 
 const json = (x) => JSON.stringify(x).replace(/</g, '\\u003c');
@@ -76,11 +85,12 @@ export function oerPaket(szenario, { medienVerzeichnis, basisUrl = 'http://local
 <style>${css}</style>
 </head>
 <body>
-<header class="leiste"><span class="marke"><span class="marke-zeichen" aria-hidden="true">◆</span> ${esc(szenario.titel)}</span></header>
+<header class="leiste"><span class="marke"><span class="marke-zeichen">${readFileSync(join(SRC, 'web/favicon.svg'), 'utf8').trim().replace('<svg ', '<svg aria-hidden="true" focusable="false" ')}</span> ${esc(szenario.titel)}</span></header>
 <main id="inhalt" class="inhalt"><noscript><p class="karte">Dieses Lernspiel braucht JavaScript.</p></noscript></main>
 <footer class="fuss">${esc(lizenzhinweis(szenario))}. Offline-Fassung, Fortschritt bleibt auf diesem Gerät. Erstellt mit dem Spielbaukasten (AGPL-3.0).</footer>
 <script type="application/json" id="szenario-daten">${json(szenario)}</script>
 <script type="application/json" id="medien-daten">${json(medienAlsDaten(szenario, medienVerzeichnis))}</script>
+<script type="application/json" id="grafik-daten">${json(grafikAlsDaten())}</script>
 <script>${skript}</script>
 </body>
 </html>

@@ -1,9 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { oerPaket, buendle } from '../src/oer-export.js';
 
-const verzeichnis = new URL('../inhalte/szenarien/fussgaengerbruecke/', import.meta.url).pathname;
+const verzeichnis = fileURLToPath(new URL('../inhalte/szenarien/fussgaengerbruecke/', import.meta.url));
 const s = JSON.parse(readFileSync(verzeichnis + 'szenario.json', 'utf8'));
 
 test('OER-Export ist eine einzige Datei ohne Nachladen von außen', () => {
@@ -12,11 +13,11 @@ test('OER-Export ist eine einzige Datei ohne Nachladen von außen', () => {
   assert.ok(!/\bimport\s*\{/.test(html), 'keine ES-Module-Importe übrig');
   assert.match(html, /data:image\/svg\+xml;base64,/);
   assert.match(html, /CC BY 4\.0/);
-  assert.ok(html.length < 200 * 1024, `Größe ${html.length}`);
+  assert.ok(html.length < 1024 * 1024, `Größe ${html.length}`); // mit allen Szenenbildern, Figur und Auszeichnungen
 });
 
 test('das gebündelte Skript ist gültiges JavaScript', () => {
-  const code = buendle(new URL('../src/web/offline.js', import.meta.url).pathname);
+  const code = buendle(fileURLToPath(new URL('../src/web/offline.js', import.meta.url)));
   assert.doesNotThrow(() => new Function(code));
 });
 

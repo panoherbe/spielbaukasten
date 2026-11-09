@@ -27,6 +27,11 @@ export function textBloecke(text) {
   ])));
 }
 
+/** Bewegung nur, wenn das System sie nicht abbestellt hat (prefers-reduced-motion). */
+export function bewegung() {
+  return !globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+}
+
 export function zahl(x, stellen = 1) {
   return Number(x).toLocaleString('de-DE', { maximumFractionDigits: stellen });
 }

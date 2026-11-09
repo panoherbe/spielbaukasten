@@ -2,6 +2,7 @@
 // bedienbar, ohne Ziehen und Ablegen).
 
 import { h, sage } from '../ui.js';
+import { symbol } from '../symbole.js';
 
 export const reihenfolgeListe = {
   typ: 'reihenfolge',
@@ -14,6 +15,7 @@ export const reihenfolgeListe = {
       if (j < 0 || j >= reihe.length) return;
       [reihe[i], reihe[j]] = [reihe[j], reihe[i]];
       zeichne();
+      liste.children[j].classList.add('bewegt');
       liste.children[j].querySelector(d < 0 ? '.hoch' : '.runter')?.focus();
       sage(`„${text[reihe[j]]}“ steht jetzt an Stelle ${j + 1}.`);
     };
@@ -25,6 +27,6 @@ export const reihenfolgeListe = {
         h('button', { type: 'button', class: 'knopf-klein runter', 'aria-label': `„${text[id]}“ nach unten`, disabled: i === reihe.length - 1, onclick: () => verschiebe(i, 1) }, '▼')))));
     zeichne();
     return h('form', { class: 'aufgabe-form', onsubmit: (e) => { e.preventDefault(); sende([...reihe]); } },
-      liste, h('button', { class: 'knopf knopf-haupt', type: 'submit' }, 'Reihenfolge prüfen'));
+      liste, h('button', { class: 'knopf knopf-haupt', type: 'submit' }, symbol('richtig'), 'Reihenfolge prüfen'));
   },
 };
