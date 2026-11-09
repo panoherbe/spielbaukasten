@@ -19,11 +19,16 @@ async function ladeIch() {
   ] : []);
 }
 
+/** Zur Startseite: Ändert sich die Adresse, zeichnet der hashchange-Handler neu, sonst hier. So entsteht die
+ * Übersicht nur einmal und überschreibt kein Spiel, das ein schneller Klick schon gestartet hat. */
+function zurStart() {
+  if (location.hash === '#/') zeige(); else location.hash = '#/';
+}
+
 async function abmelden() {
   await api('POST', '/api/abmelden', {});
   ich = null;
-  location.hash = '#/';
-  await zeige();
+  zurStart();
 }
 
 /** Großes Bild mit Überschrift; Start und Übersicht. */
@@ -58,7 +63,7 @@ function anmeldung() {
       h('summary', {}, 'Schon dabei? Mit Ihrem persönlichen Code weitermachen'),
       h('form', { class: 'stapel', onsubmit: async (e) => {
         e.preventDefault();
-        try { await api('POST', '/api/anmelden/wiederkehr', { wiederkehrcode: wieder.value }); await ladeIch(); location.hash = '#/'; zeige(); } catch (err) { melde(err.message, 'fehler'); }
+        try { await api('POST', '/api/anmelden/wiederkehr', { wiederkehrcode: wieder.value }); await ladeIch(); zurStart(); } catch (err) { melde(err.message, 'fehler'); }
       } },
       h('label', { for: 'wiederkehr', class: 'beschriftung' }, 'Persönlicher Code'), wieder,
       h('button', { class: 'knopf', type: 'submit' }, 'Weitermachen'))),
@@ -78,7 +83,7 @@ function zeigeWiederkehrcode(r) {
     h('p', {}, `Sie sind im Kurs „${r.kurs}“. Ihr Fortschritt wird unter diesem Pseudonym gespeichert, ohne Namen.`),
     h('p', {}, 'Ihr persönlicher Code, um auf einem anderen Gerät weiterzumachen. Er wird nur jetzt angezeigt:'),
     h('p', { class: 'code-gross' }, r.wiederkehrcode),
-    h('button', { class: 'knopf knopf-haupt', type: 'button', onclick: () => { location.hash = '#/'; zeige(); } }, 'Zu den Lernspielen', symbol('pfeil'))));
+    h('button', { class: 'knopf knopf-haupt', type: 'button', onclick: zurStart }, 'Zu den Lernspielen', symbol('pfeil'))));
   fokus(titel);
 }
 

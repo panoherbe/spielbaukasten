@@ -32,14 +32,16 @@ in ein Verzeichnis eintragen.
 | `engine/mechaniken/*` | Bewertung je Mechanik (`zahl`, `auswahl`, `reihenfolge`) | neue Module, siehe ERWEITERN.md |
 | `engine/szenario.js` | Szenario prüfen: Pflichtfelder, Verweise, Formeln, Erreichbarkeit, Endlosschleifen | — |
 | `engine/ablauf.js` | Zustand aus Startwert + Ereignissen berechnen (`starte`, `wende`, `spiele`) | — |
-| `engine/ansicht.js` | was die Oberfläche sieht: aktueller Knoten, Texte mit Zahlen, keine Lösungen | — |
+| `engine/ansicht.js` | was die Oberfläche sieht: aktueller Knoten, Texte mit Zahlen, Kapitel mit Stand, keine Lösungen | — |
+| `engine/wertung.js` | Sterne und Auszeichnungen aus dem Spielverlauf, gleich für Server und Offline-Fassung | weitere Regeln |
 | `engine/xapi.js` | Ereignisse als xAPI-Statements | weitere Formate (z. B. cmi5) |
 | `engine/oer.js`, `oer-export.js` | AMB-Metadaten, Offline-Fassung als eine HTML-Datei | — |
 | `server/db.js` | Schema mit Versionsnummer, Transaktionen, Aufbewahrungsfrist | PostgreSQL (nur diese Datei) |
 | `server/inhalte.js` | Szenarien aus Dateien und Uploads, unveränderliche Versionen | z. B. Git-Repository als Quelle |
 | `server/sicherheit.js` | Pseudonyme, Codes, Sitzungen, Bremse, Sicherheits-Kopfzeilen | SSO der Hochschule (SAML/OIDC) |
 | `server/app.js` | HTTP-Schnittstelle (docs/openapi.json) und Auslieferung | — |
-| `web/spieler.js` | zeigt eine Ansicht, meldet Ereignisse an ein Backend (Server oder lokale Engine) | — |
+| `web/spieler.js` | zeigt eine Ansicht als Spielbühne (Spielanzeige, Kapitelkarte, Szenenbild, Figur, Rückmeldung, Ergebnis) und meldet Ereignisse an ein Backend (Server oder lokale Engine) | — |
+| `web/styles.css` | Gestaltung über Design-Tokens, helles und dunkles Schema, „Bewegung reduzieren“ | eigenes Erscheinungsbild über die Tokens |
 | `web/mechaniken/*` | Darstellung je Mechanik | neue Module |
 
 ## Warum Ereignisse statt gespeichertem Zustand
@@ -69,8 +71,9 @@ drei Folgen, die für den Einsatz in der Lehre zählen:
 
 ## Qualität
 
-- 32 automatische Tests (`node --test`): Formelrechner, Prüfung von Szenarien, Ablauf über hunderte Startwerte,
-  Schnittstelle mit Rollen, Manipulationsversuchen, Datenschutzfunktionen, OER-Export.
+- 42 automatische Tests (`node --test`): Formelrechner, Prüfung von Szenarien, Ablauf über hunderte Startwerte,
+  Schnittstelle mit Rollen, Manipulationsversuchen, Datenschutzfunktionen, OER-Export, Sterne und Auszeichnungen,
+  Kapitelkarte, Bilder mit Alternativtext, Kopfzeilen und Kompression der Auslieferung.
 - Lasttest und Browsertest mit Chrome über das DevTools-Protokoll, Barrierefreiheitsprüfung mit axe-core
   (`compose.nachweis.yaml`, Ergebnisse in `nachweis/`).
 - Keine Laufzeitabhängigkeiten: nichts zu aktualisieren außer Node.js selbst.

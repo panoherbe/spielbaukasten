@@ -201,7 +201,7 @@
     },
     "/api/szenarien": {
       "get": {
-        "summary": "Freigegebene Szenarien mit eigenem Fortschritt",
+        "summary": "Freigegebene Szenarien mit Titelbild und eigenem Fortschritt (abgeschlossen, beste Punktquote, beste Sterne)",
         "tags": [
           "alle"
         ],
@@ -219,7 +219,7 @@
     },
     "/api/versuche": {
       "post": {
-        "summary": "Neuen Versuch starten; liefert die erste Ansicht",
+        "summary": "Neuen Versuch starten; liefert die erste Ansicht. Eine Ansicht enthält den Knoten (Text, Bild, Sprechblase, Optionen oder Aufgabe ohne Lösung), Punkte, Indikatoren, Figur, Kapitel mit Stand (erledigt, aktuell, offen) und am Ende Sterne, Auszeichnungen und den Stand je Lernziel",
         "tags": [
           "alle"
         ],
@@ -515,7 +515,7 @@
     },
     "/api/lehrende/auswertung": {
       "get": {
-        "summary": "Summen je Szenario und Kurs, erst ab Mindestgruppe",
+        "summary": "Summen je Szenario und Kurs, erst ab Mindestgruppe; je Knoten in der Reihenfolge des Szenarios, bei Szenen mit Text (optionenText) und Bewertung (optionenBewertung) jeder Option",
         "tags": [
           "lehrende"
         ],

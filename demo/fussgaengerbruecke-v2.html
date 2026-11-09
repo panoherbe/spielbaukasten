@@ -537,7 +537,7 @@ th { background: var(--flaeche-2); font-size: 0.85rem; }
   .karte.buehne { padding: 0; }
   .buehne-ueberschrift { position: static; aspect-ratio: auto; padding: 12px 16px 14px; background: var(--buehne); }
   .buehne-ueberschrift h2 { font-size: 1.3rem; }
-  .leiste:has(.pseudonym) .marke-text { display: none; }
+  .leiste:has(.pseudonym) .marke-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .marke-zeichen { width: 30px; height: 30px; }
   #navigation { gap: 10px; }
   .buehne-text { padding: 16px 14px 18px; }
