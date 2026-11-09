@@ -29,7 +29,9 @@ Webschriften, keine Analyse, kein CDN); einziges Cookie ist das der Anmeldung.
 - Sitzungstoken mit 256 Bit Zufall, im Cookie `HttpOnly`, `SameSite=Strict`, hinter HTTPS `Secure`; gespeichert nur
   als SHA-256.
 - Schreibende Anfragen nur als `application/json` und von derselben Herkunft (Schutz gegen CSRF).
-- Content-Security-Policy ohne `unsafe-inline`, `nosniff`, `frame-ancestors 'none'`, `no-referrer`.
+- Content-Security-Policy ohne `unsafe-inline` für alle Seiten und Skripte, `nosniff`, `frame-ancestors 'none'`,
+  `no-referrer`. Nur SVG-Grafiken dürfen eigene Stilangaben enthalten (`style-src 'unsafe-inline'`); für sie gilt eine
+  eigene Richtlinie mit `sandbox`: keine Skripte, kein Nachladen.
 - Inhalte aus Szenarien werden nie als HTML eingefügt; Formeln wertet ein eigener Rechner ohne Zugriff auf
   JavaScript aus.
 - Bremse gegen das Durchprobieren von Kurs- und persönlichen Codes (20 Fehlversuche je Minute und Absender; richtige

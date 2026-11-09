@@ -69,8 +69,8 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 09.11.2026](nachweis/PROTOKOLL
 <td valign="top"><img src="medien/bild-ergebnis.png" alt="Ergebnis „Sicher zum Fest“: Feuerwerk über der Brücke, drei von drei Sternen, 40 von 45 Punkten, drei von fünf Auszeichnungen und der Stand je Lernziel"><br><sub>Ergebnis: Sterne, Punkte, Auszeichnungen und der Stand je Lernziel.</sub></td>
 </tr>
 <tr>
-<td valign="top" align="center"><img src="medien/bild-telefon.png" width="300" alt="Das Brückenspiel auf einem Telefon: Spielanzeige, Kapitelkarte, Szenenbild, Bauleitung mit Sprechblase und die Entscheidungen untereinander"><br><sub>Auf dem Telefon: dasselbe Spiel im Browser, ohne App.</sub></td>
-<td valign="top"><img src="medien/bild-auswertung.png" alt="Auswertung für Lehrende: Kennzahlen mit Symbolen, Ausgang der Versuche als gestapelter Balken und Ring, je Aufgabe der Anteil im ersten Versuch richtig, häufigste Fehler"><br><sub>Auswertung für Lehrende mit Diagrammen; nur Summen, erst ab drei Personen. Zahlen aus einem Lasttest mit 200 simulierten Studierenden.</sub><br><br><img src="medien/bild-szenario-pruefen.png" alt="Bereich für Lehrende: Szenario-Datei prüfen, Fehlermeldung mit Fundstelle: knoten.diagonale.loesung „teta“ ist kein Parameter des Szenarios"><br><sub>Neue Spiele sind Dateien: Die Prüfung meldet einen Tippfehler in einer Formel auf Deutsch, mit Fundstelle.</sub></td>
+<td valign="top" align="center"><img src="medien/bild-telefon.png" width="300" alt="Das Brückenspiel auf einem Telefon: Spielanzeige, Kapitelkarte, Szenenbild, Bauleitung mit Sprechblase und der Anfang des Szenentexts"><br><sub>Auf dem Telefon: dasselbe Spiel im Browser, ohne App.</sub></td>
+<td valign="top"><img src="medien/bild-auswertung.png" alt="Auswertung für Lehrende: Kennzahlen mit Symbolen, Ausgang der Versuche als gestapelter Balken und Ring, je Aufgabe der Anteil im ersten Versuch richtig, häufigste Fehler"><br><sub>Auswertung für Lehrende mit Diagrammen; nur Summen, erst ab drei Personen. Zahlen aus einem Lasttest mit 200 simulierten Studierenden, dazu drei Testdurchläufe.</sub><br><br><img src="medien/bild-szenario-pruefen.png" alt="Bereich für Lehrende: Szenario-Datei prüfen, Fehlermeldung mit Fundstelle: knoten.diagonale.loesung „teta“ ist kein Parameter des Szenarios"><br><sub>Neue Spiele sind Dateien: Die Prüfung meldet einen Tippfehler in einer Formel auf Deutsch, mit Fundstelle.</sub></td>
 </tr>
 </table>
 
@@ -122,7 +122,7 @@ Ein Prototyp, in wenigen Tagen gebaut, um zu zeigen, dass die Architektur trägt
 
 ## Lizenz
 
-Ab 04.11.2026 AGPL-3.0. Frühere Stände bis Commit [`414f6d6`](https://github.com/panoherbe/spielbaukasten/tree/414f6d6) bleiben unter Apache-2.0. Auftraggeber erhalten im Auftrag die vertraglich vereinbarte Lizenz.
+Code: ab 04.11.2026 AGPL-3.0; frühere Stände bis Commit [`414f6d6`](https://github.com/panoherbe/spielbaukasten/tree/414f6d6) bleiben unter Apache-2.0. Die beiden Beispielszenarien und die Grafiken: CC BY 4.0 (Panagiotis Herbe). Auftraggeber erhalten im Auftrag die vertraglich vereinbarte Lizenz.
 
 ## Kontakt
 

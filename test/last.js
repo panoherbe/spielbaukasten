@@ -1,4 +1,4 @@
-// Lasttest: viele Studierende spielen gleichzeitig das Brückenszenario über die echte Schnittstelle.
+// Lasttest: simulierte Studierende spielen das Brückenszenario über die echte Schnittstelle.
 //   node test/last.js http://localhost:8080 DEMO 200 [Streuung]
 // Jede virtuelle Person tritt bei, lädt die Übersicht, startet einen Versuch und spielt ihn zu Ende (30 % der
 // Rechenaufgaben zuerst falsch). Gemessen wird jede einzelne Anfrage. Mit Streuung (0…1) wählt dieser Anteil der
