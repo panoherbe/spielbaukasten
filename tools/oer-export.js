@@ -1,5 +1,5 @@
 // Kommandozeile: OER-Export eines Szenarios aus inhalte/szenarien/.
-//   node tools/oer-export.js fussgaengerbruecke [--ziel export] [--url https://…/fussgaengerbruecke-v1.html]
+//   node tools/oer-export.js fussgaengerbruecke [--ziel export] [--url https://…/fussgaengerbruecke-v2.html]
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';

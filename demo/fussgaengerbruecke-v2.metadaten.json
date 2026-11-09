@@ -5,7 +5,7 @@
       "@language": "de"
     }
   ],
-  "id": "https://github.com/panoherbe/spielbaukasten/blob/main/demo/fussgaengerbruecke-v1.html",
+  "id": "https://github.com/panoherbe/spielbaukasten/blob/main/demo/fussgaengerbruecke-v2.html",
   "type": [
     "LearningResource"
   ],
@@ -41,12 +41,12 @@
     "Bauwerksprüfung",
     "Serious Game"
   ],
-  "dateCreated": "2026-11-04",
+  "dateCreated": "2026-11-09",
   "encoding": [
     {
       "type": "MediaObject",
       "encodingFormat": "text/html",
-      "contentUrl": "https://github.com/panoherbe/spielbaukasten/blob/main/demo/fussgaengerbruecke-v1.html"
+      "contentUrl": "https://github.com/panoherbe/spielbaukasten/blob/main/demo/fussgaengerbruecke-v2.html"
     }
   ]
 }

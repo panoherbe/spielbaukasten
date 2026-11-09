@@ -221,3 +221,21 @@ test('Auswertung beschriftet Entscheidungen mit Text und Bewertung, in der Reihe
   const ids = r.knoten.map((k) => k.knoten);
   assert.deepEqual(ids, [...ids].sort((a, b) => reihenfolge.indexOf(a) - reihenfolge.indexOf(b)));
 });
+
+test('Oberfläche und Grafiken gehen komprimiert hinaus, wenn der Browser gzip annimmt', async () => {
+  const { gunzipSync } = await import('node:zlib');
+  for (const pfad of ['/styles.css', '/spieler.js', '/bilder/start.svg']) {
+    const roh = await fetch(basis + pfad, { headers: { 'Accept-Encoding': 'identity' } });
+    const klar = Buffer.from(await roh.arrayBuffer());
+    assert.equal(roh.headers.get('content-encoding'), null, pfad);
+    // fetch entpackt selbst; deshalb die Antwort über node:http lesen
+    const { request } = await import('node:http');
+    const gepackt = await new Promise((ok, fehler) => request(basis + pfad, { headers: { 'Accept-Encoding': 'gzip' } }, (r) => {
+      const teile = []; r.on('data', (d) => teile.push(d)); r.on('end', () => ok({ kopf: r.headers, daten: Buffer.concat(teile) }));
+    }).on('error', fehler).end());
+    assert.equal(gepackt.kopf['content-encoding'], 'gzip', pfad);
+    assert.match(gepackt.kopf.vary, /Accept-Encoding/);
+    assert.ok(gepackt.daten.length < klar.length / 2, `${pfad}: ${gepackt.daten.length} von ${klar.length}`);
+    assert.deepEqual(gunzipSync(gepackt.daten), klar);
+  }
+});

@@ -3,6 +3,7 @@
 
 import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync, createReadStream } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 import { join, resolve, extname, sep, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
@@ -387,22 +388,38 @@ export function erstelleApp(cfg) {
   }
 
   // --- Auslieferung -----------------------------------------------------------------------------------------------
+  // Text und SVG gehen komprimiert hinaus, wenn der Browser gzip annimmt; die komprimierte Fassung wird je Datei und
+  // Änderungszeit einmal erzeugt und behalten (die Dateien sind klein und ändern sich selten).
+  const gepackt = new Map();
+  function sendeDatei(req, res, datei, kopf) {
+    const typ = kopf['Content-Type'];
+    const text = /^(text\/|application\/(json|manifest\+json)|image\/svg\+xml)/.test(typ);
+    if (!text || !/\bgzip\b/.test(req.headers['accept-encoding'] ?? '')) {
+      res.writeHead(200, text ? { ...kopf, Vary: 'Accept-Encoding' } : kopf);
+      createReadStream(datei).pipe(res);
+      return;
+    }
+    const stand = statSync(datei).mtimeMs;
+    let g = gepackt.get(datei);
+    if (!g || g.stand !== stand) gepackt.set(datei, (g = { stand, daten: gzipSync(readFileSync(datei), { level: 9 }) }));
+    res.writeHead(200, { ...kopf, 'Content-Encoding': 'gzip', 'Content-Length': g.daten.length, Vary: 'Accept-Encoding' });
+    res.end(g.daten);
+  }
+
   function statisch(req, res, pfad) {
     if (pfad.startsWith('/medien/')) {
       const [, , sid, ...rest] = pfad.split('/');
       const datei = medienPfad(cfg.inhalte, sid, decodeURIComponent(rest.join('/')));
       if (!datei) return false;
       const typ = MEDIENTYPEN[extname(datei).toLowerCase()];
-      res.writeHead(200, { 'Content-Type': typ, 'Cache-Control': 'public, max-age=3600', ...(typ === 'image/svg+xml' ? SVG_KOPFZEILEN : KOPFZEILEN) });
-      createReadStream(datei).pipe(res);
+      sendeDatei(req, res, datei, { 'Content-Type': typ, 'Cache-Control': 'public, max-age=3600', ...(typ === 'image/svg+xml' ? SVG_KOPFZEILEN : KOPFZEILEN) });
       return true;
     }
     const rel = pfad === '/' || pfad === '/lehrende' ? (pfad === '/' ? '/index.html' : '/lehrende.html') : pfad;
     const datei = resolve(WEB, '.' + decodeURIComponent(rel));
     if (!datei.startsWith(WEB + sep) || !existsSync(datei) || !statSync(datei).isFile()) return false;
     const typ = TYPEN[extname(datei)] ?? 'application/octet-stream';
-    res.writeHead(200, { 'Content-Type': typ, 'Cache-Control': typ.startsWith('text/html') ? 'no-cache' : 'public, max-age=300', ...(typ === 'image/svg+xml' ? SVG_KOPFZEILEN : KOPFZEILEN) });
-    createReadStream(datei).pipe(res);
+    sendeDatei(req, res, datei, { 'Content-Type': typ, 'Cache-Control': typ.startsWith('text/html') ? 'no-cache' : 'public, max-age=300', ...(typ === 'image/svg+xml' ? SVG_KOPFZEILEN : KOPFZEILEN) });
     return true;
   }
 

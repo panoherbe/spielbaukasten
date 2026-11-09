@@ -8,7 +8,7 @@ const verzeichnis = fileURLToPath(new URL('../inhalte/szenarien/fussgaengerbruec
 const s = JSON.parse(readFileSync(verzeichnis + 'szenario.json', 'utf8'));
 
 test('OER-Export ist eine einzige Datei ohne Nachladen von außen', () => {
-  const { html } = oerPaket(s, { medienVerzeichnis: verzeichnis, url: 'https://beispiel.example/fussgaengerbruecke-v1.html', datum: '2026-11-03' });
+  const { html } = oerPaket(s, { medienVerzeichnis: verzeichnis, url: 'https://beispiel.example/fussgaengerbruecke-v2.html', datum: '2026-11-03' });
   assert.ok(!/<(script|link|img)[^>]+(src|href)="(https?:)?\/\//.test(html), 'keine externen Skripte, Stile oder Bilder');
   assert.ok(!/\bimport\s*\{/.test(html), 'keine ES-Module-Importe übrig');
   assert.match(html, /data:image\/svg\+xml;base64,/);

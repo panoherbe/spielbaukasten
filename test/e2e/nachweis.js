@@ -16,14 +16,17 @@ mkdirSync(`${AUSGABE}/bilder`, { recursive: true });
 
 let axeQuelle = null;
 try {
-  axeQuelle = await (await fetch(AXE_URL)).text();
-  messwerte.umgebung.axe = AXE_URL;
+  // AXE_DATEI: axe-core aus einer lokalen Datei (z. B. node_modules/axe-core/axe.min.js), sonst aus dem Netz
+  axeQuelle = process.env.AXE_DATEI ? readFileSync(process.env.AXE_DATEI, 'utf8') : await (await fetch(AXE_URL)).text();
+  messwerte.umgebung.axe = process.env.AXE_DATEI ? `axe-core ${/axe v([\d.]+)/.exec(axeQuelle)?.[1] ?? '?'} (lokale Datei)` : AXE_URL;
 } catch (e) {
   messwerte.umgebung.axe = `nicht geladen: ${e.message}`;
 }
 
 async function pruefeBarrierefreiheit(seite, name) {
   if (!axeQuelle) return;
+  // Gemessen wird der fertige Zustand: Ein- und Überblendungen erst zu Ende laufen lassen (endlose wie das Pulsieren nicht)
+  await seite.werte(`Promise.all(document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations !== Infinity).map((a) => a.finished.catch(() => null))).then(() => true)`);
   if (!(await seite.werte('typeof axe !== "undefined"'))) await seite.werte(axeQuelle + ';true');
   const r = await seite.werte(`axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] })
     .then((r) => ({ verstoesse: r.violations.map((v) => ({ id: v.id, auswirkung: v.impact, stellen: v.nodes.length, beispiel: v.nodes[0]?.target?.join(' ') })), bestanden: r.passes.length }))`);
@@ -36,7 +39,8 @@ async function foto(seite, name) {
   writeFileSync(`${AUSGABE}/bilder/${name}.png`, await seite.bild());
 }
 
-async function geraet(seite, art) {
+async function geraet(seite, art, schema = 'hell') {
+  await seite.sende('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: schema === 'dunkel' ? 'dark' : 'light' }] });
   if (art === 'telefon') {
     await seite.sende('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true });
     await seite.sende('Emulation.setTouchEmulationEnabled', { enabled: true });
@@ -68,7 +72,7 @@ async function spieleImBrowser(seite, praefix, { fotos = true, falschBei = 'diag
     const z = await seite.werte(ZUSTAND);
     const name = z.typ === 'rueckmeldung' ? 'rueckmeldung' : z.typ === 'ende' ? 'ende' : `${z.typ}-${z.knoten}`;
     if (fotos && !gesehen.has(name)) { gesehen.add(name); await foto(seite, `${praefix}-${String(gesehen.size).padStart(2, '0')}-${name}`); }
-    if (axe && ['szene-meldung', 'aufgabe-pruefschritte', 'aufgabe-diagonale', 'rueckmeldung', 'ende'].includes(name)) await pruefeBarrierefreiheit(seite, `${praefix}-${name}`);
+    if (axe && (axe === true ? ['szene-meldung', 'aufgabe-pruefschritte', 'aufgabe-diagonale', 'rueckmeldung', 'ende'] : axe).includes(name) && !messwerte.barrierefreiheit[`${praefix}-${name}`]) await pruefeBarrierefreiheit(seite, `${praefix}-${name}`);
     if (z.typ === 'ende') return z;
     if (z.typ === 'rueckmeldung') { await klickeUndWarte(seite, `document.querySelector('main article .knopf-haupt').click()`); continue; }
     const e = loeser({ knoten: { id: z.knoten, typ: z.typ, text: z.text, frage: '', optionen: z.optionen, mechanik: z.mechanik } });
@@ -101,10 +105,11 @@ async function spieleImBrowser(seite, praefix, { fotos = true, falschBei = 'diag
   throw new Error('Szenario endet nicht');
 }
 
-async function studierendeSitzung(art) {
+async function studierendeSitzung(art, schema = 'hell') {
   const kontext = await Cdp.neuerKontext();
   const seite = await Cdp.neueSeite(undefined, kontext);
-  await geraet(seite, art);
+  await geraet(seite, art, schema);
+  const praefix = schema === 'dunkel' ? `${art}-dunkel` : art;
   const t0 = Date.now();
   await seite.gehe(`${APP}/`);
   await seite.warte(`document.querySelector('#kurscode')`);
@@ -115,27 +120,48 @@ async function studierendeSitzung(art) {
       dateien: r.length + 1, bytes: n.transferSize + r.reduce((s, x) => s + x.transferSize, 0),
       fremdeHosts: [...new Set(r.map((x) => new URL(x.name).host).filter((h) => h !== location.host))] };
   })()`);
-  messwerte.browser[`erstesLaden-${art}`] = { ...laden, wandzeitMs: Date.now() - t0 };
-  const axe = art === 'desktop';
-  await foto(seite, `${art}-00-anmeldung`);
-  if (axe) await pruefeBarrierefreiheit(seite, 'anmeldung');
+  messwerte.browser[`erstesLaden-${praefix}`] = { ...laden, wandzeitMs: Date.now() - t0 };
+  // axe: auf dem Desktop jeder Zustand, im dunklen Schema und auf dem Telefon die wichtigsten
+  const axe = praefix === 'desktop' ? true : ['szene-meldung', 'rueckmeldung', 'ende'];
+  await foto(seite, `${praefix}-00-anmeldung`);
+  await pruefeBarrierefreiheit(seite, praefix === 'desktop' ? 'anmeldung' : `${praefix}-anmeldung`);
   await seite.werte(`document.querySelector('#kurscode').value = 'DEMO'; document.querySelector('#kurscode').form.requestSubmit(); true`);
   await seite.warte(`document.querySelector('.code-gross')`);
   await seite.werte(`document.querySelector('.code-gross').textContent = 'XXXXXX-XXXXXX'; true`); // Code nicht im Bild
-  await foto(seite, `${art}-00-beitritt`);
+  await foto(seite, `${praefix}-00-beitritt`);
   await seite.werte(`document.querySelector('main .knopf-haupt').click(); true`);
   await seite.warte(`document.querySelector('.kacheln')`);
-  await foto(seite, `${art}-00-uebersicht`);
-  if (axe) await pruefeBarrierefreiheit(seite, 'uebersicht');
+  await foto(seite, `${praefix}-00-uebersicht`);
+  if (praefix === 'desktop') await pruefeBarrierefreiheit(seite, 'uebersicht');
   await seite.werte(`document.querySelector('a[href="#/spiel/fussgaengerbruecke"]').click(); true`);
   await seite.warte(`document.querySelector('main article[data-knoten]')`);
   const t1 = Date.now();
-  const ende = await spieleImBrowser(seite, art, { axe });
-  messwerte.browser[`durchgespielt-${art}`] = { ergebnis: ende.ergebnis, sekunden: (Date.now() - t1) / 1000 };
+  const ende = await spieleImBrowser(seite, praefix, { axe, fotos: schema === 'hell' });
+  messwerte.browser[`durchgespielt-${praefix}`] = { ergebnis: ende.ergebnis, sekunden: (Date.now() - t1) / 1000 };
   // Übersicht danach zeigt den Fortschritt
   await seite.werte(`[...document.querySelectorAll('main button')].find((b) => b.textContent === 'Zur Übersicht').click(); true`);
   await seite.warte(`document.querySelector('.stand')`);
-  messwerte.browser[`fortschritt-${art}`] = await seite.werte(`document.querySelector('.stand').textContent`);
+  messwerte.browser[`fortschritt-${praefix}`] = await seite.werte(`document.querySelector('.stand').textContent`);
+  seite.schliesse();
+  seite.browser.schliesse();
+}
+
+/** Eine riskante Entscheidung: Rückmeldung „Riskant“ mit besorgter Figur, auf dem Desktop. */
+async function riskanteEntscheidung() {
+  const seite = await Cdp.neueSeite(undefined, await Cdp.neuerKontext());
+  await geraet(seite, 'desktop');
+  await seite.gehe(`${APP}/`);
+  await seite.warte(`document.querySelector('#kurscode')`);
+  await seite.werte(`document.querySelector('#kurscode').value = 'DEMO'; document.querySelector('#kurscode').form.requestSubmit(); true`);
+  await seite.warte(`document.querySelector('.code-gross')`);
+  await seite.werte(`document.querySelector('main .knopf-haupt').click(); true`);
+  await seite.warte(`document.querySelector('.kacheln')`);
+  await seite.werte(`document.querySelector('a[href="#/spiel/fussgaengerbruecke"]').click(); true`);
+  await seite.warte(`document.querySelector('main article[data-knoten="meldung"]')`);
+  await klickeUndWarte(seite, `document.querySelector('[data-option="offen_lassen"]').click()`);
+  await seite.warte(`document.querySelector('.rueckmeldung.schlecht')`);
+  await foto(seite, 'desktop-riskant');
+  await pruefeBarrierefreiheit(seite, 'desktop-rueckmeldung-riskant');
   seite.schliesse();
   seite.browser.schliesse();
 }
@@ -148,8 +174,14 @@ async function lehrendeSitzung() {
   await seite.warte(`document.querySelector('#schluessel')`);
   await seite.werte(`document.querySelector('#schluessel').value = 'nachweis'; document.querySelector('#schluessel').form.requestSubmit(); true`);
   await seite.warte(`document.querySelector('.kennzahlen')`);
+  await new Promise((r) => setTimeout(r, 1200));
   await foto(seite, 'lehrende-01-auswertung');
   await pruefeBarrierefreiheit(seite, 'lehrende-auswertung');
+  await geraet(seite, 'desktop', 'dunkel');
+  await pruefeBarrierefreiheit(seite, 'lehrende-auswertung-dunkel');
+  await geraet(seite, 'telefon');
+  await pruefeBarrierefreiheit(seite, 'lehrende-auswertung-telefon');
+  await geraet(seite, 'desktop');
   messwerte.browser.auswertungKennzahlen = await seite.werte(`[...document.querySelectorAll('.kennzahl')].map((k) => k.innerText.replace('\\n', ' '))`);
   await seite.werte(`location.hash = '#szenarien'; true`);
   await seite.warte(`document.querySelector('table code')`);
@@ -167,14 +199,14 @@ async function offline() {
   const cookie = anmeldung.headers.get('set-cookie').split(';')[0];
   const html = await (await fetch(`${APP}/api/lehrende/oer/fussgaengerbruecke`, { headers: { Cookie: cookie } })).text();
   mkdirSync(EXPORT, { recursive: true });
-  writeFileSync(`${EXPORT}/fussgaengerbruecke-v1.html`, html);
+  writeFileSync(`${EXPORT}/fussgaengerbruecke-v2.html`, html);
   messwerte.offline.groesseKB = Math.round(Buffer.byteLength(html) / 1024);
   const seite = await Cdp.neueSeite(undefined, await Cdp.neuerKontext());
   await geraet(seite, 'telefon');
   const anfragen = [];
   await seite.sende('Network.enable');
   seite.auf('Network.requestWillBeSent', (p) => anfragen.push(p.request.url.slice(0, 60)));
-  await seite.gehe(`file://${EXPORT}/fussgaengerbruecke-v1.html`);
+  await seite.gehe(`file://${EXPORT}/fussgaengerbruecke-v2.html`);
   await seite.warte(`document.querySelector('main article[data-knoten]')`);
   const ende = await spieleImBrowser(seite, 'offline', { fotos: false });
   await foto(seite, 'offline-ende');
@@ -204,6 +236,8 @@ probe.schliesse();
 probe.browser.schliesse();
 await studierendeSitzung('desktop');
 await studierendeSitzung('telefon');
+await studierendeSitzung('desktop', 'dunkel');
+await riskanteEntscheidung();
 await lehrendeSitzung();
 await offline();
 writeFileSync(`${AUSGABE}/messwerte.json`, JSON.stringify(messwerte, null, 2) + '\n');
