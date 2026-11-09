@@ -12,13 +12,13 @@ Spiele entstehen als Datei statt als Programm. Das läuft heute – ansehen, sel
 
 | Was Sie brauchen | läuft hier schon |
 |---|---|
-| Lernspiele im Browser, auf dem Telefon wie am Rechner | zwei Beispielspiele (Technische Mechanik, Elektrotechnik) mit Szenenbildern, Spielfigur mit Sprechblase, Spielanzeige, Kapitelkarte, Sternen und Auszeichnungen; das Brückenspiel im Chromium auf Rechner- und Telefonbreite und im dunklen Schema durchgespielt (09.11.2026) |
+| Lernspiele im Browser, auf dem Telefon wie am Rechner | zwei Beispielspiele (Technische Mechanik, Elektrotechnik) mit Szenenbildern, Spielfigur mit Sprechblase, Spielanzeige, Kapitelkarte, Sternen und Auszeichnungen; das Brückenspiel in Chromium auf Rechner- und Telefonbreite und im dunklen Schema durchgespielt (09.11.2026) |
 | Entscheidungen mit Folgen | jede Entscheidung verändert sichtbar Sicherheit, Budget und Tage bis zum Fest; eine fachliche Bewertung und die Spielfigur erklären, warum |
 | Rückmeldung, die beim Lernen hilft | typische Fehler werden erkannt und erklärt; zweiter Versuch, Hinweis, Lösung mit Rechenweg |
 | Lernfortschritt und Auswertung für Lehrende | Stand je Lernziel; Diagramme: Ausgang der Versuche, je Aufgabe der Anteil „im ersten Versuch richtig“, die häufigsten Fehler, die Verteilung der Entscheidungen |
 | Datenschutz | keine Namen, keine E-Mail-Adressen, zufällige Pseudonyme; Auswertung in der Oberfläche nur als Summen ab 3 Personen; Löschen auf Knopfdruck |
 | Neue Inhalte ohne Programmierung | Lernspiele sind Dateien; die Prüfung meldet Fehler auf Deutsch mit Fundstelle; jede Version bleibt erhalten |
-| Offene Lernressourcen (OER) | Export als eine einzige HTML-Datei (321 KB mit allen Bildern), läuft ohne Server und ohne Internet: 0 Netzanfragen (09.11.2026); Metadaten nach dem Profil AMB |
+| Offene Lernressourcen (OER) | Export als eine einzige HTML-Datei (322 KB mit allen Bildern), läuft ohne Server und ohne Internet: 0 Netzanfragen (09.11.2026); Metadaten nach dem Profil AMB |
 | Viele Studierende | Lasttest mit 300 simulierten Studierenden, mit Denkzeit: 0 Fehler, 95 % der Antworten unter 0,16 s; 200 simulierte im selben Augenblick: 0 Fehler (09.11.2026) |
 | Barrierefreiheit | automatische Prüfung mit axe-core (WCAG 2.0/2.1 A und AA, WCAG 2.2 AA): 0 Verstöße in 22 Zuständen, auch auf dem Telefon und im dunklen Schema (09.11.2026); Farbe trägt nie allein Bedeutung; Bewegung lässt sich abschalten |
 | Schlank und sicher | erste Seite 16 Dateien, 37 KB übertragen, keine Dateien von fremden Servern (09.11.2026); Lösungen und Formeln verlassen den Server nicht |
@@ -32,7 +32,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 09.11.2026](nachweis/PROTOKOLL
 ## In zwei Minuten selbst prüfen
 
 1. **Ohne Installation spielen:** die [Offline-Fassung](demo/fussgaengerbruecke-v2.html) öffnen, rechts über dem
-   Quelltext auf „Download raw file“ (Pfeil nach unten) klicken, die Datei (321 KB) per Doppelklick im Browser öffnen.
+   Quelltext auf „Download raw file“ (Pfeil nach unten) klicken, die Datei (322 KB) per Doppelklick im Browser öffnen.
    Das Brückenspiel läuft vollständig, ohne Server und ohne Internet; der Fortschritt bleibt auf Ihrem Gerät.
    (Gemessen in Chrome.)
 2. **Die ganze Anwendung starten** – mit [Docker Desktop](https://www.docker.com/products/docker-desktop/), drei
@@ -68,7 +68,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 09.11.2026](nachweis/PROTOKOLL
 <td valign="top"><img src="medien/bild-ergebnis.png" alt="Ergebnis „Sicher zum Fest“: Feuerwerk über der Brücke, drei von drei Sternen, 40 von 45 Punkten, drei von fünf Auszeichnungen und der Stand je Lernziel"><br><sub>Ergebnis: Sterne, Punkte, Auszeichnungen und der Stand je Lernziel.</sub></td>
 </tr>
 <tr>
-<td valign="top" align="center"><img src="medien/bild-telefon.png" width="300" alt="Das Brückenspiel auf einem Telefon: Spielanzeige, Kapitelkarte, Szenenbild, Bauleitung mit Sprechblase und der Anfang des Szenentexts"><br><sub>Auf dem Telefon: dasselbe Spiel im Browser, ohne App.</sub></td>
+<td valign="top" align="center"><img src="medien/bild-telefon.png" width="300" alt="Das Brückenspiel auf einem Telefon: Spielanzeige, Kapitelkarte, Szenenbild und Bauleitung mit Sprechblase"><br><sub>Auf dem Telefon: dasselbe Spiel im Browser, ohne App.</sub></td>
 <td valign="top"><img src="medien/bild-auswertung.png" alt="Auswertung für Lehrende: Kennzahlen mit Symbolen, Ausgang der Versuche als gestapelter Balken und Ring, je Aufgabe der Anteil im ersten Versuch richtig, häufigste Fehler"><br><sub>Auswertung für Lehrende mit Diagrammen; nur Summen, erst ab drei Personen. Zahlen aus einem Lasttest mit 200 simulierten Studierenden, dazu drei Testdurchläufe.</sub><br><br><img src="medien/bild-szenario-pruefen.png" alt="Bereich für Lehrende: Szenario-Datei prüfen, Fehlermeldung mit Fundstelle: knoten.diagonale.loesung „teta“ ist kein Parameter des Szenarios"><br><sub>Neue Spiele sind Dateien: Die Prüfung meldet einen Tippfehler in einer Formel auf Deutsch, mit Fundstelle.</sub></td>
 </tr>
 </table>
@@ -238,8 +238,8 @@ node tools/pruefe.js inhalte/szenarien/*/szenario.json  # Szenarien prüfen
 ```
 
 Die Nachweis-Messung (Lasttest mit 50 und 200 simulierten Personen im selben Augenblick und 300 simulierten mit
-Denkzeit, Durchspielen im echten Chrome auf Desktop- und Telefonbreite und im dunklen Schema, Barrierefreiheit mit
-axe-core, Offline-Fassung); ohne Docker siehe [Messprotokoll](nachweis/PROTOKOLL.md):
+Denkzeit, Durchspielen in echtem Chrome auf Desktop- und Telefonbreite und im dunklen Schema, Barrierefreiheit mit
+axe-core, Offline-Fassung) startet mit Docker so; ohne Docker siehe [Messprotokoll](nachweis/PROTOKOLL.md):
 
 ```bash
 docker compose -p spielbaukasten-nachweis -f compose.nachweis.yaml up --build --abort-on-container-exit --exit-code-from messung

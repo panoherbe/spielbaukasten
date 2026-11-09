@@ -101,7 +101,7 @@ ohne Server) im Browser auf Telefonbreite durchgespielt: **Erfolg**, **0 Netzanf
 dem Spielbaukasten (AGPL-3.0).“
 
 Die Datei im Repository, [`demo/fussgaengerbruecke-v2.html`](../demo/fussgaengerbruecke-v2.html), ist mit
-`tools/oer-export.js` erzeugt (321 KB; sie unterscheidet sich nur in der eingetragenen Adresse).
+`tools/oer-export.js` erzeugt (322 KB; sie unterscheidet sich nur in der eingetragenen Adresse).
 
 ## 6. Bildschirmfotos
 

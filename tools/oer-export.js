@@ -18,4 +18,4 @@ mkdirSync(values.ziel, { recursive: true });
 const name = `${s.id}-v${s.version}`;
 writeFileSync(join(values.ziel, `${name}.html`), html);
 writeFileSync(join(values.ziel, `${name}.metadaten.json`), JSON.stringify(metadaten, null, 2) + '\n');
-console.log(`${join(values.ziel, name)}.html (${Math.round(html.length / 1024)} KB) und .metadaten.json geschrieben`);
+console.log(`${join(values.ziel, name)}.html (${Math.round(Buffer.byteLength(html) / 1024)} KB) und .metadaten.json geschrieben`);

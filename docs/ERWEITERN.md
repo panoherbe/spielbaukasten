@@ -8,7 +8,7 @@ bleiben unverändert.
    ```js
    export const zuordnung = {
      typ: 'zuordnung',
-     pruefe(def, pfad) { return []; },               // Fehler im Szenario: [{ pfad, meldung }]
+     pruefe(def, pfad, { bekannteNamen }) { return []; },  // Fehler im Szenario: [{ pfad, meldung }]
      loesung(def, werte) { return '…'; },            // Text, der nach dem letzten Fehlversuch erscheint
      bewerte(def, antwort, werte) {                  // { gueltig, richtig, rueckmeldung, typ? }
        return { gueltig: true, richtig: false, rueckmeldung: '…' };
