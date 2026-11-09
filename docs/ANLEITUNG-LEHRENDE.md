@@ -63,7 +63,7 @@ Wer gerade spielt, spielt in seiner bisherigen Version zu Ende. Neue Versuche be
 bekommt zunächst alle Spiele freigegeben. Nehmen Sie die Haken bei den Spielen heraus, die dieser Kurs nicht sehen
 soll; jede Änderung wird sofort gespeichert („Freigabe gespeichert.“).
 
-![Kurse: Demokurs und der neue Kurs „Elektrotechnik I, Praktikum WiSe 2026/27“ mit Kurscode; freigegeben ist nur „Übung: Spannungsteiler im Praktikum“](../medien/anleitung-kurs.png)
+![Kurse: Demokurs und der neue Kurs „Elektrotechnik I, Praktikum WiSe 2026/27“ mit Kurscode; im neuen Kurs ist nur „Übung: Spannungsteiler im Praktikum“ freigegeben](../medien/anleitung-kurs.png)
 
 Den **Kurscode** auf der Kurskarte geben Sie an die Studierenden weiter, etwa im Kursraum Ihrer Lernplattform. Sie
 treten damit auf der Startseite bei, ohne Konto und ohne Namen.
@@ -78,9 +78,12 @@ sehen genau die Spiele, die der Kurs freigegeben hat, und spielen sie wie Studie
 Ihr Testdurchlauf zählt als Teilnehmerin oder Teilnehmer des Kurses. Unter „Meine Daten“ unten auf der Seite können
 Sie ihn danach löschen.
 
-**Auswertung:** Unter **Auswertung** wählen Sie Spiel und Kurs. Sie sehen, wie die Versuche ausgehen, welche Aufgabe
+Der Link **Vorschau** im Bereich für Lehrende zeigt dagegen alle Spiele der Installation, nicht nur die des
+Kurses.
+
+**Auswertung:** Unter **Auswertung** wählen Sie Szenario und Kurs. Sie sehen, wie die Versuche ausgehen, welche Aufgabe
 im ersten Versuch gelingt, welche typischen Fehler vorkommen und wie entschieden wird. Zahlen erscheinen erst ab drei
-Personen; vorher steht dort „Noch zu wenige Personen“, damit niemand erkennbar ist. Wie eine gefüllte Auswertung
+Personen (Voreinstellung); vorher steht dort „Noch zu wenige Personen“, damit niemand erkennbar ist. Wie eine gefüllte Auswertung
 aussieht, zeigt das [Bild in der README](../medien/bild-auswertung.png).
 
 ## Gut zu wissen
