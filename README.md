@@ -107,6 +107,16 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 09.11.2026](nachweis/PROTOKOLL
 
 </details>
 
+## Eigenes Lernspiel in vier Schritten
+
+1. **Vorlage kopieren:** eine der mitgelieferten Dateien `szenario.json` herunterladen, Titel und Texte im
+   Texteditor ändern, die Versionsnummer erhöhen.
+2. **Prüfen und hochladen:** unter `/lehrende` → Szenarien die Datei auswählen, „Nur prüfen“, dann „Hochladen“.
+3. **Freigeben:** unter Kurse einen Kurs anlegen, das Spiel freigeben, den Kurscode an die Studierenden geben.
+4. **Ausprobieren und auswerten:** mit dem Kurscode selbst spielen; die Auswertung zeigt Zahlen ab drei Personen.
+
+Mit Bildern Schritt für Schritt: [Anleitung für Lehrende](docs/ANLEITUNG-LEHRENDE.md).
+
 ## Ehrlich gesagt: Was der Prototyp noch nicht ist
 
 Ein Prototyp, in wenigen Tagen gebaut, um zu zeigen, dass die Architektur trägt. Kein fertiges Produkt.
@@ -210,13 +220,14 @@ src/oer-export.js  Offline-Fassung als eine HTML-Datei
 inhalte/szenarien/ die Beispielszenarien (JSON + Bilder)
 tools/           pruefe.js (Szenario prüfen), oer-export.js (Export auf der Kommandozeile)
 test/            Unit- und Schnittstellentests, Lasttest, Browsertest (CDP)
-docs/            Architektur, Inhaltsformat, Erweitern, Datenschutz, Lerndesign, Schnittstelle
+docs/            Anleitung für Lehrende, Architektur, Inhaltsformat, Erweitern, Datenschutz, Lerndesign, Schnittstelle
 nachweis/        Messprotokoll mit Bildschirmfotos
 demo/            Offline-Fassung des Brückenspiels mit AMB-Metadaten (erzeugt mit tools/oer-export.js)
 medien/          Rundgang (Video, GIF, Poster), Bilder für diese Seite, Grafiken als Quelle (kunst/)
 ```
 
-Mehr: [Architektur](docs/ARCHITEKTUR.md) · [Szenarien schreiben](docs/INHALTE.md) ·
+Mehr: [Architektur](docs/ARCHITEKTUR.md) · [Anleitung für Lehrende](docs/ANLEITUNG-LEHRENDE.md) ·
+[Szenarien schreiben](docs/INHALTE.md) ·
 [Neue Mechanik ergänzen](docs/ERWEITERN.md) · [Datenschutz](docs/DATENSCHUTZ.md) · [Lerndesign und Evaluation des
 Beispielszenarios](docs/LERNDESIGN.md)
 

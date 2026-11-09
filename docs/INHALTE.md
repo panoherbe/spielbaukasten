@@ -1,5 +1,7 @@
 # Szenarien schreiben
 
+Der Weg von der Datei bis zum Kurs, mit Bildern: [Anleitung für Lehrende](ANLEITUNG-LEHRENDE.md).
+
 Ein Szenario ist ein Ordner unter `inhalte/szenarien/<id>/` mit einer Datei `szenario.json` und optional Bildern
 (SVG, PNG, JPG, WebP). Vorlage: [`fussgaengerbruecke/szenario.json`](../inhalte/szenarien/fussgaengerbruecke/szenario.json).
 Prüfen: `node tools/pruefe.js inhalte/szenarien/<id>/szenario.json` oder unter `/lehrende` → Szenarien → „Nur prüfen“.
