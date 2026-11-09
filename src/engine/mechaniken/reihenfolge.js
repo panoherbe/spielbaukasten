@@ -6,6 +6,12 @@ import { zufallsfolge } from '../zufall.js';
 export const reihenfolge = {
   typ: 'reihenfolge',
 
+  /** Felder für die Oberfläche: die Elemente gemischt, nie in der richtigen Reihenfolge. */
+  ansicht(def, t, z) {
+    const nachId = Object.fromEntries(def.elemente.map((e) => [e.id, e]));
+    return { elemente: this.mische(def, z.seed).map((id) => ({ id, text: t(nachId[id].text) })) };
+  },
+
   pruefe(def, pfad) {
     const e = def.elemente;
     if (!Array.isArray(e) || e.length < 3) return [{ pfad: `${pfad}.elemente`, meldung: 'Mindestens drei Elemente nötig' }];

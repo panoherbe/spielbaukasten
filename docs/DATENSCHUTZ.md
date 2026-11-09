@@ -22,7 +22,8 @@ Webschriften, keine Analyse, kein CDN); einziges Cookie ist das der Anmeldung.
 - Auswertungen für Lehrende nur als Summen und erst ab drei Personen (`SBK_MIN_GRUPPE`); keine Ranglisten.
 - Studierende können ihre Daten jederzeit als JSON herunterladen (Art. 15, 20) und sofort vollständig löschen
   (Art. 17), ohne Rückfrage bei Lehrenden.
-- xAPI-Export nur mit Pseudonym als Konto dieser Instanz.
+- xAPI-Export nur mit Pseudonym als Konto dieser Instanz. Er enthält, anders als die Auswertung, Einzelereignisse je
+  Pseudonym (für einen Learning Record Store) und ist nur Lehrenden zugänglich.
 
 ## Informationssicherheit
 

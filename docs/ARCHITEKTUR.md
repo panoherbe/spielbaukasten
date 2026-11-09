@@ -29,7 +29,7 @@ in ein Verzeichnis eintragen.
 |---|---|---|
 | `engine/ausdruck.js` | Formeln, Bedingungen und Textbausteine sicher auswerten (eigener Parser, kein `eval`) | — |
 | `engine/zufall.js` | Parameter je Versuch aus einem Startwert, reproduzierbar | — |
-| `engine/mechaniken/*` | Bewertung je Mechanik (`zahl`, `auswahl`, `reihenfolge`) | neue Module, siehe ERWEITERN.md |
+| `engine/mechaniken/*` | Bewertung und Ansicht je Mechanik (`zahl`, `auswahl`, `reihenfolge`) | neue Module, siehe ERWEITERN.md |
 | `engine/szenario.js` | Szenario prüfen: Pflichtfelder, Verweise, Formeln, Erreichbarkeit, Endlosschleifen | — |
 | `engine/ablauf.js` | Zustand aus Startwert + Ereignissen berechnen (`starte`, `wende`, `spiele`) | — |
 | `engine/ansicht.js` | was die Oberfläche sieht: aktueller Knoten, Texte mit Zahlen, Kapitel mit Stand, keine Lösungen | — |

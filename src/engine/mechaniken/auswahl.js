@@ -3,6 +3,11 @@
 export const auswahl = {
   typ: 'auswahl',
 
+  /** Felder für die Oberfläche, ohne die Kennzeichnung der richtigen Optionen. */
+  ansicht(def, t) {
+    return { mehrfach: Boolean(def.mehrfach), auswahl: def.optionen.map((o) => ({ id: o.id, text: t(o.text) })) };
+  },
+
   pruefe(def, pfad) {
     const fehler = [];
     const optionen = def.optionen;

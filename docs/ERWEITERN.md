@@ -1,6 +1,6 @@
 # Eine neue Mechanik ergänzen
 
-Beispiel: eine Mechanik `zuordnung` (Begriffe Kategorien zuordnen). Es sind vier Schritte, Engine und Server
+Beispiel: eine Mechanik `zuordnung` (Begriffe Kategorien zuordnen). Es sind drei Schritte; Engine und Server
 bleiben unverändert.
 
 1. **Bewertung** in `src/engine/mechaniken/zuordnung.js`:
@@ -13,15 +13,15 @@ bleiben unverändert.
      bewerte(def, antwort, werte) {                  // { gueltig, richtig, rueckmeldung, typ? }
        return { gueltig: true, richtig: false, rueckmeldung: '…' };
      },
+     ansicht(def, t, z) {                            // was die Oberfläche braucht, ohne Lösung; t() setzt Zahlen ein
+       return { begriffe: def.begriffe.map(t), kategorien: def.kategorien.map(t) };
+     },
    };
    ```
 
 2. **Eintragen** in `src/engine/mechaniken/index.js` (eine Import-Zeile, ein Eintrag in `MECHANIKEN`).
 
-3. **Ansicht**: Was die Oberfläche braucht (ohne Lösung), in `src/engine/ansicht.js` beim Knotentyp `aufgabe`
-   ergänzen, z. B. `knoten.begriffe` und `knoten.kategorien`.
-
-4. **Darstellung** in `src/web/mechaniken/zuordnung.js` mit `zeige(knoten, sende)`, die ein Formular liefert und beim
+3. **Darstellung** in `src/web/mechaniken/zuordnung.js` mit `zeige(knoten, sende)`, die ein Formular liefert und beim
    Absenden `sende(antwort)` aufruft; eintragen in `src/web/mechaniken/index.js`.
 
 Dazu ein Test in `test/` und ein Absatz in `docs/INHALTE.md`. Die Offline-Fassung (OER-Export) übernimmt die neue

@@ -37,15 +37,8 @@ export function ansicht(szenario, z) {
     knoten.punkte = k.punkte ?? 10;
     knoten.hinweisVerfuegbar = Boolean(k.hinweis) && !z.hinweis;
     if (z.hinweis) knoten.hinweis = t(k.hinweis);
-    if (k.mechanik === 'zahl') knoten.einheit = k.einheit ?? '';
-    if (k.mechanik === 'auswahl') {
-      knoten.mehrfach = Boolean(k.mehrfach);
-      knoten.auswahl = k.optionen.map((o) => ({ id: o.id, text: t(o.text) }));
-    }
-    if (k.mechanik === 'reihenfolge') {
-      const nachId = Object.fromEntries(k.elemente.map((e) => [e.id, e]));
-      knoten.elemente = MECHANIKEN.reihenfolge.mische(k, z.seed).map((id) => ({ id, text: t(nachId[id].text) }));
-    }
+    // Was die Darstellung der Mechanik braucht (ohne Lösung), liefert die Mechanik selbst.
+    Object.assign(knoten, MECHANIKEN[k.mechanik]?.ansicht?.(k, t, z) ?? {});
   } else if (k.typ === 'ende') {
     knoten.ergebnis = k.ergebnis;
   }

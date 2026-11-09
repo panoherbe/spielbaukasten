@@ -24,6 +24,11 @@ function nahe(ist, soll, def) {
 export const zahl = {
   typ: 'zahl',
 
+  /** Felder für die Oberfläche, ohne Lösung. */
+  ansicht(def) {
+    return { einheit: def.einheit ?? '' };
+  },
+
   pruefe(def, pfad, { bekannteNamen }) {
     const fehler = [];
     const formeln = [['loesung', def.loesung], ...(def.typische_fehler ?? []).map((f, i) => [`typische_fehler[${i}].formel`, f.formel])];

@@ -16,7 +16,7 @@ Spiele entstehen als Datei statt als Programm. Das läuft heute – ansehen, sel
 | Entscheidungen mit Folgen | jede Entscheidung verändert sichtbar Sicherheit, Budget und Tage bis zum Fest; eine fachliche Bewertung und die Spielfigur erklären, warum |
 | Rückmeldung, die beim Lernen hilft | typische Fehler werden erkannt und erklärt; zweiter Versuch, Hinweis, Lösung mit Rechenweg |
 | Lernfortschritt und Auswertung für Lehrende | Stand je Lernziel; Diagramme: Ausgang der Versuche, je Aufgabe der Anteil „im ersten Versuch richtig“, die häufigsten Fehler, die Verteilung der Entscheidungen |
-| Datenschutz | keine Namen, keine E-Mail-Adressen, zufällige Pseudonyme; Auswertung nur als Summen ab 3 Personen; Löschen auf Knopfdruck |
+| Datenschutz | keine Namen, keine E-Mail-Adressen, zufällige Pseudonyme; Auswertung in der Oberfläche nur als Summen ab 3 Personen; Löschen auf Knopfdruck |
 | Neue Inhalte ohne Programmierung | Lernspiele sind Dateien; die Prüfung meldet Fehler auf Deutsch mit Fundstelle; jede Version bleibt erhalten |
 | Offene Lernressourcen (OER) | Export als eine einzige HTML-Datei (321 KB mit allen Bildern), läuft ohne Server und ohne Internet: 0 Netzanfragen (09.11.2026); Metadaten nach dem Profil AMB |
 | Viele Studierende | Lasttest mit 300 simulierten Studierenden, mit Denkzeit: 0 Fehler, 95 % der Antworten unter 0,16 s; 200 simulierte im selben Augenblick: 0 Fehler (09.11.2026) |
@@ -46,16 +46,15 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 09.11.2026](nachweis/PROTOKOLL
    Schlüssel **demo-lehrende**.
 3. **Nachlesen, was gemessen wurde:** [Messprotokoll](nachweis/PROTOKOLL.md) mit 34 Bildschirmfotos.
 
-## Ihr Vorteil: Sie bewerten ein laufendes System, kein Versprechen
+## Was Sie heute schon prüfen können
 
-- **Sie sehen vorher, was Sie bekommen.** Oberfläche, Spielablauf, Auswertung und Export lassen sich heute
-  anklicken, nicht erst nach Monaten Entwicklung.
-- **Die riskanten Teile sind gebaut und gemessen:** Last (im Lasttest mit simulierten Studierenden),
-  Barrierefreiheit (automatisch geprüft), Datenschutz, Offline-Export. Das Projekt beginnt nicht bei null.
-- **Mehr Projektzeit für das, was zählt:** Ihre Anforderungen, Ihre Inhalte, Tests mit Studierenden und Lehrenden.
-  Ein erster testbarer Stand steht früh.
-- **Keine Bindung an einen Anbieter:** offener Quellcode (AGPL-3.0), keine Fremdbibliotheken zur Laufzeit,
-  Dokumentation auf Deutsch. Das Framework lässt sich ohne mich betreiben und weiterentwickeln.
+- Oberfläche, Spielablauf, Auswertung und Export lassen sich heute ausprobieren.
+- Last (im Lasttest mit simulierten Studierenden), Barrierefreiheit (automatisch geprüft), Datenschutz und
+  Offline-Export sind gebaut und gemessen.
+- Die Projektzeit geht in Ihre Anforderungen, Ihre Inhalte und Tests mit Studierenden und Lehrenden; ein erster
+  testbarer Stand steht früh.
+- Offener Quellcode (AGPL-3.0), keine Fremdbibliotheken zur Laufzeit, Dokumentation auf Deutsch: Das Framework lässt
+  sich ohne mich betreiben und weiterentwickeln.
 
 ## So sieht es aus
 
@@ -117,7 +116,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 09.11.2026](nachweis/PROTOKOLL
 
 Mit Bildern Schritt für Schritt: [Anleitung für Lehrende](docs/ANLEITUNG-LEHRENDE.md).
 
-## Ehrlich gesagt: Was der Prototyp noch nicht ist
+## Was der Prototyp noch nicht ist
 
 Ein Prototyp, in wenigen Tagen gebaut, um zu zeigen, dass die Architektur trägt. Kein fertiges Produkt.
 
@@ -192,7 +191,7 @@ Sensor“ (ca. 8 Minuten) ist eine kurze Übung. Unter `/lehrende` erscheinen Au
 **Für Lehrende**
 - Kurse anlegen (Kurscode), Szenarien je Kurs freigeben.
 - Szenario-Dateien prüfen und hochladen: Fehler kommen als deutsche Meldung mit Fundstelle
-  (`knoten.diagonale.loesung: „alpha“ ist kein Parameter des Szenarios`). Jede Version bleibt erhalten; laufende
+  (`knoten.diagonale.loesung „alpha“ ist kein Parameter des Szenarios`). Jede Version bleibt erhalten; laufende
   Versuche bleiben bei ihrer Version.
 - Auswertung je Szenario und Kurs, als Diagramme und als Tabelle: Versuche, Ausgang, je Aufgabe Anteil „im ersten
   Versuch richtig“ und die häufigsten Fehlerarten, je Entscheidung die Verteilung mit fachlicher Bewertung. Nur

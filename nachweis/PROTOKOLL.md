@@ -96,7 +96,7 @@ VoiceOver), reine Tastaturbedienung durch Menschen, Verständlichkeit.
 Das Brückenszenario als OER-Export vom Server heruntergeladen (eine HTML-Datei, **322 KB** mit allen eingebetteten
 Szenenbildern, Figur und Auszeichnungen; am 02.11.2026 waren es 76 KB mit zwei Bildern) und als Datei (`file://`,
 ohne Server) im Browser auf Telefonbreite durchgespielt: **Erfolg**, **0 Netzanfragen** nach dem Öffnen. Fußzeile:
-„„Riss an der Fußgängerbrücke“ von Panagiotis Herbe, Lizenz CC BY 4.0
+„‚Riss an der Fußgängerbrücke‘ von Panagiotis Herbe, Lizenz CC BY 4.0
 (https://creativecommons.org/licenses/by/4.0/). Offline-Fassung, Fortschritt bleibt auf diesem Gerät. Erstellt mit
 dem Spielbaukasten (AGPL-3.0).“
 
