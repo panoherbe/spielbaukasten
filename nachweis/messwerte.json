@@ -1,31 +1,33 @@
 {
-  "zeitpunkt": "2026-11-09T15:35:40.834Z",
-  "app": "http://127.0.0.1:8080",
+  "zeitpunkt": "2026-11-12T13:04:27.643Z",
+  "zeitpunktMez": "12.11.2026, 14:04–14:07 Uhr (MEZ)",
+  "hinweis": "Alle Personen im Lasttest und 24 der 25 Stimmen der Kursrunde im Browser sind simuliert.",
+  "app": "http://sbk-1112-app:8080",
   "umgebung": {
     "axe": "axe-core 4.10.2 (lokale Datei)",
     "app": {
       "ok": true,
-      "version": "0.1.0",
+      "version": "0.2.0",
       "szenarienVersionen": 2
     },
-    "node": "v24.22.1",
-    "browser": "Chrome/153.0.8010.12"
+    "node": "v24.22.3",
+    "browser": "Chrome/158.0.8127.18"
   },
   "last": [
     {
       "personen": 50,
       "denkzeitMs": null,
-      "anfragen": 549,
+      "anfragen": 544,
       "fehler": 0,
       "abgebrochen": 0,
       "ersterFehler": null,
-      "dauerSekunden": 0.6,
-      "anfragenJeSekunde": 851.4,
+      "dauerSekunden": 0.3,
+      "anfragenJeSekunde": 1644.9,
       "latenzMs": {
-        "p50": 53.1,
-        "p95": 92.1,
-        "p99": 104.3,
-        "max": 117
+        "p50": 20.3,
+        "p95": 40.6,
+        "p99": 226,
+        "max": 259.4
       },
       "ergebnisse": {
         "erfolg": 50
@@ -34,17 +36,17 @@
     {
       "personen": 200,
       "denkzeitMs": null,
-      "anfragen": 2183,
+      "anfragen": 2178,
       "fehler": 0,
       "abgebrochen": 0,
       "ersterFehler": null,
-      "dauerSekunden": 1.9,
-      "anfragenJeSekunde": 1139.7,
+      "dauerSekunden": 1,
+      "anfragenJeSekunde": 2105.3,
       "latenzMs": {
-        "p50": 104.1,
-        "p95": 223.4,
-        "p99": 1581.5,
-        "max": 1641.9
+        "p50": 64.5,
+        "p95": 87.1,
+        "p99": 869.6,
+        "max": 938
       },
       "ergebnisse": {
         "erfolg": 200
@@ -56,71 +58,145 @@
         1000,
         5000
       ],
-      "anfragen": 3279,
+      "anfragen": 3259,
       "fehler": 0,
       "abgebrochen": 0,
       "ersterFehler": null,
-      "dauerSekunden": 39,
-      "anfragenJeSekunde": 84,
+      "dauerSekunden": 40.1,
+      "anfragenJeSekunde": 81.3,
       "latenzMs": {
-        "p50": 2.1,
-        "p95": 153.7,
-        "p99": 274.8,
-        "max": 287.6
+        "p50": 1.5,
+        "p95": 97.6,
+        "p99": 187.6,
+        "max": 194.6
       },
       "ergebnisse": {
         "erfolg": 300
       }
+    },
+    {
+      "art": "teams",
+      "teams": 50,
+      "groesse": 3,
+      "personen": 150,
+      "denkzeitMs": [
+        1000,
+        3000
+      ],
+      "anfragen": 1136,
+      "fehler": 0,
+      "schonEntschieden409": 1,
+      "abgebrochen": 0,
+      "ersterFehler": null,
+      "dauerSekunden": 22.4,
+      "anfragenJeSekunde": 50.6,
+      "latenzMs": {
+        "anzahl": 1136,
+        "p50": 2,
+        "p95": 24.6,
+        "p99": 76.3,
+        "max": 91.7
+      },
+      "entscheidungen": 383,
+      "zustellungAnAlleMs": {
+        "anzahl": 383,
+        "p50": 2.2,
+        "p95": 2.9,
+        "p99": 6.9,
+        "max": 19.3
+      },
+      "ergebnisse": {
+        "erfolg": 50
+      }
+    },
+    {
+      "art": "runde",
+      "personen": 200,
+      "denkzeitMs": [
+        1000,
+        4000
+      ],
+      "anfragen": 2003,
+      "fehler": 0,
+      "schonEntschieden409": 0,
+      "dauerSekunden": 28.3,
+      "beitrittAllerSekunden": 0.3,
+      "anfragenJeSekunde": 70.7,
+      "latenzMs": {
+        "anzahl": 2003,
+        "p50": 2.1,
+        "p95": 130.7,
+        "p99": 227.7,
+        "max": 241.5
+      },
+      "entscheidungen": 7,
+      "zustellungAnAlleMs": {
+        "anzahl": 7,
+        "p50": 9.5,
+        "p95": 17.7,
+        "p99": 17.7,
+        "max": 17.7
+      },
+      "zustellungAnLehrendeMs": {
+        "anzahl": 7,
+        "p50": 5.2,
+        "p95": 12.8,
+        "p99": 12.8,
+        "max": 12.8
+      },
+      "liveStaendeLehrende": 187,
+      "ergebnis": "erfolg",
+      "schritteSichtbar": 7
     }
   ],
   "browser": {
     "erstesLaden-desktop": {
-      "domFertigMs": 89,
-      "geladenMs": 90,
-      "bisBedienbarMs": 135,
+      "domFertigMs": 25,
+      "geladenMs": 25,
+      "bisBedienbarMs": 44,
       "dateien": 16,
-      "bytes": 37519,
+      "bytes": 42496,
       "fremdeHosts": [],
-      "wandzeitMs": 139
+      "wandzeitMs": 45
     },
     "durchgespielt-desktop": {
       "ergebnis": "erfolg",
-      "sekunden": 9.06
+      "sekunden": 11.12
     },
     "fortschritt-desktop": "3 von 3 Sternen, 1× abgeschlossen, bestes Ergebnis 89 %",
     "erstesLaden-telefon": {
-      "domFertigMs": 85,
-      "geladenMs": 86,
-      "bisBedienbarMs": 114,
-      "dateien": 12,
-      "bytes": 29058,
+      "domFertigMs": 37,
+      "geladenMs": 37,
+      "bisBedienbarMs": 58,
+      "dateien": 16,
+      "bytes": 42496,
       "fremdeHosts": [],
-      "wandzeitMs": 115
+      "wandzeitMs": 60
     },
     "durchgespielt-telefon": {
       "ergebnis": "erfolg",
-      "sekunden": 8.125
+      "sekunden": 8.72
     },
     "fortschritt-telefon": "3 von 3 Sternen, 1× abgeschlossen, bestes Ergebnis 89 %",
     "erstesLaden-desktop-dunkel": {
-      "domFertigMs": 95,
-      "geladenMs": 95,
-      "bisBedienbarMs": 160,
+      "domFertigMs": 26,
+      "geladenMs": 27,
+      "bisBedienbarMs": 60,
       "dateien": 16,
-      "bytes": 37519,
+      "bytes": 42496,
       "fremdeHosts": [],
-      "wandzeitMs": 161
+      "wandzeitMs": 62
     },
     "durchgespielt-desktop-dunkel": {
       "ergebnis": "erfolg",
-      "sekunden": 5.456
+      "sekunden": 5.266
     },
     "fortschritt-desktop-dunkel": "3 von 3 Sternen, 1× abgeschlossen, bestes Ergebnis 89 %",
     "auswertungKennzahlen": [
       "554 Personen",
       "554 Versuche",
       "553 abgeschlossen",
-      "88 % mittlere Punktquote"
+      "89 % mittlere Punktquote"
     ]
   },
   "barrierefreiheit": {
@@ -211,12 +287,181 @@
     "lehrende-auswertung-telefon": {
       "verstoesse": [],
       "bestanden": 23
+    },
+    "editor-allgemein": {
+      "verstoesse": [],
+      "bestanden": 29
+    },
+    "editor-aufgabe": {
+      "verstoesse": [],
+      "bestanden": 29
+    },
+    "editor-fehler": {
+      "verstoesse": [],
+      "bestanden": 30
+    },
+    "editor-dunkel": {
+      "verstoesse": [],
+      "bestanden": 31
+    },
+    "editor-telefon": {
+      "verstoesse": [],
+      "bestanden": 30
+    },
+    "editor-vorschau-ende": {
+      "verstoesse": [],
+      "bestanden": 21
+    },
+    "team-start": {
+      "verstoesse": [],
+      "bestanden": 22
+    },
+    "team-abstimmung": {
+      "verstoesse": [],
+      "bestanden": 28
+    },
+    "team-abstimmung-telefon": {
+      "verstoesse": [],
+      "bestanden": 28
+    },
+    "team-abstimmung-dunkel": {
+      "verstoesse": [],
+      "bestanden": 28
+    },
+    "team-rueckmeldung": {
+      "verstoesse": [],
+      "bestanden": 27
+    },
+    "kursrunde-start": {
+      "verstoesse": [],
+      "bestanden": 22
+    },
+    "uebersicht-live-runde-telefon": {
+      "verstoesse": [],
+      "bestanden": 21
+    },
+    "kursrunde-lehrende": {
+      "verstoesse": [],
+      "bestanden": 20
+    },
+    "kursrunde-lehrende-dunkel": {
+      "verstoesse": [],
+      "bestanden": 20
+    },
+    "kursrunde-lehrende-telefon": {
+      "verstoesse": [],
+      "bestanden": 20
+    },
+    "kursrunde-studierende-telefon": {
+      "verstoesse": [],
+      "bestanden": 31
+    },
+    "admin-anmeldung": {
+      "verstoesse": [],
+      "bestanden": 21
+    },
+    "admin-zugaenge": {
+      "verstoesse": [],
+      "bestanden": 23
+    },
+    "admin-zugang-neu": {
+      "verstoesse": [],
+      "bestanden": 26
+    },
+    "admin-einstellungen": {
+      "verstoesse": [],
+      "bestanden": 25
+    },
+    "admin-protokoll": {
+      "verstoesse": [],
+      "bestanden": 22
+    },
+    "admin-protokoll-dunkel": {
+      "verstoesse": [],
+      "bestanden": 22
+    },
+    "admin-protokoll-telefon": {
+      "verstoesse": [],
+      "bestanden": 23
+    },
+    "uebersicht-ton-an": {
+      "verstoesse": [],
+      "bestanden": 21
     }
   },
   "offline": {
-    "groesseKB": 322,
+    "groesseKB": 339,
     "ergebnis": "erfolg",
     "netzanfragenNachDemLaden": 0,
     "lizenzhinweis": "„Riss an der Fußgängerbrücke“ von Panagiotis Herbe, Lizenz CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Offline-Fassung, Fortschritt bleibt auf diesem Gerät. Erstellt mit dem Spielbaukasten (AGPL-3.0)."
+  },
+  "editor": {
+    "fehlermeldung": "knoten.teilspannung.loesung „R3“ ist kein Parameter des Szenarios",
+    "fehlerAmFeld": "true",
+    "zurStelleFokus": "knoten.teilspannung.loesung",
+    "gespeichert": "Version 3 gespeichert",
+    "versionen": [
+      "3 editor",
+      "2 datei"
+    ],
+    "vorschauTitel": "Vorschau: Übung: Spannungsteiler im Praktikum",
+    "vorschauErgebnis": "erfolg"
+  },
+  "team": {
+    "abstimmungBeiC": "Abstimmung im Team: 2 von 3 haben abgestimmt |  | A | Option A:",
+    "dritteStimmeBisAlleDreiMs": 57,
+    "rueckmeldung": [
+      "Gute Entscheidung",
+      "Gute Entscheidung",
+      "Gute Entscheidung"
+    ],
+    "knotenDanach": [
+      "pruefschritte",
+      "pruefschritte",
+      "pruefschritte"
+    ]
+  },
+  "kursrunde": {
+    "verteilungJetzt": [
+      "richtig 15 63 %",
+      "falsch: Es gibt zwei Diagonalen; jede trägt die … 6 25 %",
+      "falsch: Die Hälfte der Last stimmt, aber die … 3 13 %"
+    ],
+    "schritte": [
+      "Kraft in der Diagonale: offen",
+      "Das Fachwerk als Modell: Entschieden: Zur Berechnung (25 von 25 Stimmen)",
+      "Wie gehen Sie vor?: Entschieden: richtige Antwort (21 von 24 Stimmen)",
+      "Eine Meldung am Montagmorgen: Entschieden: Brücke sofort sperren und Umleitung ausschildern, dann prüfen (21 von 25 Stimmen)"
+    ],
+    "anzeigeTelefon": "Abstimmung in der Kursrunde: 24 von 25 haben abgestimmt",
+    "schliessenBisTelefonMs": 54,
+    "rueckmeldungTelefon": "Richtig",
+    "teilnehmende": "24 simuliert über die Schnittstelle, 1 im Browser auf Telefonbreite"
+  },
+  "admin": {
+    "anmeldungMitNeuemZugang": "200, Zugang „Lehrstuhl Baustatik“",
+    "nachSperrenSitzung": "401: abgemeldet",
+    "nachSperrenAnmeldung": "403: abgewiesen, Zugang gesperrt",
+    "nachEntsperren": "200: angemeldet",
+    "einstellungenZeilen": 15,
+    "protokollAktionen": [
+      "Anmeldung",
+      "Zugang entsperrt",
+      "Anmeldung abgewiesen: Zugang gesperrt",
+      "Zugang gesperrt",
+      "Zugang angelegt",
+      "Kursrunde beendet",
+      "Kursrunde gestartet",
+      "Szenario im Editor gespeichert"
+    ]
+  },
+  "ton": {
+    "voreinstellung": "false",
+    "nachNeuladen": "true",
+    "gespieltNachGuterEntscheidung": [
+      "richtig"
+    ],
+    "textGleichzeitig": "Gute Entscheidung",
+    "webAudio": "AudioContext vorhanden"
   }
 }
