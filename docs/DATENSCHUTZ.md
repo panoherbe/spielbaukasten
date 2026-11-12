@@ -12,8 +12,8 @@ Grundsatz: **so wenig wie möglich, so kurz wie möglich, nur so viel wie die Le
 | Versuche: Szenario, Version, Startwert, Zeitpunkte, Punkte | Fortschritt, Auswertung | pseudonym |
 | Ereignisse: Entscheidung oder Antwort mit Zeitpunkt | Bewertung, Nachrechnen, Auswertung | pseudonym |
 | Ton an oder aus | Einstellung der Person | pseudonym |
-| Teams und Kursrunden: Szenario, Startwert, gemeinsame Ereignisse | gemeinsamer Spielstand | kein Personenbezug (gehört der Gruppe) |
-| Mitgliedschaft in Team oder Kursrunde, mit Zeitpunkt | Zugang zum gemeinsamen Stand | pseudonym |
+| Teams und Live-Runden: Szenario, Startwert, gemeinsame Ereignisse | gemeinsamer Spielstand | kein Personenbezug (gehört der Gruppe) |
+| Mitgliedschaft in Team oder Live-Runde, mit Zeitpunkt | Zugang zum gemeinsamen Stand | pseudonym |
 | Stimmen: Entscheidung oder Antwort je Schritt, mit Zeitpunkt | Abstimmung, Live-Verteilung (nur Summen) | pseudonym |
 | Zugänge für Lehrende: Bezeichnung (eine Stelle oder Rolle), Hash des Schlüssels, gesperrt ja/nein | Anmeldung der Lehrenden | so viel, wie die Bezeichnung verrät; kein Name nötig |
 | Protokoll der Verwaltung: Zeit, Rolle, Zugang, Aktion, Gegenstand | Nachvollziehbarkeit (wer hat was freigegeben, gespeichert, gesperrt) | Lehrende und Administration; nie Studierende, keine IP-Adressen |
@@ -26,15 +26,15 @@ Webschriften, keine Analyse, kein CDN); einziges Cookie ist das der Anmeldung.
 ## Voreinstellungen (Privacy by Default)
 
 - Aufbewahrungsfrist 180 Tage ohne Nutzung, dann automatisch gelöscht (`SBK_AUFBEWAHRUNG_TAGE`): Versuche, Teams,
-  Kursrunden, Pseudonyme und Einträge im Protokoll. Die Administration kann die Frist in der Oberfläche ändern
+  Live-Runden, Pseudonyme und Einträge im Protokoll. Die Administration kann die Frist in der Oberfläche ändern
   (7 bis 3650 Tage); sie gilt sofort, aufgeräumt wird beim Speichern und alle sechs Stunden.
 - Auswertungen für Lehrende nur als Summen und erst ab drei Personen (`SBK_MIN_GRUPPE`); keine Ranglisten.
-- Kursrunde: Lehrende sehen je Schritt nur Summen und erst ab drei Stimmen; darunter auch nicht, wie entschieden
-  wurde. Studierende sehen in der Kursrunde nur, wie viele schon abgestimmt haben.
+- Live-Runde: Lehrende sehen je Schritt nur Summen und erst ab drei Stimmen; darunter auch nicht, wie entschieden
+  wurde. Studierende sehen in der Live-Runde nur, wie viele schon abgestimmt haben.
 - Team: Mitglieder sehen, wie viele abgestimmt haben, die Stimmen je Möglichkeit und bei Rechenaufgaben die
   eingegebenen Zahlen, aber nicht, wer wie gestimmt hat. Wer im Team ist, zeigt nur die Zahl der Mitglieder.
 - Ton ist aus, bis die Person ihn einschaltet.
-- Studierende können ihre Daten jederzeit als JSON herunterladen (Art. 15, 20), samt Teams, Kursrunden und eigenen
+- Studierende können ihre Daten jederzeit als JSON herunterladen (Art. 15, 20), samt Teams, Live-Runden und eigenen
   Stimmen, und sofort vollständig löschen (Art. 17), ohne Rückfrage bei Lehrenden. Beim Löschen verschwinden auch
   Mitgliedschaften und Stimmen; der gemeinsame Spielstand eines Teams bleibt für die anderen erhalten, er enthält
   keine Angaben zur Person.

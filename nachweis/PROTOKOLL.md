@@ -1,8 +1,8 @@
 # Messprotokoll
 
-Gemessen am **12.11.2026, 14:04–14:07 Uhr (MEZ)**, Version 0.2.0: mit Szenario-Editor, Teamspiel, Kursrunde,
+Gemessen am **12.11.2026, 14:04–14:07 Uhr (MEZ)**, Version 0.2.0: mit Szenario-Editor, Teamspiel, Live-Runde,
 Administration und Ton. Alle Zahlen stammen aus diesem Lauf (Rohdaten: [`messwerte.json`](messwerte.json)); nichts ist
-geschätzt. Alle Personen im Lasttest und die 24 Stimmen in der Kursrunde im Browser sind **simuliert**. Was nicht
+geschätzt. Alle Personen im Lasttest und alle 25 Stimmen in der Live-Runde im Browser sind **simuliert** (24 über die Schnittstelle, eine über einen automatisch gesteuerten Browser). Was nicht
 gemessen wurde, steht am Ende. Das vorige Protokoll vom 09.11.2026 (Version 0.1.0, andere Maschine) steht in der
 Git-Geschichte.
 
@@ -20,7 +20,7 @@ chromium --headless=new --remote-debugging-port=9222 about:blank
 APP_URL=http://127.0.0.1:8080 AXE_DATEI=node_modules/axe-core/axe.min.js EXPORT_DIR=/tmp/export node test/e2e/nachweis.js
 ```
 
-Mit Docker geht dasselbe über `compose.nachweis.yaml` (siehe README).
+Ähnlich geht es mit Docker über `compose.nachweis.yaml` (siehe README); dort lädt die Messung axe-core vom CDN, und die Anwendung heißt im Netz anders. Dieser Lauf nutzte eigene Container (Abbild `node:24` für Tests und Anwendung) und axe-core aus einer lokalen Datei.
 
 ## 1. Automatische Tests
 
@@ -35,7 +35,7 @@ Mit Docker geht dasselbe über `compose.nachweis.yaml` (siehe README).
 | Spielgestaltung | 10 | Sterne, Auszeichnungen, Kapitelkarte, neue Felder, Bilder mit Alternativtext, SVG mit eigener Richtlinie, Übersicht, Auswertung, gzip |
 | OER-Export | 3 | eine Datei ohne Nachladen; gültiges Skript; Metadaten nach AMB |
 | **Editor** | 5 | öffnen, ändern, als neue Version speichern (alte bleibt, neue Versuche nehmen die neue); Fehler mit Fundstelle, nichts gespeichert; veraltete Grundlage ergibt 409 statt Überschreiben; neues Szenario aus der Vorlage, Kennung nicht doppelt; Vorschau ohne Speichern mit Content-Security-Policy über Prüfsummen; Studierende erreichen weder Editor noch Vorschau |
-| **Teamspiel und Kursrunde** | 9 | gemeinsamer Stand und Mehrheit (1 : 1 offen, 2 : 1 entschieden), Gleichstand (erste Stimme gilt), vorzeitiges Schließen nur durch wer gegründet hat, Antworten nach Bewertung gruppiert, Hinweis sofort für alle, Fremde und andere Kurse ausgeschlossen, Live-Stände über Server-Sent Events, **Kursrunde: Verteilung erst ab drei Stimmen, ohne Pseudonyme, darunter auch die Entscheidung verborgen**, Meine Daten und Löschen mit Teams |
+| **Teamspiel und Live-Runde** | 9 | gemeinsamer Stand und Mehrheit (1 : 1 offen, 2 : 1 entschieden), Gleichstand (erste Stimme gilt), vorzeitiges Schließen nur durch wer gegründet hat, Antworten nach Bewertung gruppiert, Hinweis sofort für alle, Fremde und andere Kurse ausgeschlossen, Live-Stände über Server-Sent Events, **Live-Runde: Verteilung erst ab drei Stimmen, ohne Pseudonyme, darunter auch die Entscheidung verborgen**, Meine Daten und Löschen mit Teams |
 | **Administration und Ton** | 6 | Rollen: Studierende erreichen weder Lehrenden- noch Administrationsrouten, Lehrende und Administration nicht die der anderen; Zugang anlegen, sperren (sofort abgemeldet, Anmeldung abgewiesen), entsperren, auch der gemeinsame Schlüssel; Aufbewahrungsfrist in der Oberfläche, wirkt sofort; Protokoll ohne Studierende und ohne Schlüssel; Ton je Person, aus als Voreinstellung; Übernahme einer Datenbank von Version 0.1 |
 
 ## 2. Last (simulierte Studierende)
@@ -59,11 +59,11 @@ angekommen ist (Lastgenerator und Anwendung auf derselben Uhr).
 | Profil | simulierte Personen | Anfragen | Fehler | Dauer | Median | 95 % | 99 % | Maximum | Entscheidungen | Zustellung an alle: Median / 95 % / Maximum |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 50 Teams zu je 3, 1–3 s Denkzeit | 150 | 1.136 | 0 | 22,4 s | 2,0 ms | 24,6 ms | 76,3 ms | 91,7 ms | 383 | 2,2 / 2,9 / 19,3 ms |
-| eine Kursrunde, 1–4 s Denkzeit, entschieden, wenn alle abgestimmt haben | 200 + 1 Lehrperson | 2.003 | 0 | 28,3 s | 2,1 ms | 130,7 ms | 227,7 ms | 241,5 ms | 7 | 9,5 / 17,7 / 17,7 ms an alle 200; 5,2 / 12,8 / 12,8 ms an die Lehrperson |
+| eine Live-Runde, 1–4 s Denkzeit, entschieden, wenn alle abgestimmt haben | 200 + 1 Lehrperson | 2.003 | 0 | 28,3 s | 2,1 ms | 130,7 ms | 227,7 ms | 241,5 ms | 7 | 9,5 / 17,7 / 17,7 ms an alle 200; 5,2 / 12,8 / 12,8 ms an die Lehrperson |
 
-Alle 50 Teams und die Kursrunde haben das Szenario mit Erfolg beendet. Im Teamprofil kam eine Stimme an, nachdem ihr
+Alle 50 Teams und die Live-Runde haben das Szenario mit Erfolg beendet. Im Teamprofil kam eine Stimme an, nachdem ihr
 Team schon entschieden hatte (Antwort 409, „Inzwischen wurde schon entschieden“, so vorgesehen; nicht als Fehler
-gezählt). In der Kursrunde traten alle 200 in 0,3 s bei; die Lehrperson bekam 187 Live-Stände.
+gezählt). In der Live-Runde traten alle 200 in 0,3 s bei; die Lehrperson bekam 187 Live-Stände.
 
 Zusammen mit den Alleinspielenden haben in diesem Lauf 900 simulierte Personen gespielt, ohne einen Fehler. Der
 Stoß mit 200 Personen in derselben Millisekunde ist der ungünstigste Fall: 95 % der Anfragen unter 0,09 s, die
@@ -82,7 +82,7 @@ lesen, rechnen, eintippen, Schritte umsortieren, einmal absichtlich falsch antwo
 | durchgespielt | Erfolg, 3 Sterne | dasselbe | dasselbe |
 | Übersicht danach | „3 von 3 Sternen, 1× abgeschlossen, bestes Ergebnis 89 %“ | dasselbe | dasselbe |
 
-Die erste Seite ist 5 KB schwerer als am 09.11.2026 (37 KB): Schalter „Ton“ und Kursrunden auf der Übersicht. Das
+Die erste Seite ist 5 KB schwerer als am 09.11.2026 (37 KB): Schalter „Ton“ und Live-Runden auf der Übersicht. Das
 Modul für das Teamspiel lädt erst, wenn es gebraucht wird. Die Auswertung für Lehrende zeigte danach 554 Personen,
 553 abgeschlossene Versuche, 89 % mittlere Punktquote.
 
@@ -98,7 +98,7 @@ ab: Alle drei sehen „2 von 3 haben abgestimmt“ und je eine Stimme für A und
 **57 ms** nach ihrem Klick zeigten alle drei Browser die Rückmeldung „Gute Entscheidung“ (geprüft alle 50 ms), nach
 „Weiter“ standen alle drei bei derselben Aufgabe.
 
-**Kursrunde** (Lehrperson im Browser, Desktop; 24 simulierte Studierende über die Schnittstelle; eine Person im Browser
+**Live-Runde** (Lehrperson im Browser, Desktop; 24 simulierte Studierende über die Schnittstelle; eine simulierte Person in einem automatisch gesteuerten Browser
 auf Telefonbreite, beigetreten über „Mitmachen“ auf der Übersicht): vier Schritte, darunter einer, den die Lehrperson
 mit „Abstimmung schließen“ entschied. Bei der Rechenaufgabe zeigte die Live-Ansicht nach 24 von 25 Stimmen
 „richtig 15 (63 %)“, „falsch: Es gibt zwei Diagonalen; jede trägt die … 6 (25 %)“, „falsch: Die Hälfte der Last
@@ -108,7 +108,7 @@ schließen“ zeigte das Telefon **54 ms** später „Richtig“. Danach „Rund
 **Administration** (Desktop): Zugang „Lehrstuhl Baustatik“ angelegt; mit seinem Schlüssel angemeldet (200).
 Gesperrt: Die laufende Sitzung bekam 401, eine neue Anmeldung 403 („Zugang gesperrt“). Entsperrt: Anmeldung wieder
 200. Einstellungen mit 15 Angaben zur Instanz; das Protokoll enthielt Anmeldung, Zugang angelegt, gesperrt,
-entsperrt, „Anmeldung abgewiesen: Zugang gesperrt“, Kursrunde gestartet und beendet, „Szenario im Editor
+entsperrt, „Anmeldung abgewiesen: Zugang gesperrt“, Live-Runde gestartet und beendet, „Szenario im Editor
 gespeichert“.
 
 **Ton:** Voreinstellung aus (`aria-pressed="false"`); eingeschaltet und Seite neu geladen: weiter an (die Einstellung
@@ -124,7 +124,7 @@ axe-core 4.10.2, Regeln WCAG 2.0/2.1 A und AA sowie WCAG 2.2 AA, gemessen nach d
   Auswertung für Lehrende hell, dunkel, Telefon
 - Editor: Allgemein, Aufgabe, mit Fehlermeldung, dunkel, Telefon, Ende der Vorschau
 - Teamspiel: Team gründen, Abstimmung (Desktop, Telefon, dunkel), Rückmeldung nach der Entscheidung
-- Kursrunde: Runde starten, Übersicht mit Live-Runde (Telefon), Live-Ansicht der Lehrenden (hell, dunkel, Telefon),
+- Live-Runde: Runde starten, Übersicht mit Live-Runde (Telefon), Live-Ansicht der Lehrenden (hell, dunkel, Telefon),
   Abstimmung der Studierenden (Telefon)
 - Administration: Anmeldung, Zugänge, neuer Zugang mit Schlüssel, Einstellungen, Protokoll (hell, dunkel, Telefon)
 - Übersicht mit eingeschaltetem Ton
@@ -156,7 +156,7 @@ Die Datei im Repository, [`demo/fussgaengerbruecke-v2.html`](../demo/fussgaenger
 `bilder/`: 13 Zustände des Alleinspiels auf Desktop (`desktop-0*`), 13 auf Telefonbreite (`telefon-0*`), 3 im dunklen
 Schema, die riskante Entscheidung, die Lehrenden-Oberfläche (`lehrende-01` bis `-03`), der Editor (`lehrende-04`,
 mit Fehlermeldung `lehrende-05`, Telefon `telefon-10`), das Teamspiel (`desktop-10`, Telefon `telefon-11`), die
-Kursrunde (Lehrende `lehrende-06`, Telefon `telefon-12`), die Administration (`admin-01` bis `-03`), das Ende der
+Live-Runde (Lehrende `lehrende-06`, Telefon `telefon-12`), die Administration (`admin-01` bis `-03`), das Ende der
 Offline-Fassung; zusammen 44. Der persönliche Code und der Schlüssel des neuen Zugangs sind in den Fotos ersetzt.
 Uhrzeiten in den Fotos der Administration stehen in der Zeitzone des Browsers im Container (UTC, also eine Stunde
 vor MEZ).
@@ -166,10 +166,10 @@ doppelte Pixeldichte) stammen aus demselben Lauf.
 ## 7. Nicht gemessen
 
 - Echte Geräte, Safari und Firefox, langsame Mobilfunknetze.
-- Nutzung durch Studierende und Lehrende: kein Usability-Test des Editors, keine echten Teams oder Kursrunden (alle
-  Stimmen im Lasttest und 24 der 25 in der Kursrunde im Browser sind simuliert), keine Lernwirksamkeit.
+- Nutzung durch Studierende und Lehrende: kein Usability-Test des Editors, keine echten Teams oder Live-Runden (alle
+  Stimmen im Lasttest und alle 25 in der Live-Runde im Browser sind simuliert), keine Lernwirksamkeit.
 - Ob die Töne hörbar und angenehm sind; gemessen ist nur, dass der passende Ton ausgelöst wird.
-- Live-Verbindungen hinter HTTPS und einem Reverse Proxy, über Stunden, mehr als 200 Personen in einer Kursrunde,
-  mehrere Kursrunden gleichzeitig.
+- Live-Verbindungen hinter HTTPS und einem Reverse Proxy, über Stunden, mehr als 200 Personen in einer Live-Runde,
+  mehrere Live-Runden gleichzeitig.
 - Betrieb hinter HTTPS, Dauerbetrieb über Tage, Datensicherung.
 - Die Fachinhalte sind nicht von Fachlehrenden geprüft.

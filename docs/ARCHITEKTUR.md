@@ -9,7 +9,7 @@ in ein Verzeichnis eintragen.
 
 ```
    ┌──────────────────────────────────── Browser ─────────────────────────────────────┐
-   │  Studierende: app.js · spieler.js · gruppe.js (Team, Kursrunde) · ton.js           │
+   │  Studierende: app.js · spieler.js · gruppe.js (Team, Live-Runde) · ton.js           │
    │  Lehrende: lehrende.js · editor.js · kursrunde.js     Administration: admin.js     │
    └───────────┬──────────────────────────────▲───────────────────────▲───────────────┘
    Ereignis oder Stimme (Wahl, Antwort, Hinweis) │ Ansicht (aktueller Knoten) │ Live-Stand (Server-Sent Events)
@@ -42,11 +42,11 @@ in ein Verzeichnis eintragen.
 | `server/db.js` | Schema mit Versionsnummer und Übernahme älterer Datenbanken, Transaktionen, Aufbewahrungsfrist | PostgreSQL (nur diese Datei) |
 | `server/inhalte.js` | Szenarien aus Dateien, Uploads und dem Editor, unveränderliche Versionen, Bilder je Szenario | z. B. Git-Repository als Quelle |
 | `server/sicherheit.js` | Pseudonyme, Codes, Sitzungen, Bremse, Sicherheits-Kopfzeilen | SSO der Hochschule (SAML/OIDC) |
-| `server/gruppen.js` | Teamspiel und Kursrunde: gemeinsamer Ereignisstrom je Gruppe, Abstimmung, Live-Stände (Server-Sent Events), Live-Ansicht mit Mindestgruppe | z. B. WebSockets, wenn Rückkanal nötig |
+| `server/gruppen.js` | Teamspiel und Live-Runde: gemeinsamer Ereignisstrom je Gruppe, Abstimmung, Live-Stände (Server-Sent Events), Live-Ansicht mit Mindestgruppe | z. B. WebSockets, wenn Rückkanal nötig |
 | `server/app.js` | HTTP-Schnittstelle (docs/openapi.json), Rollen, Zugänge, Protokoll, Vorschau, Auslieferung | — |
 | `web/spieler.js` | zeigt eine Ansicht als Spielbühne (Spielanzeige, Kapitelkarte, Szenenbild, Figur, Rückmeldung, Ergebnis) und meldet Ereignisse an ein Backend (Server, Gruppe oder lokale Engine) | — |
 | `web/editor.js` | Szenario-Editor: Ablauf und Formulare, Prüfung mit „Zur Stelle“, Vorschau, Speichern als neue Version | — |
-| `web/gruppe.js`, `web/kursrunde.js` | Teamspiel und Kursrunde für Studierende; Live-Runde für Lehrende | — |
+| `web/gruppe.js`, `web/kursrunde.js` | Teamspiel und Live-Runde für Studierende; Live-Runde für Lehrende | — |
 | `web/admin.js` | Administration: Zugänge, Aufbewahrungsfrist, Einstellungen, Protokoll | — |
 | `web/ton.js` | kurze Töne mit der Web Audio API, Schalter in der Kopfzeile | — |
 | `web/styles.css` | Gestaltung über Design-Tokens, helles und dunkles Schema, „Bewegung reduzieren“ | eigenes Erscheinungsbild über die Tokens |
@@ -67,7 +67,7 @@ drei Folgen, die für den Einsatz in der Lehre zählen:
 
 ## Gemeinsam spielen: ein Ereignisstrom je Gruppe
 
-Ein **Team** (Studierende eines Kurses mit einem Team-Code) und eine **Kursrunde** (von Lehrenden gestartet, für einen
+Ein **Team** (Studierende eines Kurses mit einem Team-Code) und eine **Live-Runde** (von Lehrenden gestartet, für einen
 ganzen Kurs) sind beide eine *Gruppe*: ein Startwert, eine Szenario-Version und ein gemeinsamer Ereignisstrom
 (`gruppe_ereignis`). Der Zustand entsteht wie beim Einzelspiel durch Nachrechnen mit derselben Engine; alle Mitglieder
 sehen dieselbe Szene mit denselben Zahlen. Was eine Person tut, ist zunächst eine **Stimme** (`stimme`, je Person und
@@ -80,7 +80,7 @@ Punkte und Rückmeldung gelten für die ganze Gruppe.
 2. Bei Gleichstand gilt die Möglichkeit, für die zuerst gestimmt wurde.
 3. Wann entschieden ist: im **Team**, sobald alle abgestimmt haben oder eine Möglichkeit mehr als die Hälfte der
    Stimmen des Teams hat; wer das Team gegründet hat, kann die Abstimmung vorher schließen (etwa wenn jemand fehlt).
-   In der **Kursrunde** schließen die Lehrenden; vorher ist nur entschieden, wenn alle abgestimmt haben.
+   In der **Live-Runde** schließen die Lehrenden; vorher ist nur entschieden, wenn alle abgestimmt haben.
 4. Antworten auf Aufgaben zählen als gleich, wenn die Engine sie gleich bewertet: „28,3“ und „28.28“ sind beide
    richtig, also eine Möglichkeit; falsche Antworten werden nach erkannter Fehlerart zusammengefasst.
 5. Den Hinweis zu einer Aufgabe kann jede Person sofort abrufen; er gilt für alle und kostet die Gruppe Punkte.
@@ -90,12 +90,12 @@ alle abgestimmt haben. Wer zu spät abstimmt, bekommt den neuen Stand und die Me
 entschieden“.
 
 **Live:** Jede Stimme und jede Entscheidung geht als neuer Stand über Server-Sent Events (`text/event-stream`, im
-Browser `EventSource`, keine Bibliothek) an alle Mitglieder und, in der Kursrunde, an die Lehrenden. Stimmen, die
+Browser `EventSource`, keine Bibliothek) an alle Mitglieder und, in der Live-Runde, an die Lehrenden. Stimmen, die
 innerhalb von 100 ms eingehen, gehen als ein Stand hinaus; eine Entscheidung sofort. Bricht die Verbindung ab,
 verbindet der Browser sich nach 3 s neu und bekommt den aktuellen Stand.
 
 **Was wer sieht:** Teammitglieder sehen, wie viele abgestimmt haben, die Verteilung je Möglichkeit und bei
-Rechenaufgaben die eingegebenen Zahlen, ohne Namen. In der Kursrunde sehen Studierende nur, wie viele abgestimmt
+Rechenaufgaben die eingegebenen Zahlen, ohne Namen. In der Live-Runde sehen Studierende nur, wie viele abgestimmt
 haben; Lehrende sehen die Verteilung je Schritt erst ab der Mindestgruppe (drei Stimmen), darunter auch die
 Entscheidung nicht.
 
@@ -105,14 +105,14 @@ Das Einzelspiel ist davon unberührt: eigene Tabellen, eigene Schnittstellen, di
 
 | Rolle | Anmeldung | darf |
 |---|---|---|
-| Studierende | Kurscode, zufälliges Pseudonym | spielen (allein, im Team, in der Kursrunde), eigene Daten herunterladen und löschen |
-| Lehrende | Schlüssel eines Zugangs (gemeinsamer Schlüssel der Instanz oder persönlicher Zugang) | Kurse, Szenarien, Editor, Kursrunde, Auswertung, Exporte |
+| Studierende | Kurscode, zufälliges Pseudonym | spielen (allein, im Team, in der Live-Runde), eigene Daten herunterladen und löschen |
+| Lehrende | Schlüssel eines Zugangs (gemeinsamer Schlüssel der Instanz oder persönlicher Zugang) | Kurse, Szenarien, Editor, Live-Runde, Auswertung, Exporte |
 | Administration | eigener Schlüssel (`SBK_ADMIN_SCHLUESSEL`) | Zugänge anlegen, sperren, entsperren; Aufbewahrungsfrist; Einstellungen ansehen; Protokoll lesen |
 
 Jede Schnittstelle gehört genau einer Rolle (oder allen Angemeldeten); die Administration sieht keine Spielstände und
 erreicht die Schnittstellen der Lehrenden nicht, Lehrende nicht die der Administration (getestet). Ein gesperrter
 Zugang ist sofort abgemeldet. Das **Protokoll** hält fest, wer in der Verwaltung was getan hat (Anmeldungen, Zugänge,
-Kurse, Freigaben, gespeicherte Szenarien, Kursrunden, Exporte), nie Spielschritte von Studierenden.
+Kurse, Freigaben, gespeicherte Szenarien, Live-Runden, Exporte), nie Spielschritte von Studierenden.
 
 ## Editor und Vorschau
 
@@ -132,7 +132,7 @@ Speicher (zwei Stunden). Sie hat Stil und Skript in der Seite; die Content-Secur
 | Moodle | — (nicht Teil dieses Prototyps) | LTI 1.3 Launch + Assignment and Grade Services |
 | Anmeldung | Kurscode/Pseudonym, Schlüssel für Lehrende | SAML/OIDC der Hochschule in `sicherheit.js` |
 | Inhalte | Szenario-Editor im Browser, JSON-Dateien und Upload | Bilder im Editor hochladen (mit Lizenzangabe), mehrere Personen gleichzeitig an einem Szenario |
-| Gemeinsam spielen | Teamspiel und Kursrunde mit Server-Sent Events | Rollen im Team (z. B. Statik, Kosten), Chat oder Videokonferenz einbinden |
+| Gemeinsam spielen | Teamspiel und Live-Runde mit Server-Sent Events | Rollen im Team (z. B. Statik, Kosten), Chat oder Videokonferenz einbinden |
 | Rollen | Studierende, Lehrende (Zugänge), Administration | Kurse je Zugang, Rechte je Kurs, Anmeldung über SSO |
 | OER | HTML-Datei + AMB-Metadaten | Veröffentlichung in einem OER-Repositorium |
 | Mechaniken | drei | z. B. Zuordnung, Lückentext, Diagramm ablesen, Simulation mit Schiebereglern |
@@ -143,8 +143,8 @@ Speicher (zwei Stunden). Sie hat Stil und Skript in der Seite; die Content-Secur
   Schnittstelle mit drei Rollen, Manipulationsversuchen, Datenschutzfunktionen, OER-Export, Sterne und
   Auszeichnungen, Kapitelkarte, Bilder mit Alternativtext, Kopfzeilen und Kompression der Auslieferung; Editor
   (Speichern als neue Version, Konflikt, Vorschau), Teamspiel (Mehrheit, Gleichstand, Schließen, Live-Stände),
-  Kursrunde (Summen erst ab drei Stimmen), Administration (Sperren, Aufbewahrungsfrist, Protokoll), Übernahme einer
+  Live-Runde (Summen erst ab drei Stimmen), Administration (Sperren, Aufbewahrungsfrist, Protokoll), Übernahme einer
   Datenbank von Version 0.1.
-- Lasttest (allein, 50 Teams, Kursrunde mit 200 simulierten Studierenden) und Browsertest mit Chrome über das
+- Lasttest (allein, 50 Teams, Live-Runde mit 200 simulierten Studierenden) und Browsertest mit Chrome über das
   DevTools-Protokoll, Barrierefreiheitsprüfung mit axe-core (`compose.nachweis.yaml`, Ergebnisse in `nachweis/`).
 - Keine Laufzeitabhängigkeiten: nichts zu aktualisieren außer Node.js selbst.

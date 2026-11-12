@@ -38,9 +38,9 @@ function abstimmung(a, { schliessen }) {
   if (a.gruppe.status !== 'laeuft') return h('div', { class: 'abstimmung' }, h('p', { class: 'abstimmung-kopf' }, symbol('live'), 'Die Lehrperson hat die Runde beendet.'));
   if (a.beendet || (k.typ !== 'szene' && k.typ !== 'aufgabe')) return null;
   const eigene = eigeneStimme(a);
-  return h('section', { class: 'abstimmung', 'aria-label': team ? 'Abstimmung im Team' : 'Abstimmung in der Kursrunde' },
+  return h('section', { class: 'abstimmung', 'aria-label': team ? 'Abstimmung im Team' : 'Abstimmung in der Live-Runde' },
     h('p', { class: 'abstimmung-kopf' }, symbol('gruppe'),
-      h('span', {}, team ? 'Abstimmung im Team: ' : 'Abstimmung in der Kursrunde: ', h('strong', {}, `${ab.stimmen} von ${ab.von}`), ' haben abgestimmt')),
+      h('span', {}, team ? 'Abstimmung im Team: ' : 'Abstimmung in der Live-Runde: ', h('strong', {}, `${ab.stimmen} von ${ab.von}`), ' haben abgestimmt')),
     team && ab.optionen && k.typ === 'szene' ? h('ul', { class: 'abstimmung-optionen' }, k.optionen.map((o, i) => {
       const n = ab.optionen[o.id] ?? 0;
       return h('li', {}, h('span', { class: 'option-buchstabe klein', 'aria-hidden': 'true' }, BUCHSTABEN[i]),
@@ -57,7 +57,7 @@ function abstimmung(a, { schliessen }) {
 function band(a) {
   const team = a.gruppe.art === 'team';
   return [
-    h('span', { class: 'chip' }, symbol(team ? 'gruppe' : 'live'), team ? 'Teamspiel' : 'Kursrunde'),
+    h('span', { class: 'chip' }, symbol(team ? 'gruppe' : 'live'), team ? 'Teamspiel' : 'Live-Runde'),
     team ? h('span', {}, 'Team-Code ', h('strong', { class: 'code' }, a.gruppe.code), ' – zum Mitspielen weitergeben') : h('span', {}, 'Die Lehrperson sieht nur Summen, keine Namen.'),
     h('span', { class: 'gruppe-mitglieder' }, `${a.gruppe.mitglieder} ${a.gruppe.mitglieder === 1 ? 'Person' : 'Personen'}${team && a.gruppe.sprecher ? ' · Sie haben das Team gegründet' : ''}`),
   ];
@@ -72,7 +72,7 @@ export function spieleGruppe(inhalt, gid, { medienUrl, uebersicht }) {
   let quelle = null;
   let p = null;
 
-  const zeigeBand = () => { kopf.setAttribute('aria-label', a.gruppe.art === 'team' ? 'Teamspiel' : 'Kursrunde'); leere(kopf, band(a)); };
+  const zeigeBand = () => { kopf.setAttribute('aria-label', a.gruppe.art === 'team' ? 'Teamspiel' : 'Live-Runde'); leere(kopf, band(a)); };
   const neuerStand = (stand) => {
     const vorher = a;
     a = stand;

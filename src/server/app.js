@@ -500,7 +500,7 @@ export function erstelleApp(cfg) {
     if (!db.prepare('SELECT 1 FROM kurs_szenario WHERE kurs_id = ? AND szenario_id = ?').get(k.id, id)) throw new HttpFehler(400, 'Das Szenario ist in diesem Kurs nicht freigegeben');
     const s = ladeSzenario(db, id);
     const r = gr.neu('runde', { kursId: k.id, szenario: s });
-    protokolliere(n, 'Kursrunde gestartet', `${k.name}: ${s.titel}`);
+    protokolliere(n, 'Live-Runde gestartet', `${k.name}: ${s.titel}`);
     return mit(201, { id: r.id });
   });
 
@@ -520,7 +520,7 @@ export function erstelleApp(cfg) {
   route('POST', '/api/lehrende/runden/([0-9a-f-]{36})/beenden', 'lehrende', (_req, _res, m, _ip, n) => {
     gr.beende(m[1]);
     const r = gr.rundeAnsicht(m[1]);
-    protokolliere(n, 'Kursrunde beendet', `${r.runde.kurs}: ${r.runde.szenario}`);
+    protokolliere(n, 'Live-Runde beendet', `${r.runde.kurs}: ${r.runde.szenario}`);
     return r;
   });
 
@@ -562,7 +562,7 @@ export function erstelleApp(cfg) {
       ['Szenario-Versionen', zahl('SELECT count(*) AS n FROM szenario')], ['Kurse', zahl('SELECT count(*) AS n FROM kurs')],
       ['Studierende (Pseudonyme)', zahl("SELECT count(*) AS n FROM nutzer WHERE rolle = 'studierende'")],
       ['Zugänge für Lehrende', zahl('SELECT count(*) AS n FROM zugang')], ['davon gesperrt', zahl('SELECT count(*) AS n FROM zugang WHERE gesperrt = 1')],
-      ['Laufende Kursrunden', zahl("SELECT count(*) AS n FROM gruppe WHERE art = 'runde' AND status = 'laeuft' AND beendet = 0")],
+      ['Laufende Live-Runden', zahl("SELECT count(*) AS n FROM gruppe WHERE art = 'runde' AND status = 'laeuft' AND beendet = 0")],
     ].map(([name, wert]) => ({ name, wert: String(wert) }));
   }
 

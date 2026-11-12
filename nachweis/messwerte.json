@@ -1,7 +1,7 @@
 {
   "zeitpunkt": "2026-11-12T13:04:27.643Z",
   "zeitpunktMez": "12.11.2026, 14:04–14:07 Uhr (MEZ)",
-  "hinweis": "Alle Personen im Lasttest und 24 der 25 Stimmen der Kursrunde im Browser sind simuliert.",
+  "hinweis": "Alle Personen im Lasttest und alle 25 Stimmen der Live-Runde im Browser sind simuliert (24 über die Schnittstelle, eine über einen automatisch gesteuerten Browser).",
   "app": "http://sbk-1112-app:8080",
   "umgebung": {
     "axe": "axe-core 4.10.2 (lokale Datei)",

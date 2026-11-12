@@ -31,7 +31,7 @@ Editor; Engine und Server bleiben unverändert.
 
 Dazu ein Test in `test/` und ein Absatz in `docs/INHALTE.md`. Die Offline-Fassung (OER-Export) und die Vorschau im
 Editor übernehmen die neue Mechanik automatisch, weil sie dieselben Module bündeln. Im **Teamspiel** und in der
-**Kursrunde** funktioniert sie ohne weitere Arbeit: Stimmen werden nach der Bewertung der Engine gruppiert (`richtig`
+**Live-Runde** funktioniert sie ohne weitere Arbeit: Stimmen werden nach der Bewertung der Engine gruppiert (`richtig`
 oder Fehlerart `typ`); wer im Team die Antworten der anderen lesbar sehen soll, ergänzt eine Zeile in
 `gemeinsam()` in `src/server/gruppen.js` (heute für Rechenaufgaben).
 

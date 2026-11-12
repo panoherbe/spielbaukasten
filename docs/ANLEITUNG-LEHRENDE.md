@@ -91,7 +91,7 @@ nie.
 
 ![Live-Runde für Lehrende: 25 Teilnehmende, 24 von 25 haben abgestimmt; Aufgabe „Kraft in der Diagonale“ mit 15 richtig, 6 „Es gibt zwei Diagonalen; jede trägt die …“, 3 „Die Hälfte der Last stimmt …“; darunter der vorige Schritt mit seiner Entscheidung](../medien/kursrunde-lehrende.png)
 
-<sub>Stimmen im Bild: 24 simulierte Studierende und eine Person im Browser (Messung vom 12.11.2026).</sub>
+<sub>Stimmen im Bild: alle 25 simuliert, 24 über die Schnittstelle und eine über einen automatisch gesteuerten Browser (Messung vom 12.11.2026).</sub>
 
 Mit **Abstimmung schließen** entscheidet die Mehrheit (bei Gleichstand die Möglichkeit, für die zuerst gestimmt
 wurde), und alle sehen sofort die Rückmeldung. Haben alle abgestimmt, ist sofort entschieden. **Runde beenden**

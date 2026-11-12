@@ -3,7 +3,7 @@
   "info": {
     "title": "Spielbaukasten",
     "version": "0.2.0",
-    "description": "Schnittstelle des Spielbaukastens. Anmeldung über ein HttpOnly-Cookie; schreibende Anfragen nur als application/json und von derselben Herkunft. Fehler kommen als {\"fehler\": \"…\"} auf Deutsch. Drei Rollen: Studierende (Kurscode, Pseudonym), Lehrende (Schlüssel eines Zugangs), Administration (eigener Schlüssel). Live-Stände im Teamspiel und in der Kursrunde als Server-Sent Events (text/event-stream, Ereignis „stand“).",
+    "description": "Schnittstelle des Spielbaukastens. Anmeldung über ein HttpOnly-Cookie; schreibende Anfragen nur als application/json und von derselben Herkunft. Fehler kommen als {\"fehler\": \"…\"} auf Deutsch. Drei Rollen: Studierende (Kurscode, Pseudonym), Lehrende (Schlüssel eines Zugangs), Administration (eigener Schlüssel). Live-Stände im Teamspiel und in der Live-Runde als Server-Sent Events (text/event-stream, Ereignis „stand“).",
     "license": {
       "name": "AGPL-3.0-only",
       "identifier": "AGPL-3.0-only"
@@ -879,7 +879,7 @@
     },
     "/api/gruppen": {
       "get": {
-        "summary": "Laufende Kursrunden des eigenen Kurses und eigene Teams",
+        "summary": "Laufende Live-Runden des eigenen Kurses und eigene Teams",
         "tags": [
           "studierende"
         ],
@@ -897,7 +897,7 @@
     },
     "/api/runden/{id}/beitreten": {
       "post": {
-        "summary": "Einer laufenden Kursrunde des eigenen Kurses beitreten",
+        "summary": "Einer laufenden Live-Runde des eigenen Kurses beitreten",
         "tags": [
           "studierende"
         ],
@@ -925,7 +925,7 @@
     },
     "/api/gruppen/{id}": {
       "get": {
-        "summary": "Gemeinsamer Stand eines Teams oder einer Kursrunde mit Abstimmung und eigener Stimme",
+        "summary": "Gemeinsamer Stand eines Teams oder einer Live-Runde mit Abstimmung und eigener Stimme",
         "tags": [
           "studierende"
         ],
@@ -953,7 +953,7 @@
     },
     "/api/gruppen/{id}/live": {
       "get": {
-        "summary": "Live-Stand des Teams oder der Kursrunde",
+        "summary": "Live-Stand des Teams oder der Live-Runde",
         "tags": [
           "studierende"
         ],
@@ -1064,7 +1064,7 @@
     },
     "/api/lehrende/runden": {
       "get": {
-        "summary": "Kursrunden (laufende und beendete)",
+        "summary": "Live-Runden (laufende und beendete)",
         "tags": [
           "lehrende"
         ],
@@ -1080,7 +1080,7 @@
         ]
       },
       "post": {
-        "summary": "Kursrunde starten: {\"kurs\", \"szenario\"}",
+        "summary": "Live-Runde starten: {\"kurs\", \"szenario\"}",
         "tags": [
           "lehrende"
         ],
@@ -1108,7 +1108,7 @@
     },
     "/api/lehrende/runden/{id}": {
       "get": {
-        "summary": "Live-Ansicht einer Kursrunde: je Schritt Summen der Stimmen, erst ab der Mindestgruppe",
+        "summary": "Live-Ansicht einer Live-Runde: je Schritt Summen der Stimmen, erst ab der Mindestgruppe",
         "tags": [
           "lehrende"
         ],
@@ -1136,7 +1136,7 @@
     },
     "/api/lehrende/runden/{id}/live": {
       "get": {
-        "summary": "Live-Ansicht einer Kursrunde",
+        "summary": "Live-Ansicht einer Live-Runde",
         "tags": [
           "lehrende"
         ],
@@ -1171,7 +1171,7 @@
     },
     "/api/lehrende/runden/{id}/schliessen": {
       "post": {
-        "summary": "Abstimmung der Kursrunde schließen: {\"nr\"}; die Mehrheit entscheidet",
+        "summary": "Abstimmung der Live-Runde schließen: {\"nr\"}; die Mehrheit entscheidet",
         "tags": [
           "lehrende"
         ],
@@ -1209,7 +1209,7 @@
     },
     "/api/lehrende/runden/{id}/beenden": {
       "post": {
-        "summary": "Kursrunde für alle beenden",
+        "summary": "Live-Runde für alle beenden",
         "tags": [
           "lehrende"
         ],

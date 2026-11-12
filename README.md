@@ -26,7 +26,7 @@ weiter unten.</sub>
 | Offene Lernressourcen (OER) | Export als eine einzige HTML-Datei (339 KB mit allen Bildern), läuft ohne Server und ohne Internet: 0 Netzanfragen (12.11.2026); Metadaten nach dem Profil AMB |
 | Viele Studierende | Lasttest mit simulierten Studierenden (12.11.2026), 0 Fehler: 300 mit Denkzeit, 95 % der Antworten unter 0,10 s; 200 im selben Augenblick; 50 Teams zu je drei; eine Live-Runde mit 200, neuer Stand bei allen 200 in höchstens 0,018 s |
 | Barrierefreiheit | automatische Prüfung mit axe-core (WCAG 2.0/2.1 A und AA, WCAG 2.2 AA): 0 Verstöße in 47 Zuständen, mit Editor, Teamspiel, Live-Runde und Administration, auch auf dem Telefon und im dunklen Schema (12.11.2026); Farbe trägt nie allein Bedeutung; Bewegung lässt sich abschalten |
-| Schlank und sicher | erste Seite 16 Dateien, 42 KB übertragen, keine Dateien von fremden Servern (12.11.2026); Lösungen und Formeln verlassen den Server nicht |
+| Schlank und sicher | erste Seite 16 Dateien, 42 KB übertragen, keine Dateien von fremden Servern (12.11.2026); im Online-Spiel erhalten Studierende weder Lösungen noch Formeln |
 | Geprüfte Qualität | 62 von 62 automatischen Tests bestanden (12.11.2026) |
 | Anschluss an Lernplattformen | xAPI-Ausgabe und eine dokumentierte Schnittstelle (OpenAPI) |
 | Offen und übergabefähig | Quellcode unter AGPL-3.0, keine Fremdbibliotheken zur Laufzeit, Dokumentation auf Deutsch |
@@ -49,7 +49,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 12.11.2026](nachweis/PROTOKOLL
    ```
    Dann http://localhost:8080 öffnen, Kurscode **DEMO**. Bereich für Lehrende mit Editor und Live-Runde:
    http://localhost:8080/lehrende, Schlüssel **demo-lehrende**. Administration: http://localhost:8080/admin,
-   Schlüssel **demo-admin**. Für ein Teamspiel die Startseite in zwei privaten Fenstern öffnen.
+   Schlüssel **demo-admin**. Für ein Teamspiel die Startseite zusätzlich in einem privaten Fenster öffnen (für eine dritte Person einen anderen Browser); private Fenster desselben Browsers teilen sich die Anmeldung.
 3. **Nachlesen, was gemessen wurde:** [Messprotokoll](nachweis/PROTOKOLL.md) mit 44 Bildschirmfotos.
 
 ## Was Sie heute schon prüfen können
@@ -78,7 +78,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 12.11.2026](nachweis/PROTOKOLL
 </tr>
 <tr>
 <td valign="top"><img src="medien/teamspiel.png" alt="Teamspiel: oben Team-Code und „3 Personen“, darunter die Szene mit der Brücke; rechts die beiden Entscheidungen und die Abstimmung im Team: 2 von 3 haben abgestimmt, je eine Stimme für A und B, die eigene Stimme, „Abstimmung jetzt schließen“ und die Regel"><br><sub>Teamspiel: ein Spielstand, jede Person stimmt ab, die Mehrheit entscheidet.</sub></td>
-<td valign="top"><img src="medien/kursrunde-lehrende.png" alt="Live-Runde für Lehrende: 25 Teilnehmende, 24 von 25 haben abgestimmt; Aufgabe „Kraft in der Diagonale“: 15 richtig, 6 „Es gibt zwei Diagonalen; jede trägt die …“, 3 „Die Hälfte der Last stimmt …“; darunter der vorige Schritt mit seiner Entscheidung"><br><sub>Live-Runde: Die Lehrperson sieht, wie der Kurs antwortet, nur Summen ab drei Stimmen. Stimmen im Bild: 24 simulierte Studierende und eine Person im Browser.</sub></td>
+<td valign="top"><img src="medien/kursrunde-lehrende.png" alt="Live-Runde für Lehrende: 25 Teilnehmende, 24 von 25 haben abgestimmt; Aufgabe „Kraft in der Diagonale“: 15 richtig, 6 „Es gibt zwei Diagonalen; jede trägt die …“, 3 „Die Hälfte der Last stimmt …“; darunter der vorige Schritt mit seiner Entscheidung"><br><sub>Live-Runde: Die Lehrperson sieht, wie der Kurs antwortet, nur Summen ab drei Stimmen. Alle Stimmen im Bild sind simuliert (24 über die Schnittstelle, eine über einen automatisch gesteuerten Browser).</sub></td>
 </tr>
 <tr>
 <td valign="top" align="center"><img src="medien/bild-telefon.png" width="300" alt="Das Brückenspiel auf einem Telefon: Spielanzeige, Kapitelkarte, Szenenbild und Bauleitung mit Sprechblase"><br><sub>Auf dem Telefon: dasselbe Spiel im Browser, ohne App.</sub></td>
@@ -87,7 +87,7 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 12.11.2026](nachweis/PROTOKOLL
 </table>
 
 <details>
-<summary><b>Text des Rundgangs</b> (die Untertitel des Videos vom 09.11.2026, mit den damaligen Messwerten)</summary>
+<summary><b>Text des Rundgangs</b> (die Untertitel des Videos vom 09.11.2026, mit den damaligen Messwerten aus dem [Protokoll vom 09.11.2026](https://github.com/panoherbe/spielbaukasten/blob/edbc7f3/nachweis/PROTOKOLL.md))</summary>
 
 | ab | Untertitel |
 |---|---|
@@ -246,7 +246,7 @@ Sensor“ (ca. 8 Minuten) ist eine kurze Übung. Unter `/lehrende` erscheinen Au
   und ohne Build-Schritt; alle Grafiken als SVG-Dateien im Repository. Text und SVG gehen mit gzip hinaus.
 - Dieselbe Spiel-Engine im Browser (Offline-Fassung) und auf dem Server. Online bewertet nur der Server: Er bekommt
   Entscheidungen und Antworten, rechnet den Zustand aus allen Schritten neu aus und schickt nur die aktuelle Ansicht
-  zurück. Lösungen und Formeln verlassen den Server nicht.
+  zurück. Im Online-Spiel erhalten Studierende weder Lösungen noch Formeln (die Offline-Fassung und der Editor für Lehrende enthalten sie zwangsläufig).
 - Szenarien sind Daten, kein Code: Formeln werden von einem eigenen, abgeschlossenen Rechner ausgewertet, Texte nie als
   HTML eingefügt.
 - Teamspiel und Live-Runde: ein gemeinsamer Ereignisstrom je Gruppe, dieselbe Engine; neue Stände über Server-Sent
@@ -324,13 +324,13 @@ Aufgenommen am 09.11.2026 mit Playwright (Chromium) an einer laufenden Installat
 ohne Docker). 200 simulierte Studierende aus dem Lasttest (`test/last.js`, ein Teil der Entscheidungen zufällig
 gestreut) füllen die Auswertung. Untertitel und Mauszeiger sind in die Seite gezeichnet; dafür ist im Aufnahmebrowser
 die Content-Security-Policy abgeschaltet, die Anwendung selbst ist unverändert. Das Video hat keinen Ton. Die
-Messwerte der Schlusskarte stammen aus dem Protokoll vom 09.11.2026, nicht aus der Aufnahme. Zwei Stellen sind
+Messwerte der Schlusskarte stammen aus dem [Protokoll vom 09.11.2026](https://github.com/panoherbe/spielbaukasten/blob/edbc7f3/nachweis/PROTOKOLL.md), nicht aus der Aufnahme. Zwei Stellen sind
 nachträglich ersetzt (09.11.2026): Bei 1:10 zeigte der Aufnahmebrowser den Dateiknopf englisch („Choose File“); das Feld
 ist durch dieselbe Ansicht in einem deutschen Chromium ersetzt („Datei auswählen“). Die Karte bei 0:58 hieß „Dasselbe
 Spiel auf dem Telefon“, zeigt aber die Sensor-Übung; sie heißt jetzt „Auch auf dem Telefon“. Die übrigen Bilder auf
 dieser Seite sind am selben Tag mit Playwright entstanden, bis auf Editor, Teamspiel und Live-Runde: Diese drei
 stammen aus der Nachweis-Messung vom 12.11.2026 (Chromium headless über das DevTools-Protokoll, 1280 px breit); die
-Stimmen im Bild der Live-Runde kommen von 24 simulierten Studierenden und einer Person im Browser.
+Alle Stimmen im Bild der Live-Runde sind simuliert: 24 über die Schnittstelle, eine über einen automatisch gesteuerten Browser.
 
 Lizenz: AGPL-3.0 für den Code (bis Commit `414f6d6` Apache-2.0), CC BY 4.0 für die beiden Beispielszenarien und
 die Grafiken (Panagiotis Herbe).
