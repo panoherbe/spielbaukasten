@@ -4,7 +4,9 @@
 Lehrende bauen neue Spiele im Editor, ohne zu programmieren, und sehen, wo die Gruppe hängt. Das läuft heute –
 ansehen, selbst ausprobieren, nachprüfen.**
 
-**Beide Rundgänge im Player ansehen** und das Brückenspiel zum Anklicken, ohne Installation: **[panoherbe.com/projekte/spielbaukasten](https://www.panoherbe.com/projekte/spielbaukasten)**.
+Wie das Spiel beim Lernen helfen soll und wie man das prüft: [Lerndesign und Evaluation](docs/LERNDESIGN.md).
+
+**Ohne Installation:** beide Videos ansehen und das Brückenspiel selbst spielen auf [panoherbe.com/projekte/spielbaukasten](https://www.panoherbe.com/projekte/spielbaukasten).
 
 ### Für Lehrende: so bauen Sie ein Spiel
 
@@ -12,46 +14,46 @@ ansehen, selbst ausprobieren, nachprüfen.**
 
 <sub>Rundgang, 85 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 12.11.2026 an einer laufenden Installation
 (Version 0.2.1). Alle Personen im Teamspiel und in der Live-Runde sind simuliert.
-[Video herunterladen (MP4, 1,9 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
+[Video herunterladen (MP4, 1,9 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · [Text des Rundgangs](docs/RUNDGANG.md#fuer-lehrende)</sub>
 
 ### Für Studierende: so spielt es sich
 
 ![Rundgang aus Sicht der Studierenden: eine Entscheidung an der Fußgängerbrücke mit sichtbaren Folgen, Beitritt mit Kurscode, Prüfschritte ordnen, Rechenaufgabe mit erkanntem typischem Fehler, Ergebnis mit Sternen und Auszeichnungen, Telefon, Diagramme für Lehrende, Prüfung einer Spieldatei, Offline-Datei](medien/rundgang-studierende.gif)
 
 <sub>Rundgang, 89 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 09.11.2026 an Version 0.1.0. Das Spiel selbst ist seitdem
-gleich geblieben; neu sind Vorlagen, Editor, Teamspiel und Live-Runde (Rundgang oben). Die Zahlen am Ende stammen aus dem
+gleich geblieben; neu sind Vorlagen, Editor, Teamspiel, Live-Runde und der Schalter „Ton“. Die Zahlen am Ende stammen aus dem
 [Messprotokoll vom 09.11.2026](https://github.com/panoherbe/spielbaukasten/blob/edbc7f3/nachweis/PROTOKOLL.md).
-[Video herunterladen (MP4, 2,6 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang-studierende.mp4)</sub>
+[Video herunterladen (MP4, 2,6 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang-studierende.mp4) · [Text des Rundgangs](docs/RUNDGANG.md#fuer-studierende)</sub>
 
 ## Was Sie brauchen → läuft hier schon
 
 | Was Sie brauchen | läuft hier schon |
 |---|---|
-| Lernspiele im Browser, auf dem Telefon wie am Rechner | zwei Beispielspiele (Technische Mechanik, Elektrotechnik) mit Szenenbildern, Spielfigur mit Sprechblase, Spielanzeige, Kapitelkarte, Sternen und Auszeichnungen; das Brückenspiel in Chromium auf Rechner- und Telefonbreite und im dunklen Schema durchgespielt (12.11.2026) |
-| Neue Spiele ohne Programmierung | **Neues Szenario aus Vorlage:** Entscheidungsspiel, Rechenübung oder Quiz wählen, Titel und Namen eintragen; die Vorlage ist sofort spielbar, „Prüfen“ meldet keine Fehler. Im **Szenario-Editor** ändern Sie dann nur noch Texte: links der Ablauf aller Schritte, rechts Formulare für Texte, Entscheidungen, Rechenaufgaben mit Einheit und Toleranz, Rückmeldungen. „Prüfen“ nennt Fehler in klaren Worten mit dem Titel des Schritts, „Zur Stelle“ springt ins Feld; Technisches (interne Kennungen, JSON) steht verborgen unter „Für Fortgeschrittene“. „Vorschau im neuen Tab“; jede Speicherung ist eine neue Version, die alte bleibt (im Browser durchgespielt, 12.11.2026) |
-| Gemeinsam spielen | **Teamspiel**: ein Spielstand für das ganze Team, jede Person stimmt ab, die Mehrheit entscheidet. **Live-Runde** für den ganzen Kurs: alle stimmen auf dem eigenen Gerät ab, Lehrende sehen live die Verteilung je Schritt und schließen die Abstimmung. Neue Stände kommen ohne Neuladen, bei allen in unter 0,02 s (Lasttest, 12.11.2026) |
-| Entscheidungen mit Folgen | jede Entscheidung verändert sichtbar Sicherheit, Budget und Tage bis zum Fest; eine fachliche Bewertung und die Spielfigur erklären, warum |
-| Rückmeldung, die beim Lernen hilft | typische Fehler werden erkannt und erklärt; zweiter Versuch, Hinweis, Lösung mit Rechenweg; auf Wunsch kurze **Töne** für richtig, falsch, Entscheidung und neue Szene (im Browser erzeugt, keine Tondateien; aus, bis man sie einschaltet; nie das einzige Signal) |
-| Lernfortschritt und Auswertung für Lehrende | Stand je Lernziel; Diagramme: Ausgang der Versuche, je Aufgabe der Anteil „im ersten Versuch richtig“, die häufigsten Fehler, die Verteilung der Entscheidungen |
-| Datenschutz | keine Namen, keine E-Mail-Adressen, zufällige Pseudonyme; Auswertung und Live-Runde zeigen nur Summen, erst ab 3 Personen; Löschen auf Knopfdruck |
-| Rollen und Verwaltung | drei Rollen: Studierende, Lehrende, **Administration**; persönliche Zugänge für Lehrende, sperren (sofort abgemeldet) und entsperren; Aufbewahrungsfrist in der Oberfläche; Protokoll der Verwaltung |
-| Offene Lernressourcen (OER) | Export als eine einzige HTML-Datei (342 KB mit allen Bildern), läuft ohne Server und ohne Internet: 0 Netzanfragen (12.11.2026); Metadaten nach dem Profil AMB |
-| Viele Studierende | Lasttest mit simulierten Studierenden (12.11.2026), 0 Fehler: 300 mit Denkzeit, 95 % der Antworten unter 0,10 s; 200 im selben Augenblick; 50 Teams zu je drei; eine Live-Runde mit 200, neuer Stand bei allen 200 in höchstens 0,013 s |
-| Barrierefreiheit | automatische Prüfung mit axe-core (WCAG 2.0/2.1 A und AA, WCAG 2.2 AA): 0 Verstöße in 55 Zuständen, mit Vorlagen, Editor, Teamspiel, Live-Runde und Administration, auch auf dem Telefon und im dunklen Schema (12.11.2026); „Für Fortgeschrittene“ und die Wahl der Vorlage gehen mit der Tastatur; Farbe trägt nie allein Bedeutung; Bewegung lässt sich abschalten |
-| Schlank und sicher | erste Seite 16 Dateien, 42 KB übertragen, keine Dateien von fremden Servern (12.11.2026); im Online-Spiel erhalten Studierende weder Lösungen noch Formeln |
-| Geprüfte Qualität | 67 von 67 automatischen Tests bestanden (12.11.2026), darunter: jede Vorlage fehlerfrei und bis zum Ende spielbar |
-| Anschluss an Lernplattformen | xAPI-Ausgabe und eine dokumentierte Schnittstelle (OpenAPI) |
-| Offen und übergabefähig | Quellcode unter AGPL-3.0, keine Fremdbibliotheken zur Laufzeit, Dokumentation auf Deutsch |
+| Lernspiele im Browser, auf dem Telefon wie am Rechner | zwei Beispielspiele (Technische Mechanik, Elektrotechnik) mit Bildern, Spielfigur, Sternen und Auszeichnungen; in Chrome auf Rechner und Telefon und in dunkler Darstellung durchgespielt (12.11.2026) |
+| Neue Spiele ohne Programmierung | Vorlage wählen (Entscheidungsspiel, Rechenübung, Quiz), Texte im Formular ändern; „Prüfen“ nennt Fehler in klaren Worten, „Vorschau“ zeigt das Spiel; jede Speicherung ist eine neue Version (im Browser durchgespielt, 12.11.2026) |
+| Gemeinsam spielen | Teamspiel: jede Person stimmt ab, die Mehrheit entscheidet. Live-Runde: der ganze Kurs stimmt ab, Lehrende sehen die Verteilung. Neuer Stand bei allen in unter 0,02 s (Teams höchstens 17,8 ms, Live-Runde höchstens 12,4 ms; simuliert, 12.11.2026) |
+| Entscheidungen mit Folgen | jede Entscheidung verändert sichtbar Sicherheit, Budget und Tage bis zum Fest; die Spielfigur erklärt, warum |
+| Rückmeldung, die beim Lernen hilft | typische Fehler werden erkannt und erklärt; zweiter Versuch, Hinweis, Lösung mit Rechenweg; auf Wunsch kurze Töne |
+| Lernfortschritt und Auswertung für Lehrende | Stand je Lernziel; Diagramme zu Versuchen, Aufgaben, häufigen Fehlern und Entscheidungen |
+| Datenschutz | keine Namen, keine E-Mail-Adressen; Auswertung nur als Summen, erst ab 3 Personen; Löschen auf Knopfdruck |
+| Rollen und Verwaltung | Studierende, Lehrende, Administration; persönliche Zugänge für Lehrende, sperren und entsperren |
+| Offene Lernressourcen (OER) | jedes Spiel als eine HTML-Datei (342 KB), läuft ohne Server und ohne Internet (12.11.2026) |
+| Viele Studierende | 900 simulierte Personen in fünf Lasttests, 0 Fehler; bis zu 300 gleichzeitig, dazu 50 Teams und eine Live-Runde mit 200 (12.11.2026) |
+| Barrierefreiheit | automatisch geprüft: 0 Verstöße in 55 Ansichten, auch auf dem Telefon und in dunkler Darstellung (12.11.2026); Farbe trägt nie allein Bedeutung; Bewegung lässt sich abschalten |
+| Schlank und sicher | erste Seite 42 KB, keine Dateien von fremden Servern (12.11.2026); im Online-Spiel sehen Studierende weder Lösungen noch Formeln |
+| Geprüfte Qualität | 67 von 67 automatischen Tests bestanden (12.11.2026) |
+| Anschluss an Lernplattformen | Lernstände im Standardformat xAPI; eine beschriebene Schnittstelle für den späteren Anschluss an Moodle |
+| Offen und übergabefähig | offener Quellcode (AGPL-3.0), keine Fremdbibliotheken, Dokumentation auf Deutsch: Der Baukasten lässt sich ohne mich betreiben und weiterentwickeln |
 
 Jede Zahl steht mit Messweg im [Messprotokoll vom 12.11.2026](nachweis/PROTOKOLL.md) (Version 0.2.1; Rohdaten
-`nachweis/messwerte.json`). Alle Personen in Lasttest, Teamspiel und Live-Runde sind simuliert.
+`nachweis/messwerte.json`). Alle Personen in Lasttest, Teamspiel und Live-Runde sind simuliert. Einzelheiten zu
+den Zahlen: [Für Ihre IT](#die-zahlen-im-einzelnen).
 
 ## In zwei Minuten selbst prüfen
 
-1. **Ohne Installation spielen:** die [Offline-Fassung](demo/fussgaengerbruecke-v2.html) öffnen, rechts über dem
-   Quelltext auf „Download raw file“ (Pfeil nach unten) klicken, die Datei (342 KB) per Doppelklick im Browser öffnen.
-   Das Brückenspiel läuft vollständig, ohne Server und ohne Internet; der Fortschritt bleibt auf Ihrem Gerät.
-   (Gemessen in Chrome.)
+1. **Ohne Installation spielen:** [Brückenspiel im Browser](https://www.panoherbe.com/projekte/spielbaukasten-spiel.html)
+   öffnen, auf Rechner oder Telefon. Es läuft ohne Server; der Spielstand bleibt in Ihrem Browser. Zum Mitnehmen:
+   [Offline-Datei](demo/fussgaengerbruecke-v2.html) herunterladen und per Doppelklick öffnen.
 2. **Die ganze Anwendung starten** – mit [Docker Desktop](https://www.docker.com/products/docker-desktop/), drei
    Befehle:
    ```bash
@@ -64,16 +66,6 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 12.11.2026](nachweis/PROTOKOLL
    Vorlage“ klicken, eine Vorlage wählen, Ihren Namen eintragen, „Im Editor öffnen“, dann „Prüfen“ und „Vorschau im
    neuen Tab“. Administration: http://localhost:8080/admin, Schlüssel **demo-admin**. Für ein Teamspiel die Startseite zusätzlich in einem privaten Fenster öffnen (für eine dritte Person einen anderen Browser); private Fenster desselben Browsers teilen sich die Anmeldung.
 3. **Nachlesen, was gemessen wurde:** [Messprotokoll](nachweis/PROTOKOLL.md) mit 47 Bildschirmfotos.
-
-## Was Sie heute schon prüfen können
-
-- Oberfläche, Spielablauf, Auswertung und Export lassen sich heute ausprobieren.
-- Last (im Lasttest mit simulierten Studierenden, allein, im Team und in der Live-Runde), Barrierefreiheit
-  (automatisch geprüft), Datenschutz und Offline-Export sind gebaut und gemessen.
-- Die Projektzeit geht in Ihre Anforderungen, Ihre Inhalte und Tests mit Studierenden und Lehrenden; ein erster
-  testbarer Stand steht früh.
-- Offener Quellcode (AGPL-3.0), keine Fremdbibliotheken zur Laufzeit, Dokumentation auf Deutsch: Das Framework lässt
-  sich ohne mich betreiben und weiterentwickeln.
 
 ## So sieht es aus
 
@@ -102,29 +94,8 @@ Jede Zahl steht mit Messweg im [Messprotokoll vom 12.11.2026](nachweis/PROTOKOLL
 </tr>
 </table>
 
-<details>
-<summary><b>Text des Rundgangs</b> (die Untertitel des Videos vom 12.11.2026; die Zahlen der Messkarte stammen aus dem <a href="nachweis/PROTOKOLL.md">Messprotokoll vom 12.11.2026</a>)</summary>
-
-| ab | Untertitel |
-|---|---|
-| 0:00 | **Titel:** Lernspiele bauen. Ohne zu programmieren. Lehrende beginnen mit einer Vorlage, ändern nur die Texte und spielen das Spiel mit ihrem Kurs: allein, im Team oder live in der Vorlesung. |
-| 0:06 | Ein neues Lernspiel beginnt mit einer Vorlage: Entscheidungsspiel, Rechenübung oder Quiz. |
-| 0:11 | Wir nehmen die Rechenübung und tragen unseren Namen ein. |
-| 0:15 | Links der Ablauf, rechts die Aufgabe. Sie ist schon spielbar. |
-| 0:18 | Texte ändern Sie direkt im Formular, hier die Frage. |
-| 0:22 | „Prüfen“: keine Fehler. Sonst nennt es jeden Fehler in klaren Worten, mit „Zur Stelle“. |
-| 0:27 | Die Vorschau zeigt den Entwurf so, wie Studierende ihn spielen. |
-| 0:31 | Ein typischer Fehler bekommt Ihre Rückmeldung. *(Absichtlich falsch: die Kraft nicht in N umgerechnet.)* |
-| 0:36 | **Auch auf dem Telefon:** Ihre Studierenden spielen im Browser, ohne App: entscheiden, Folgen sehen, rechnen. |
-| 0:42 | Im Team spielen: ein Spielstand, jede Person stimmt ab, die Mehrheit entscheidet. *(Alle drei Personen sind simuliert: automatisch gesteuerte Browser.)* |
-| 0:49 | Zwei zu eins: Das Team sperrt die Brücke, alle drei sehen dieselbe Rückmeldung. |
-| 0:56 | In der Vorlesung: eine Live-Runde für den ganzen Kurs. |
-| 0:59 | Sie sehen live, wie der Kurs entscheidet: nur Summen, erst ab drei Stimmen. *(Alle 25 Stimmen sind simuliert.)* |
-| 1:05 | Sie schließen die Abstimmung, die Mehrheit entscheidet, alle sehen die Rückmeldung. |
-| 1:11 | **Gemessen am 12.11.2026:** 67 von 67 Tests bestanden · 300 Studierende, 0 Fehler (Lasttest, simuliert: 95 % der Antworten unter 0,10 s) · Live-Runde mit 200 (simuliert: neuer Stand bei allen in höchstens 0,02 s) · 0 Verstöße (Barrierefreiheit automatisch geprüft, axe-core, WCAG 2.2 AA, 55 Ansichten). Alle Personen in Lasttest, Teamspiel und Live-Runde sind simuliert. |
-| 1:19 | **Selbst ausprobieren:** github.com/panoherbe/spielbaukasten – mit Docker in drei Befehlen starten oder die Offline-Fassung im Browser öffnen. Quellcode, Tests und Messprotokoll liegen offen. AGPL-3.0, ohne Fremdbibliotheken. |
-
-</details>
+Text beider Rundgänge zum Nachlesen: [Rundgang für Lehrende](docs/RUNDGANG.md#fuer-lehrende) ·
+[Rundgang für Studierende](docs/RUNDGANG.md#fuer-studierende).
 
 ## Eigenes Lernspiel in vier Schritten
 
@@ -150,8 +121,8 @@ Ein Prototyp, in wenigen Tagen gebaut, um zu zeigen, dass die Architektur trägt
 | Bilder im Editor hochladen; heute wählt der Editor aus den Bildern im Ordner des Szenarios | Hochladen mit Pflichtfeld für die Lizenz, weitere Werkzeuge für Autorinnen und Autoren nach Ihren Anforderungen |
 | Feinere Rechte; heute sehen alle Zugänge für Lehrende alle Kurse | Kurse und Szenarien je Zugang, Rechte je Kurs |
 | Fachlich geprüfte Inhalte; die Beispiele sind vereinfachte Lehrmodelle, nicht von Fachlehrenden geprüft | Ihre Inhalte und Lernziele, mit Ihren Lehrenden |
-| Ihr Erscheinungsbild; Grafiken, Figuren und Farben sind die Beispiele dieses Prototyps | Gestaltung nach Ihren Vorgaben, über die Design-Tokens und eigene Grafiken |
-| Nicht gemessen: echte Geräte, Safari und Firefox, Bildschirmleser, Nutzung durch Studierende und Lehrende (der Editor und die Vorlagen sind nicht mit Lehrenden erprobt; keine echten Teams oder Live-Runden), ob die Töne hörbar und angenehm sind, Dauerbetrieb hinter HTTPS | Usability-Tests mit Studierenden und Lehrenden, Erprobung im Semester, Abnahmetest |
+| Ihr Erscheinungsbild; Grafiken, Figuren und Farben sind die Beispiele dieses Prototyps | Gestaltung nach Ihren Vorgaben, über zentrale Farb- und Schrifteinstellungen und eigene Grafiken |
+| Nicht gemessen: echte Geräte, Safari, Firefox und Edge, Bildschirmleser, Nutzung durch Studierende und Lehrende (der Editor und die Vorlagen sind nicht mit Lehrenden erprobt; keine echten Teams oder Live-Runden), ob die Töne hörbar und angenehm sind, Dauerbetrieb hinter HTTPS | Usability-Tests mit Studierenden und Lehrenden, Erprobung im Semester, Abnahmetest |
 
 ## Lizenz
 
@@ -239,7 +210,7 @@ Runde für einen Kurs.
   je Schritt (Entscheidungen mit Bewertung, Aufgaben als „richtig“ und erkannte Fehler), Abstimmung schließen, Runde
   beenden.
 - Für Fortgeschrittene: Szenario-Dateien prüfen und hochladen; Fehler kommen als deutsche Meldung mit Fundstelle
-  (`knoten.diagonale.loesung „alpha“ ist kein Parameter des Szenarios`). Jede Version bleibt erhalten; laufende
+  (`knoten.diagonale.loesung „teta“ ist kein Parameter des Szenarios`). Jede Version bleibt erhalten; laufende
   Versuche bleiben bei ihrer Version.
 - Auswertung je Szenario und Kurs, als Diagramme und als Tabelle: Versuche, Ausgang, je Aufgabe Anteil „im ersten
   Versuch richtig“ und die häufigsten Fehlerarten, je Entscheidung die Verteilung mit fachlicher Bewertung. Nur
@@ -277,7 +248,7 @@ src/oer-export.js  Offline-Fassung als eine HTML-Datei
 inhalte/szenarien/ die Beispielszenarien (JSON + Bilder)
 tools/           pruefe.js (Szenario prüfen), oer-export.js (Export auf der Kommandozeile)
 test/            Unit- und Schnittstellentests, Lasttest (allein, Teams, Live-Runde), Browsertest (CDP)
-docs/            Anleitung für Lehrende, Architektur, Inhaltsformat, Erweitern, Datenschutz, Lerndesign, Schnittstelle
+docs/            Anleitung für Lehrende, Architektur, Inhaltsformat, Erweitern, Datenschutz, Lerndesign, Schnittstelle, Text der Rundgänge
 nachweis/        Messprotokoll mit Bildschirmfotos
 demo/            Offline-Fassung des Brückenspiels mit AMB-Metadaten (erzeugt mit tools/oer-export.js)
 medien/          Rundgang (Video, GIF, Poster), Bilder für diese Seite, Grafiken als Quelle (kunst/)
@@ -307,6 +278,26 @@ docker compose -p spielbaukasten-nachweis -f compose.nachweis.yaml up --build --
 docker compose -p spielbaukasten-nachweis -f compose.nachweis.yaml down -v
 ```
 
+### Die Zahlen im Einzelnen
+
+Alle Werte vom 12.11.2026, Version 0.2.1, Rohdaten in `nachweis/messwerte.json`; alle Personen simuliert.
+
+- **Lasttests (900 simulierte Personen in fünf Läufen, 0 Fehler):** 50 und 200 im selben Augenblick; 300 mit
+  Denkzeit (1 bis 5 s), 95 % der Antworten unter 0,10 s; 50 Teams zu je drei (150); eine Live-Runde mit 200.
+- **Zustellung neuer Stände** (Server-Sent Events): an alle im Team höchstens 17,8 ms, an alle in der Live-Runde
+  höchstens 12,4 ms.
+- **Barrierefreiheit:** axe-core 4.10.2 mit den Regeln WCAG 2.0/2.1 A und AA und WCAG 2.2 AA, 55 Ansichten (Spiel,
+  Vorlagen, Editor, Teamspiel, Live-Runde, Administration; Desktop, Telefonbreite, dunkle Darstellung).
+  „Für Fortgeschrittene“ und die Wahl der Vorlage gehen mit der Tastatur.
+- **Editor:** „Prüfen“ nennt Fehler mit dem Titel des Schritts, „Zur Stelle“ springt ins Feld; interne Kennungen und
+  JSON stehen unter „Für Fortgeschrittene“; „Vorschau im neuen Tab“; „Als neue Version speichern“ behält die alte.
+- **Töne:** im Browser erzeugt (Web Audio), keine Tondateien; aus, bis man sie einschaltet; nie das einzige Signal.
+- **Erste Seite:** 16 Dateien, 42 KB übertragen. **Offline-Datei:** 342 KB, 0 Netzanfragen; Metadaten nach dem
+  Profil AMB.
+- **Tests:** 67 von 67, darunter: jede Vorlage fehlerfrei und bis zum Ende spielbar.
+- **Verwaltung:** Aufbewahrungsfrist in der Oberfläche, Protokoll der Verwaltung.
+- **Lernplattformen:** xAPI-Statements; Schnittstelle in OpenAPI beschrieben ([`docs/openapi.json`](docs/openapi.json)).
+
 ### Einstellungen
 
 | Variable | Bedeutung | Vorgabe |
@@ -323,6 +314,7 @@ docker compose -p spielbaukasten-nachweis -f compose.nachweis.yaml down -v
 
 ### Technische Grenzen
 
+- Gemessen nur in Chrome; Safari, Firefox und Edge sind nicht gemessen.
 - SQLite genügt für die Last, die gemessen ist: im Lasttest mit simulierten Studierenden 300 mit Denkzeit, 200 im
   selben Augenblick, 50 Teams und eine Live-Runde mit 200 ohne Fehler (siehe Protokoll). Für mehr wäre PostgreSQL
   vorgesehen (Datenzugriff in `src/server/db.js` gekapselt).

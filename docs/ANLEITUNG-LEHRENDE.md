@@ -47,7 +47,7 @@ ersten Schritt den **Text der Szene** oder die **Frage**.
 - **Reihenfolge und Entfernen:** im Formular **Nach oben**, **Nach unten**, **Schritt entfernen**; Möglichkeiten,
   Antworten und Regeln haben eigene Knöpfe zum Verschieben und Entfernen.
 - **Zahlen je Person** (unter „Allgemein“, z. B. `F` von 10 bis 50 in Schritten von 5) setzen Sie in Texte mit
-  `{F}` ein, gerechnete Zahlen mit `{= F / 2 : 1}`. Die Lösung einer Rechenaufgabe ist eine Formel mit diesen Namen,
+  `{F}` ein, gerechnete Zahlen mit `{= F / 2 : 1}` („: 1“ = eine Nachkommastelle). Die Lösung einer Rechenaufgabe ist eine Formel mit diesen Namen,
   geschrieben wie auf dem Papier; das Feld zeigt dazu ein Beispiel aus Ihrem Szenario (in der Rechenübung
   `F * 1000 / A`).
 - **Für Fortgeschrittene** (zu Beginn geschlossen, mit Maus oder Tastatur zu öffnen): Jeder Schritt hat eine interne
