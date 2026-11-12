@@ -1,33 +1,39 @@
 {
-  "zeitpunkt": "2026-11-12T13:04:27.643Z",
-  "zeitpunktMez": "12.11.2026, 14:04–14:07 Uhr (MEZ)",
-  "hinweis": "Alle Personen im Lasttest und alle 25 Stimmen der Live-Runde im Browser sind simuliert (24 über die Schnittstelle, eine über einen automatisch gesteuerten Browser).",
-  "app": "http://sbk-1112-app:8080",
+  "zeitpunkt": "2026-11-12T15:07:08.808Z",
+  "zeitpunktMez": "12.11.2026, 16:07–16:10 Uhr (MEZ)",
+  "hinweis": "Alle Personen sind simuliert: im Lasttest, im Teamspiel (drei automatisch gesteuerte Browser) und in der Live-Runde (24 über die Schnittstelle, eine über einen automatisch gesteuerten Browser). Auch die Lehrperson im Browser wird von diesem Skript gesteuert.",
+  "app": "http://sbk-messung-app:8080",
   "umgebung": {
     "axe": "axe-core 4.10.2 (lokale Datei)",
     "app": {
       "ok": true,
-      "version": "0.2.0",
+      "version": "0.2.1",
       "szenarienVersionen": 2
     },
     "node": "v24.22.3",
     "browser": "Chrome/158.0.8127.18"
   },
+  "tests": {
+    "bestanden": 67,
+    "gesamt": 67,
+    "fehlgeschlagen": 0,
+    "dauerMs": 541
+  },
   "last": [
     {
       "personen": 50,
       "denkzeitMs": null,
-      "anfragen": 544,
+      "anfragen": 539,
       "fehler": 0,
       "abgebrochen": 0,
       "ersterFehler": null,
       "dauerSekunden": 0.3,
-      "anfragenJeSekunde": 1644.9,
+      "anfragenJeSekunde": 1623.9,
       "latenzMs": {
-        "p50": 20.3,
-        "p95": 40.6,
-        "p99": 226,
-        "max": 259.4
+        "p50": 25.2,
+        "p95": 44.2,
+        "p99": 65.1,
+        "max": 108.7
       },
       "ergebnisse": {
         "erfolg": 50
@@ -36,17 +42,17 @@
     {
       "personen": 200,
       "denkzeitMs": null,
-      "anfragen": 2178,
+      "anfragen": 2176,
       "fehler": 0,
       "abgebrochen": 0,
       "ersterFehler": null,
       "dauerSekunden": 1,
-      "anfragenJeSekunde": 2105.3,
+      "anfragenJeSekunde": 2085.4,
       "latenzMs": {
-        "p50": 64.5,
-        "p95": 87.1,
-        "p99": 869.6,
-        "max": 938
+        "p50": 50.1,
+        "p95": 104.1,
+        "p99": 879.3,
+        "max": 966.2
       },
       "ergebnisse": {
         "erfolg": 200
@@ -58,17 +64,17 @@
         1000,
         5000
       ],
-      "anfragen": 3259,
+      "anfragen": 3293,
       "fehler": 0,
       "abgebrochen": 0,
       "ersterFehler": null,
-      "dauerSekunden": 40.1,
-      "anfragenJeSekunde": 81.3,
+      "dauerSekunden": 37.8,
+      "anfragenJeSekunde": 87.2,
       "latenzMs": {
         "p50": 1.5,
-        "p95": 97.6,
-        "p99": 187.6,
-        "max": 194.6
+        "p95": 90.9,
+        "p99": 181.1,
+        "max": 188.7
       },
       "ergebnisse": {
         "erfolg": 300
@@ -83,27 +89,27 @@
         1000,
         3000
       ],
-      "anfragen": 1136,
+      "anfragen": 1138,
       "fehler": 0,
-      "schonEntschieden409": 1,
+      "schonEntschieden409": 0,
       "abgebrochen": 0,
       "ersterFehler": null,
-      "dauerSekunden": 22.4,
-      "anfragenJeSekunde": 50.6,
+      "dauerSekunden": 23.5,
+      "anfragenJeSekunde": 48.5,
       "latenzMs": {
-        "anzahl": 1136,
-        "p50": 2,
-        "p95": 24.6,
-        "p99": 76.3,
-        "max": 91.7
+        "anzahl": 1138,
+        "p50": 1.9,
+        "p95": 29.4,
+        "p99": 80.2,
+        "max": 92.3
       },
-      "entscheidungen": 383,
+      "entscheidungen": 386,
       "zustellungAnAlleMs": {
-        "anzahl": 383,
+        "anzahl": 386,
         "p50": 2.2,
-        "p95": 2.9,
-        "p99": 6.9,
-        "max": 19.3
+        "p95": 2.7,
+        "p99": 3.7,
+        "max": 17.8
       },
       "ergebnisse": {
         "erfolg": 50
@@ -121,82 +127,82 @@
       "schonEntschieden409": 0,
       "dauerSekunden": 28.3,
       "beitrittAllerSekunden": 0.3,
-      "anfragenJeSekunde": 70.7,
+      "anfragenJeSekunde": 70.8,
       "latenzMs": {
         "anzahl": 2003,
         "p50": 2.1,
-        "p95": 130.7,
-        "p99": 227.7,
-        "max": 241.5
+        "p95": 144.6,
+        "p99": 233.7,
+        "max": 256.1
       },
       "entscheidungen": 7,
       "zustellungAnAlleMs": {
         "anzahl": 7,
-        "p50": 9.5,
-        "p95": 17.7,
-        "p99": 17.7,
-        "max": 17.7
+        "p50": 9.9,
+        "p95": 12.4,
+        "p99": 12.4,
+        "max": 12.4
       },
       "zustellungAnLehrendeMs": {
         "anzahl": 7,
-        "p50": 5.2,
-        "p95": 12.8,
-        "p99": 12.8,
-        "max": 12.8
+        "p50": 5.3,
+        "p95": 7.4,
+        "p99": 7.4,
+        "max": 7.4
       },
-      "liveStaendeLehrende": 187,
+      "liveStaendeLehrende": 182,
       "ergebnis": "erfolg",
       "schritteSichtbar": 7
     }
   ],
   "browser": {
     "erstesLaden-desktop": {
-      "domFertigMs": 25,
-      "geladenMs": 25,
-      "bisBedienbarMs": 44,
+      "domFertigMs": 22,
+      "geladenMs": 22,
+      "bisBedienbarMs": 43,
       "dateien": 16,
-      "bytes": 42496,
+      "bytes": 43053,
       "fremdeHosts": [],
       "wandzeitMs": 45
     },
     "durchgespielt-desktop": {
       "ergebnis": "erfolg",
-      "sekunden": 11.12
+      "sekunden": 11.085
     },
     "fortschritt-desktop": "3 von 3 Sternen, 1× abgeschlossen, bestes Ergebnis 89 %",
     "erstesLaden-telefon": {
-      "domFertigMs": 37,
-      "geladenMs": 37,
-      "bisBedienbarMs": 58,
-      "dateien": 16,
-      "bytes": 42496,
+      "domFertigMs": 34,
+      "geladenMs": 34,
+      "bisBedienbarMs": 44,
+      "dateien": 13,
+      "bytes": 35188,
       "fremdeHosts": [],
-      "wandzeitMs": 60
+      "wandzeitMs": 46
     },
     "durchgespielt-telefon": {
       "ergebnis": "erfolg",
-      "sekunden": 8.72
+      "sekunden": 9.145
     },
     "fortschritt-telefon": "3 von 3 Sternen, 1× abgeschlossen, bestes Ergebnis 89 %",
     "erstesLaden-desktop-dunkel": {
-      "domFertigMs": 26,
-      "geladenMs": 27,
-      "bisBedienbarMs": 60,
+      "domFertigMs": 30,
+      "geladenMs": 30,
+      "bisBedienbarMs": 51,
       "dateien": 16,
-      "bytes": 42496,
+      "bytes": 43053,
       "fremdeHosts": [],
-      "wandzeitMs": 62
+      "wandzeitMs": 54
     },
     "durchgespielt-desktop-dunkel": {
       "ergebnis": "erfolg",
-      "sekunden": 5.266
+      "sekunden": 5.307
     },
     "fortschritt-desktop-dunkel": "3 von 3 Sternen, 1× abgeschlossen, bestes Ergebnis 89 %",
     "auswertungKennzahlen": [
       "554 Personen",
       "554 Versuche",
       "553 abgeschlossen",
-      "89 % mittlere Punktquote"
+      "88 % mittlere Punktquote"
     ]
   },
   "barrierefreiheit": {
@@ -296,21 +302,53 @@
       "verstoesse": [],
       "bestanden": 29
     },
-    "editor-fehler": {
+    "editor-fortgeschritten": {
       "verstoesse": [],
       "bestanden": 30
+    },
+    "editor-fehler": {
+      "verstoesse": [],
+      "bestanden": 29
     },
     "editor-dunkel": {
       "verstoesse": [],
-      "bestanden": 31
+      "bestanden": 29
     },
     "editor-telefon": {
       "verstoesse": [],
-      "bestanden": 30
+      "bestanden": 29
     },
     "editor-vorschau-ende": {
       "verstoesse": [],
       "bestanden": 21
+    },
+    "vorlage": {
+      "verstoesse": [],
+      "bestanden": 21
+    },
+    "vorlage-dunkel": {
+      "verstoesse": [],
+      "bestanden": 22
+    },
+    "vorlage-telefon": {
+      "verstoesse": [],
+      "bestanden": 22
+    },
+    "vorlage-editor": {
+      "verstoesse": [],
+      "bestanden": 29
+    },
+    "vorlage-vorschau-aufgabe": {
+      "verstoesse": [],
+      "bestanden": 22
+    },
+    "editor-rechenuebung": {
+      "verstoesse": [],
+      "bestanden": 29
+    },
+    "editor-rechenuebung-dunkel": {
+      "verstoesse": [],
+      "bestanden": 29
     },
     "team-start": {
       "verstoesse": [],
@@ -390,15 +428,22 @@
     }
   },
   "offline": {
-    "groesseKB": 339,
+    "groesseKB": 342,
     "ergebnis": "erfolg",
     "netzanfragenNachDemLaden": 0,
     "lizenzhinweis": "„Riss an der Fußgängerbrücke“ von Panagiotis Herbe, Lizenz CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Offline-Fassung, Fortschritt bleibt auf diesem Gerät. Erstellt mit dem Spielbaukasten (AGPL-3.0)."
   },
   "editor": {
-    "fehlermeldung": "knoten.teilspannung.loesung „R3“ ist kein Parameter des Szenarios",
+    "statusBeimOeffnen": "Keine Änderungen",
+    "interneKennungenSichtbar": [],
+    "formelHilfe": "Wie auf dem Papier, mit den Namen aus „Zahlen je Person“ (U, R1, R2): z. B. U * R2 / (R1 + R2)",
+    "fortgeschrittenBeimOeffnen": "geschlossen",
+    "fortgeschrittenInhalt": "Interne Kennung Umbenennen Umbenennen passt alle Verweise an. Als Start festlegen",
+    "fortgeschrittenTastatur": "Eingabetaste: geöffnet; Leertaste: geschlossen",
+    "fehlermeldung": "Aufgabe „Teilspannung“, Lösung (Formel): „R3“ kennt das Spiel nicht. Erlaubt sind: U, R1, R2.",
     "fehlerAmFeld": "true",
     "zurStelleFokus": "knoten.teilspannung.loesung",
+    "statusNachSpeichern": "Version 3 gespeichert",
     "gespeichert": "Version 3 gespeichert",
     "versionen": [
       "3 editor",
@@ -407,9 +452,39 @@
     "vorschauTitel": "Vorschau: Übung: Spannungsteiler im Praktikum",
     "vorschauErgebnis": "erfolg"
   },
+  "vorlage": {
+    "knopf": "Neues Szenario aus Vorlage",
+    "vorlagen": [
+      "Entscheidungsspiel: Szene → 2 Möglichkeiten → 2 Enden",
+      "Rechenübung: Rechenaufgabe → Ende",
+      "Quiz: Frage 1 → Frage 2 → Ende"
+    ],
+    "pruefenSofort": {
+      "entscheidung": "Keine Fehler. Das Szenario lässt sich spielen.",
+      "quiz": "Keine Fehler. Das Szenario lässt sich spielen.",
+      "rechnen": "Keine Fehler. Das Szenario lässt sich spielen."
+    },
+    "pfeiltasteWaehlt": "rechnen",
+    "titelVorgeschlagen": "Übung: Spannung im Zugstab",
+    "statusNeu": "Noch nicht gespeichert",
+    "geoeffneterSchritt": "Aufgabe Spannung im Zugstab",
+    "formelHilfe": "Wie auf dem Papier, mit den Namen aus „Zahlen je Person“ (F, A): z. B. F * 1000 / A",
+    "statusNachAenderung": "Ungespeicherte Änderungen",
+    "vorschauTitel": "Vorschau: Übung: Spannung im Zugstab",
+    "vorschauFrage": "Ein Zugstab aus Baustahl S235 hat die Querschnittsfläche A =",
+    "vorschauErgebnis": "erfolg",
+    "gespeichert": "Version 1 gespeichert",
+    "adresse": "#editor/uebung-spannung-im-zugstab",
+    "interneKennung": "uebung-spannung-im-zugstab",
+    "schritte": [
+      "spannung-im-zugstab",
+      "geschafft"
+    ],
+    "statusWiederGeoeffnet": "Keine Änderungen"
+  },
   "team": {
     "abstimmungBeiC": "Abstimmung im Team: 2 von 3 haben abgestimmt |  | A | Option A:",
-    "dritteStimmeBisAlleDreiMs": 57,
+    "dritteStimmeBisAlleDreiMs": 56,
     "rueckmeldung": [
       "Gute Entscheidung",
       "Gute Entscheidung",
@@ -433,8 +508,8 @@
       "Wie gehen Sie vor?: Entschieden: richtige Antwort (21 von 24 Stimmen)",
       "Eine Meldung am Montagmorgen: Entschieden: Brücke sofort sperren und Umleitung ausschildern, dann prüfen (21 von 25 Stimmen)"
     ],
-    "anzeigeTelefon": "Abstimmung in der Kursrunde: 24 von 25 haben abgestimmt",
-    "schliessenBisTelefonMs": 54,
+    "anzeigeTelefon": "Abstimmung in der Live-Runde: 24 von 25 haben abgestimmt",
+    "schliessenBisTelefonMs": 52,
     "rueckmeldungTelefon": "Richtig",
     "teilnehmende": "24 simuliert über die Schnittstelle, 1 im Browser auf Telefonbreite"
   },
@@ -450,8 +525,8 @@
       "Anmeldung abgewiesen: Zugang gesperrt",
       "Zugang gesperrt",
       "Zugang angelegt",
-      "Kursrunde beendet",
-      "Kursrunde gestartet",
+      "Live-Runde beendet",
+      "Live-Runde gestartet",
       "Szenario im Editor gespeichert"
     ]
   },
