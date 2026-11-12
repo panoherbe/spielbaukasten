@@ -1,17 +1,19 @@
 # Szenarien schreiben
 
-Der Weg von der Datei bis zum Kurs, mit Bildern: [Anleitung für Lehrende](ANLEITUNG-LEHRENDE.md).
+Lehrende bearbeiten Szenarien im **Szenario-Editor** im Browser (`/lehrende` → Szenarien → Bearbeiten); der Weg bis
+zum Kurs, mit Bildern: [Anleitung für Lehrende](ANLEITUNG-LEHRENDE.md). Diese Seite beschreibt die Datei dahinter, für
+den fortgeschrittenen Weg (Datei hochladen, „JSON ansehen und bearbeiten“) und für Ihre IT.
 
 Ein Szenario ist ein Ordner unter `inhalte/szenarien/<id>/` mit einer Datei `szenario.json` und optional Bildern
 (SVG, PNG, JPG, WebP). Vorlage: [`fussgaengerbruecke/szenario.json`](../inhalte/szenarien/fussgaengerbruecke/szenario.json).
-Prüfen: `node tools/pruefe.js inhalte/szenarien/<id>/szenario.json` oder unter `/lehrende` → Szenarien → „Nur prüfen“.
+Prüfen: im Editor „Prüfen“, unter `/lehrende` → Szenarien → „Nur prüfen“ oder `node tools/pruefe.js inhalte/szenarien/<id>/szenario.json`.
 
 ## Kopf
 
 | Feld | Pflicht | Bedeutung |
 |---|---|---|
 | `id` | ja | Kleinbuchstaben, Ziffern, Bindestrich; gleich dem Ordnernamen |
-| `version` | ja | ganze Zahl; bei jeder inhaltlichen Änderung erhöhen |
+| `version` | ja | ganze Zahl; bei jeder inhaltlichen Änderung erhöhen (der Editor zählt selbst hoch) |
 | `titel`, `kurzbeschreibung` | ja | erscheinen in der Übersicht |
 | `lizenz` | ja | `CC-BY-4.0`, `CC-BY-SA-4.0` oder `CC0-1.0` |
 | `urheber` | ja | Liste der Namen für die Namensnennung |

@@ -1,7 +1,10 @@
 // Der Spieler zeigt eine Ansicht (src/engine/ansicht.js) und meldet Entscheidungen und Antworten an ein „Backend“
 // zurück. Online ist das der Server, im OER-Export die Engine im Browser. Der Spieler selbst kennt keine Lösungen.
 //
-//   spieler(element, { sende(ereignis) → Promise<Ansicht>, neu() → Promise<Ansicht>, medienUrl(datei), grafikUrl(name), uebersicht() })
+//   spieler(element, { sende(ereignis) → Promise<Ansicht|null>, neu() → Promise<Ansicht>, medienUrl(datei), grafikUrl(name), uebersicht(), zusatz(ansicht) })
+//
+// Im Teamspiel und in der Kursrunde liefert `sende` null (die Stimme ist gezählt, entschieden wird gemeinsam); neue
+// Stände kommen dann von außen über `aktualisiere(ansicht)`. `zusatz` zeichnet die Abstimmung unter die Handlung.
 //
 // Jede Ansicht hat denselben Aufbau: oben die Spielanzeige (Punkte, Indikatoren, Kapitelkarte), darunter die Bühne
 // mit großem Bild und daneben Text, Figur und Handlung. Änderungen an Indikatoren und Punkten steigen als „+20 %“
@@ -10,6 +13,7 @@
 import { h, textBloecke, zahl, leere, fokus, melde, bewegung } from './ui.js';
 import { symbol, ring, sterne } from './symbole.js';
 import { DARSTELLUNGEN } from './mechaniken/index.js';
+import { spieleTon } from './ton.js';
 
 const ERGEBNIS = {
   erfolg: { titel: 'Geschafft', klasse: 'gut', zeichen: 'richtig', stimmung: 'zufrieden' },
@@ -25,6 +29,7 @@ const RUECKMELDUNG = {
 };
 const STUFE = { sicher: ['sicher', 'richtig'], mit_hilfe: ['mit Hilfe', 'hinweis'], offen: ['noch offen', 'falsch'], nicht_geprueft: ['nicht geprüft', 'anzeige'] };
 const KAPITEL_STAND = { erledigt: 'erledigt', aktuell: 'aktuelles Kapitel', offen: 'noch offen' };
+const TON = { richtig: 'richtig', gut: 'richtig', aufgeloest: 'falsch', schlecht: 'falsch', falsch: 'falsch', neutral: 'entscheidung' };
 const BUCHSTABEN = 'ABCDEFGH';
 const fehlt = (e) => e.target.classList.add('fehlt'); // fehlendes Bild: Platz bleibt, kein kaputtes Symbol
 
@@ -33,6 +38,7 @@ export function spieler(wurzel, backend) {
   let beschaeftigt = false;
   let zuletzt = null; // Punkte und Indikatoren der zuletzt gezeigten Anzeige; daraus entstehen die Änderungen
   let letztesBild = null; // Bild des zuletzt gezeigten Knotens: Die Rückmeldung erscheint vor dieser Szene
+  let zuletztGezeigt = null; // Knoten, der zuletzt zu sehen war (für den Ton beim Szenenwechsel)
   const grafikUrl = backend.grafikUrl ?? ((name) => `/bilder/${name}.svg`);
 
   async function schritt(ereignis) {
@@ -41,18 +47,37 @@ export function spieler(wurzel, backend) {
     wurzel.setAttribute('aria-busy', 'true');
     try {
       const neu = await backend.sende({ ...ereignis, knoten: a.knoten.id });
-      const alterKnoten = a.knoten.id;
-      letztesBild = a.knoten.bild;
-      a = neu;
-      const r = a.rueckmeldung;
-      if (r && (r.art === 'falsch' || r.art === 'ungueltig') && a.knoten.id === alterKnoten) zeigeHinweisInline(r);
-      else if (r) zeigeRueckmeldung(r);
-      else zeigeKnoten({ ruhig: a.knoten.id === alterKnoten });
+      if (!neu) return; // Stimme gezählt; der gemeinsame Stand kommt über aktualisiere()
+      uebernimm(neu);
     } catch (e) {
       melde(e.message || 'Das hat nicht geklappt. Bitte erneut versuchen.', 'fehler');
     } finally {
       beschaeftigt = false;
       wurzel.removeAttribute('aria-busy');
+    }
+  }
+
+  /** Neuen Stand zeigen: Rückmeldung, Hinweis unter der Aufgabe oder der nächste Knoten. */
+  function uebernimm(neu) {
+    const alterKnoten = a.knoten.id;
+    letztesBild = a.knoten.bild;
+    a = neu;
+    const r = a.rueckmeldung;
+    if (r && (r.art === 'falsch' || r.art === 'ungueltig') && a.knoten.id === alterKnoten) zeigeHinweisInline(r);
+    else if (r) zeigeRueckmeldung(r);
+    else zeigeKnoten({ ruhig: a.knoten.id === alterKnoten });
+  }
+
+  /** Abstimmung (Team, Kursrunde) unter der Handlung neu zeichnen, ohne Eingaben zu verlieren. */
+  function fuelleZusatz() {
+    const platz = wurzel.querySelector('.zusatz');
+    if (!platz || !backend.zusatz) return;
+    leere(platz, backend.zusatz(a));
+    const eigene = a.abstimmung?.eigene;
+    for (const b of wurzel.querySelectorAll('[data-option]')) {
+      const gewaehlt = eigene?.typ === 'wahl' && eigene.option === b.dataset.option;
+      b.classList.toggle('gewaehlt', gewaehlt);
+      b.setAttribute('aria-pressed', String(gewaehlt));
     }
   }
 
@@ -160,9 +185,12 @@ export function spieler(wurzel, backend) {
     }
     leere(wurzel, anzeige(), buehne({ class: `szene${ruhig ? ' ruhig' : ''}`, 'data-knoten': k.id, 'data-typ': k.typ, 'data-mechanik': k.mechanik }, k.bild, [kapitelMarke(), titel], {
       figur: sprechzeile(k.sprechblase),
-      inhalt: [k.text ? h('div', { class: 'szenen-text' }, textBloecke(k.text)) : null, interaktion],
+      inhalt: [k.text ? h('div', { class: 'szenen-text' }, textBloecke(k.text)) : null, interaktion, backend.zusatz ? h('div', { class: 'zusatz' }) : null],
     }));
+    fuelleZusatz();
     animiere();
+    if (!ruhig && zuletztGezeigt && zuletztGezeigt !== k.id) spieleTon('szene');
+    zuletztGezeigt = k.id;
     if (k.typ !== 'aufgabe' || k.mechanik !== 'zahl') fokus(titel);
   }
 
@@ -174,6 +202,7 @@ export function spieler(wurzel, backend) {
     if (feld && vorher !== undefined) feld.value = vorher;
     const box = wurzel.querySelector('.inline-rueckmeldung');
     const falsch = r.art === 'falsch';
+    if (falsch) spieleTon('falsch');
     if (box) leere(box, h('div', { class: `rueckmeldung-inline ${falsch ? 'schlecht' : 'neutral'}` },
       h('span', { class: 'zeichen', 'aria-hidden': 'true' }, symbol(falsch ? 'falsch' : 'hinweis')),
       h('div', {}, h('strong', {}, falsch ? 'Noch nicht richtig. ' : ''), r.text ?? '')));
@@ -182,6 +211,8 @@ export function spieler(wurzel, backend) {
 
   function zeigeRueckmeldung(r) {
     const art = RUECKMELDUNG[r.art] ?? RUECKMELDUNG.neutral;
+    spieleTon(TON[r.art] ?? 'entscheidung');
+    zuletztGezeigt = null; // nach „Weiter“ kein zweiter Ton für die neue Szene
     const titel = h('h2', { class: 'rueckmeldung-titel' }, h('span', { class: 'zeichen', 'aria-hidden': 'true' }, symbol(art.zeichen)),
       r.art === 'richtig' && r.versuch > 1 ? 'Richtig im zweiten Versuch' : art.titel);
     const effekte = Object.entries(r.effekte ?? {}).filter(([, d]) => d !== 0);
@@ -233,8 +264,8 @@ export function spieler(wurzel, backend) {
             h('p', { class: 'punkte-gross' }, `${zahl(a.punkte)} von ${zahl(a.maxPunkte)} Punkten`, h('small', {}, `${zahl(quote * 100, 0)} % der Punkte`)))),
         k.text ? h('div', { class: 'szenen-text' }, textBloecke(k.text)) : null,
         h('div', { class: 'knopfreihe' },
-          h('button', { class: 'knopf knopf-haupt', type: 'button', onclick: async () => { a = await backend.neu(); zuletzt = null; letztesBild = null; zeigeKnoten(); } }, symbol('nochmal'), 'Noch einmal spielen'),
-          backend.uebersicht ? h('button', { class: 'knopf', type: 'button', onclick: () => backend.uebersicht() }, symbol('uebersicht'), 'Zur Übersicht') : null)],
+          backend.neu ? h('button', { class: 'knopf knopf-haupt', type: 'button', onclick: async () => { a = await backend.neu(); zuletzt = null; letztesBild = null; zeigeKnoten(); } }, symbol('nochmal'), 'Noch einmal spielen') : null,
+          backend.uebersicht ? h('button', { class: `knopf${backend.neu ? '' : ' knopf-haupt'}`, type: 'button', onclick: () => backend.uebersicht() }, symbol('uebersicht'), 'Zur Übersicht') : null)],
       unten,
     }));
     animiere();
@@ -242,6 +273,17 @@ export function spieler(wurzel, backend) {
   }
 
   return {
-    zeige(ansicht) { a = ansicht; zuletzt = null; zeigeKnoten(); },
+    zeige(ansicht) { a = ansicht; zuletzt = null; zuletztGezeigt = null; zeigeKnoten(); },
+    /** Stand von außen (Teamspiel, Kursrunde). Ist inzwischen entschieden worden (nr größer), erscheint die Rückmeldung. */
+    aktualisiere(neu) {
+      if (!a) { this.zeige({ ...neu, rueckmeldung: null }); return; }
+      if (neu.nr < a.nr) return;
+      if (neu.nr === a.nr) {
+        a = { ...neu, rueckmeldung: a.rueckmeldung };
+        fuelleZusatz();
+        return;
+      }
+      uebernimm(neu);
+    },
   };
 }

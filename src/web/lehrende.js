@@ -1,12 +1,19 @@
-// Oberfläche für Lehrende: Kurse und Freigaben, Szenarien prüfen und hochladen, Auswertung, Exporte (xAPI, OER).
+// Oberfläche für Lehrende: Kurse und Freigaben, Szenarien bearbeiten (Editor), prüfen und hochladen, Live-Runde,
+// Auswertung, Exporte (xAPI, OER).
 
 import { api, ApiFehler } from './api.js';
 import { h, leere, fokus, melde, zahl } from './ui.js';
 import { symbol, ring } from './symbole.js';
+import { editor } from './editor.js';
+import { runden, rundeLive } from './kursrunde.js';
 
 const inhalt = document.getElementById('inhalt');
 const navigation = document.getElementById('navigation');
-const BEREICHE = [['kurse', 'Kurse'], ['szenarien', 'Szenarien'], ['auswertung', 'Auswertung']];
+const BEREICHE = [['kurse', 'Kurse'], ['szenarien', 'Szenarien'], ['runde', 'Live-Runde'], ['auswertung', 'Auswertung']];
+let offenerEditor = null; // fragt vor dem Verlassen, wenn Änderungen nicht gespeichert sind
+let aufraeumen = null; // schließt die Live-Verbindung einer Runde
+let neuerEntwurf = null; // Kennung und Titel für „Neues Szenario“
+let letzteAdresse = location.hash;
 
 function nav(aktiv) {
   leere(navigation, BEREICHE.map(([id, name]) => h('a', { href: `#${id}`, class: 'nav-link', 'aria-current': id === aktiv ? 'page' : null }, name)),
@@ -66,6 +73,8 @@ function fehlerliste(r) {
 
 async function szenarien() {
   const liste = await api('GET', '/api/lehrende/szenarien');
+  const neuId = h('input', { id: 'neu-id', required: true, autocomplete: 'off', spellcheck: 'false', pattern: '[a-z0-9][a-z0-9-]{1,60}', placeholder: 'z. B. fachwerk-knoten', 'aria-describedby': 'neu-id-h' });
+  const neuTitel = h('input', { id: 'neu-titel', required: true, autocomplete: 'off', placeholder: 'z. B. Übung: Knotenpunktverfahren' });
   const datei = h('input', { id: 'datei', type: 'file', accept: '.json,application/json' });
   const ergebnis = h('div', { 'aria-live': 'polite' });
   const lies = async () => { const f = datei.files[0]; if (!f) throw new Error('Bitte eine Datei wählen'); return JSON.parse(await f.text()); };
@@ -77,10 +86,23 @@ async function szenarien() {
         h('td', {}, s.titel), h('td', {}, h('code', {}, s.id)), h('td', {}, s.version), h('td', {}, s.quelle), h('td', {}, s.aufgaben),
         h('td', {}, s.lizenz.replace(/-/g, ' ')),
         h('td', { class: 'knopfreihe' },
+          h('a', { class: 'knopf-klein', href: `#editor/${encodeURIComponent(s.id)}` }, symbol('stift'), 'Bearbeiten', h('span', { class: 'nur-vorlesen' }, `: ${s.titel}`)),
           h('a', { class: 'knopf-klein', href: `/#/spiel/${s.id}` }, 'Vorschau'),
           h('a', { class: 'knopf-klein', href: `/api/lehrende/oer/${s.id}`, download: `${s.id}-v${s.version}.html` }, 'OER-Export'),
           h('button', { class: 'knopf-klein', type: 'button', onclick: async () => herunterladen(`${s.id}-v${s.version}.metadaten.json`, JSON.stringify(await api('GET', `/api/lehrende/oer/${s.id}/metadaten`), null, 2)) }, 'Metadaten'))))))),
-    h('section', { class: 'karte' }, h('h2', {}, 'Szenario prüfen oder hochladen'),
+    h('section', { class: 'karte schmal' }, h('h2', {}, 'Neues Szenario anlegen'),
+      h('p', {}, 'Öffnet den Editor mit einer Vorlage aus Szene, Aufgabe und Ende. Gespeichert wird erst, wenn Sie „Als neue Version speichern“ wählen.'),
+      h('form', { class: 'stapel', onsubmit: (e) => {
+        e.preventDefault();
+        if (liste.some((s) => s.id === neuId.value)) return melde(`Die Kennung „${neuId.value}“ gibt es schon.`, 'fehler');
+        neuerEntwurf = { id: neuId.value, titel: neuTitel.value };
+        location.hash = '#editor/neu';
+      } },
+      h('label', { for: 'neu-titel', class: 'beschriftung' }, 'Titel'), neuTitel,
+      h('label', { for: 'neu-id', class: 'beschriftung' }, 'Kennung'),
+      h('p', { class: 'feld-hilfe', id: 'neu-id-h' }, 'Kleinbuchstaben, Ziffern und Bindestrich; bleibt über alle Versionen gleich.'), neuId,
+      h('button', { class: 'knopf knopf-haupt', type: 'submit' }, symbol('plus'), 'Im Editor anlegen'))),
+    h('section', { class: 'karte' }, h('h2', {}, 'Szenario-Datei prüfen oder hochladen (Fortgeschritten)'),
       h('p', {}, 'Eine Datei szenario.json (Format: docs/INHALTE.md im Repository). Hochladen legt eine neue Version an; laufende Versuche bleiben bei ihrer Version.'),
       h('div', { class: 'stapel' }, h('label', { for: 'datei', class: 'beschriftung' }, 'Datei'), datei),
       h('div', { class: 'knopfreihe' },
@@ -217,10 +239,31 @@ async function zeige() {
     const ich = await api('GET', '/api/ich');
     if (ich.rolle !== 'lehrende') return anmeldung();
   } catch (e) { if (e instanceof ApiFehler && e.status === 401) return anmeldung(); throw e; }
-  const bereich = location.hash.replace('#', '') || 'kurse';
-  nav(bereich);
-  try { await ({ kurse, szenarien, auswertung }[bereich] ?? kurse)(); } catch (e) { melde(e.message, 'fehler'); }
+  aufraeumen?.();
+  aufraeumen = null;
+  offenerEditor = null;
+  const adresse = location.hash.replace('#', '') || 'kurse';
+  const [bereich, id] = adresse.split('/');
+  nav(bereich === 'editor' ? 'szenarien' : bereich);
+  try {
+    if (bereich === 'editor' && id === 'neu') {
+      if (!neuerEntwurf) { location.hash = '#szenarien'; return; }
+      offenerEditor = await editor(inhalt, null, { neu: neuerEntwurf });
+    } else if (bereich === 'editor' && id) offenerEditor = await editor(inhalt, decodeURIComponent(id));
+    else if (bereich === 'runde' && id) aufraeumen = rundeLive(inhalt, id);
+    else if (bereich === 'runde') await runden(inhalt);
+    else await ({ kurse, szenarien, auswertung }[bereich] ?? kurse)();
+  } catch (e) { melde(e.message, 'fehler'); }
 }
 
-window.addEventListener('hashchange', zeige);
+window.addEventListener('hashchange', () => {
+  // Ungespeicherte Änderungen im Editor: erst fragen
+  if (offenerEditor?.ungespeichert() && !confirm('Ungespeicherte Änderungen im Editor verwerfen?')) {
+    history.replaceState(null, '', letzteAdresse || '#szenarien');
+    return;
+  }
+  letzteAdresse = location.hash;
+  zeige();
+});
+window.addEventListener('beforeunload', (e) => { if (offenerEditor?.ungespeichert()) { e.preventDefault(); e.returnValue = ''; } });
 zeige();

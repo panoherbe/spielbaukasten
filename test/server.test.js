@@ -1,6 +1,6 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, readFileSync } from 'node:fs';
+import { mkdtempSync, rmSync, readFileSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -228,9 +228,11 @@ test('Aufbewahrungsfrist: alte Versuche und Personen werden gelöscht', async ()
 });
 
 test('jede Route steht in docs/openapi.json', () => {
-  const quelle = readFileSync(new URL('../src/server/app.js', import.meta.url), 'utf8');
+  const ordner = new URL('../src/server/', import.meta.url);
+  const quelle = readdirSync(ordner).filter((d) => d.endsWith('.js')).map((d) => readFileSync(new URL(d, ordner), 'utf8')).join('\n');
   const doc = JSON.parse(readFileSync(new URL('../docs/openapi.json', import.meta.url), 'utf8'));
   const routen = [...quelle.matchAll(/route\('(\w+)', '([^']+)'/g)].map(([, m, p]) => [m.toLowerCase(), p.replace(/\([^)]*\)/g, '{x}')]);
   const doku = Object.entries(doc.paths).flatMap(([p, ops]) => Object.keys(ops).map((m) => [m, p.replace(/\{[^}]+\}/g, '{x}')]));
+  assert.ok(routen.length >= 40, `nur ${routen.length} Routen gefunden`);
   for (const [m, p] of routen) assert.ok(doku.some(([dm, dp]) => dm === m && dp === p), `${m.toUpperCase()} ${p} fehlt in openapi.json`);
 });

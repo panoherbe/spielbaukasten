@@ -96,8 +96,9 @@ export class Cdp {
     throw new Error(`Wartezeit abgelaufen: ${ausdruck}\nSeite: ${lage}\n${(this.protokoll ?? []).join('\n')}`);
   }
 
-  async bild() {
-    const { data } = await this.sende('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
+  /** Bildschirmfoto als PNG; `ganz`: die ganze Seite, sonst nur der sichtbare Ausschnitt. */
+  async bild({ ganz = true } = {}) {
+    const { data } = await this.sende('Page.captureScreenshot', { format: 'png', captureBeyondViewport: ganz });
     return Buffer.from(data, 'base64');
   }
 

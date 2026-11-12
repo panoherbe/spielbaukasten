@@ -559,3 +559,139 @@ th { background: var(--flaeche-2); font-size: 0.85rem; }
 .diagramm .gestapelt { height: 42px; }
 .ausgang-ring { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--linie); }
 .ausgang-ring .ring-bogen { stroke: var(--gut); }
+
+/* Ton: Schalter in der Kopfzeile; der Zustand steht in aria-pressed und im Symbol */
+.ton-schalter { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 4px 12px 4px 8px; border-radius: 99px; font: inherit; font-size: 0.92rem; font-weight: 700;
+  color: var(--gedaempft); background: var(--flaeche-2); border: 1px solid var(--linie); cursor: pointer; }
+.ton-schalter .symbol { width: 18px; height: 18px; }
+.ton-schalter[aria-pressed="true"] { color: var(--akzent); border-color: var(--akzent); background: var(--akzent-hell); }
+.ton-schalter:hover { border-color: var(--akzent); }
+
+/* Gemeinsam spielen: Team und Kursrunde */
+.gemeinsam { display: flex; flex-direction: column; gap: 12px; border-left: 5px solid var(--akzent); }
+.gemeinsam-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.gemeinsam-zeile.live .chip { background: var(--gold-hell); }
+.gemeinsam-zeile.live .chip .symbol { color: var(--gold-text); }
+.gemeinsam-text { flex: 1; min-width: 220px; }
+.zwischentitel { font-size: 1.1rem; margin-top: 22px; }
+.gruppe-band { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 18px; margin-bottom: 14px; font-size: 0.95rem; }
+.gruppe-band .code { font-size: 1.05rem; letter-spacing: 0.08em; }
+.gruppe-mitglieder { margin-left: auto; color: var(--gedaempft); font-weight: 600; }
+.zusatz:empty { display: none; }
+.zusatz { margin-top: 14px; }
+.abstimmung { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 12px; background: var(--flaeche-2); border: 1px solid var(--linie); }
+.abstimmung p { margin: 0; }
+.abstimmung-kopf { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.abstimmung-kopf .symbol { color: var(--akzent); }
+.abstimmung-optionen { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 16px; font-weight: 700; }
+.abstimmung-optionen li { display: inline-flex; align-items: center; gap: 6px; }
+.option-buchstabe.klein { width: 26px; height: 26px; border-radius: 8px; font-size: 0.85rem; }
+.abstimmung-eigene { font-size: 0.95rem; }
+.abstimmung-eigene .symbol { color: var(--gut); width: 18px; height: 18px; vertical-align: -3px; margin-right: 4px; }
+.abstimmung-regel summary { font-size: 0.9rem; min-height: 28px; }
+.abstimmung-regel p { font-size: 0.9rem; color: var(--gedaempft); }
+.knopf-option.gewaehlt { border-color: var(--akzent); background: var(--akzent-hell); box-shadow: 0 3px 0 var(--akzent); }
+.knopf-option.gewaehlt .symbol { transform: none; }
+
+/* Vorschau aus dem Editor (Offline-Fassung) */
+.vorschau-band { margin: 0; padding: 8px var(--abstand); text-align: center; font-weight: 700; background: var(--gold-hell); color: var(--text); border-bottom: 1px solid var(--linie); }
+
+/* Editor: Ablauf links, Formular rechts */
+.eingabe-zeile { display: flex; gap: 10px; align-items: stretch; }
+.eingabe-zeile > input, .eingabe-zeile > select { flex: 1; min-width: 0; }
+.eingabe-zeile > .knopf { flex: none; }
+.eingabe-zeile.kurz > input { max-width: 340px; }
+.editor-kopf h1 { margin-bottom: 4px; }
+.chip[href] { text-decoration: none; }
+.chip[href] .symbol, .knopf-klein.hoch .symbol, .knopf-klein.runter .symbol, .knoten-hoch .symbol, .knoten-runter .symbol { transition: none; }
+.chip[href] .symbol { transform: rotate(180deg); }
+.knopf-klein.hoch .symbol, .knoten-hoch .symbol { transform: rotate(-90deg); }
+.knopf-klein.runter .symbol, .knoten-runter .symbol { transform: rotate(90deg); }
+.editor-werkzeuge { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0 16px; padding: 10px 12px;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--flaeche) 94%, transparent); border: 1px solid var(--linie); box-shadow: var(--schatten); }
+.editor-status { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 0 auto; font-weight: 700; font-size: 0.92rem; }
+.editor-status .symbol { width: 18px; height: 18px; }
+.editor-status.offen { color: var(--neutral); }
+.editor-status.gespeichert { color: var(--gut); }
+.editor { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 18px; align-items: start; }
+.editor-ablauf { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow: auto; padding: 16px; border-radius: var(--radius); background: var(--flaeche); border: 1px solid var(--linie); box-shadow: var(--schatten); }
+.editor-ablauf h2 { font-size: 1.15rem; }
+.ablauf-liste { list-style: none; padding: 0; margin: 0 0 12px; display: flex; flex-direction: column; gap: 6px; }
+.ablauf-liste.knoten { position: relative; padding-left: 14px; border-left: 3px solid var(--linie); margin-left: 6px; }
+.ablauf-punkt { position: relative; }
+.ablauf-liste.knoten .ablauf-punkt::before { content: ""; position: absolute; left: -21px; top: 18px; width: 11px; height: 11px; border-radius: 50%; background: var(--flaeche); border: 3px solid var(--akzent); }
+.ablauf-liste.knoten .typ-ende::before { border-color: var(--gut); }
+.ablauf-liste.knoten .typ-verzweigung::before { border-color: var(--gold); border-radius: 2px; transform: rotate(45deg); }
+.ablauf-eintrag { display: flex; flex-direction: column; align-items: stretch; gap: 2px; width: 100%; min-height: 44px; padding: 8px 10px; text-align: left; font: inherit; color: var(--text);
+  background: var(--flaeche); border: 2px solid var(--linie); border-radius: 12px; cursor: pointer; }
+.ablauf-eintrag:hover { border-color: var(--akzent); }
+.ablauf-eintrag[aria-current="true"] { border-color: var(--akzent); background: var(--akzent-hell); }
+.ablauf-typ { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gedaempft); }
+.ablauf-typ .symbol { width: 16px; height: 16px; color: var(--akzent); }
+.ablauf-start { margin-left: auto; padding: 0 8px; border-radius: 99px; background: var(--akzent); color: var(--akzent-text); letter-spacing: 0; text-transform: none; }
+.ablauf-titel { font-weight: 700; line-height: 1.3; }
+.ablauf-id { font-family: var(--mono); font-size: 0.8rem; color: var(--gedaempft); }
+.ablauf-wege { display: flex; flex-direction: column; font-size: 0.82rem; color: var(--gedaempft); }
+.ablauf-wege .fehlt { color: var(--schlecht); font-weight: 700; }
+.ablauf-fehler { display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; font-weight: 800; color: var(--schlecht); }
+.ablauf-fehler .symbol { width: 16px; height: 16px; }
+.knoten-neu { padding-top: 10px; border-top: 1px solid var(--linie); }
+.knoten-neu .beitritt-zeile { margin-top: 6px; }
+.editor-karte h2 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.feldgruppe { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px 16px; margin: 12px 0; }
+.feld { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.feld.breit { grid-column: 1 / -1; }
+.feld > label { font-weight: 700; font-size: 0.93rem; }
+.pflicht { font-weight: 600; color: var(--gedaempft); font-size: 0.85rem; }
+.feld-hilfe { margin: 0; font-size: 0.85rem; color: var(--gedaempft); }
+.feld-meldung { display: flex; align-items: flex-start; gap: 6px; margin: 2px 0 0; font-size: 0.88rem; font-weight: 700; color: var(--schlecht); }
+.feld-meldung .symbol { width: 18px; height: 18px; flex: none; }
+.feld-meldung.block { padding: 10px 12px; border-radius: 12px; background: var(--schlecht-hell); margin: 8px 0; }
+.feld.mit-meldung input, .feld.mit-meldung textarea, .feld.mit-meldung select { border-color: var(--schlecht); }
+.feld-haken .auswahl-option { min-height: 46px; padding: 10px 12px; }
+textarea { font: inherit; padding: 8px 12px; border-radius: var(--radius-klein); border: 2px solid var(--linie); background: var(--flaeche); color: var(--text); width: 100%; resize: vertical; line-height: 1.45; }
+textarea:focus-visible { border-color: var(--akzent); }
+.formel { font-family: var(--mono); font-size: 0.95rem; }
+.editor-liste { margin: 18px 0 8px; padding-top: 12px; border-top: 1px solid var(--linie); }
+.editor-liste h3 { margin-top: 0; }
+.unterkarte { margin: 0 0 12px; padding: 4px 14px 12px; border: 1px solid var(--linie); border-radius: 14px; background: var(--flaeche-2); min-width: 0; }
+.unterkarte legend { padding: 0 6px; font-weight: 800; }
+.unterkarte .feldgruppe { margin: 6px 0; }
+.knopfreihe.klein { margin-top: 6px; gap: 6px; }
+.knopf-klein.gefahr { color: var(--schlecht); border-color: var(--schlecht); }
+.bild-vorschau { width: 220px; aspect-ratio: 2 / 1; object-fit: contain; border-radius: 10px; background: #0b1a33; border: 1px solid var(--linie); }
+.feldgruppe.bild { align-items: end; }
+.editor-json { margin-top: 18px; }
+.editor-json textarea { min-height: 260px; }
+.editor-ergebnis .pruefergebnis h2 { font-size: 1.15rem; }
+.pruefergebnis p { display: flex; align-items: center; gap: 6px; }
+.pruefergebnis ul { margin: 0 0 10px; padding-left: 20px; }
+.pruefergebnis li { margin-bottom: 4px; }
+.pruefergebnis.mit-fehlern { border-left: 5px solid var(--schlecht); }
+.pruefergebnis.ohne-fehler { border-left: 5px solid var(--gut); }
+
+/* Kursrunde: Live-Ansicht für Lehrende */
+.runde-schritte { display: flex; flex-direction: column; gap: 14px; }
+.runde-knoepfe { margin: 4px 0 18px; }
+.runde-schritt { margin: 0; }
+.runde-schritt.aktuell { border: 2px solid var(--akzent); box-shadow: var(--schatten-gross); }
+.runde-schritt h3 { margin-top: 0; }
+.runde-entscheidung { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--linie); }
+.runde-entscheidung .symbol { color: var(--gut); }
+
+/* Administration */
+.zugang-stand { display: inline-flex; align-items: center; gap: 4px; font-weight: 800; }
+.zugang-stand .symbol { width: 16px; height: 16px; }
+.zugang-stand.gut { color: var(--gut); }
+.zugang-stand.schlecht { color: var(--schlecht); }
+.schluessel-neu { border-left: 5px solid var(--gold); }
+.schluessel-neu h2 { display: flex; align-items: center; gap: 8px; }
+th[scope="row"] { width: 40%; }
+
+@media (max-width: 960px) {
+  .editor { grid-template-columns: 1fr; }
+  .editor-ablauf { position: static; max-height: none; }
+  .editor-werkzeuge { position: static; }
+  .editor-status { margin-left: 0; }
+  .gruppe-mitglieder { margin-left: 0; }
+}

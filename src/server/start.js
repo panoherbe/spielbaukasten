@@ -16,12 +16,18 @@ if (!schluessel) {
   schluessel = randomBytes(12).toString('base64url');
   console.log(`Kein SBK_LEHRENDE_SCHLUESSEL gesetzt. Schlüssel für diesen Lauf: ${schluessel}`);
 }
+let adminSchluessel = env.SBK_ADMIN_SCHLUESSEL;
+if (!adminSchluessel) {
+  adminSchluessel = randomBytes(12).toString('base64url');
+  console.log(`Kein SBK_ADMIN_SCHLUESSEL gesetzt. Schlüssel der Administration für diesen Lauf: ${adminSchluessel}`);
+}
 const port = Number(env.PORT ?? 8080);
 
 const app = erstelleApp({
   datenbank: join(daten, 'spielbaukasten.sqlite'),
   inhalte: resolve(env.SBK_INHALTE ?? join(WURZEL, 'inhalte/szenarien')),
   lehrendeSchluessel: schluessel,
+  adminSchluessel,
   demoKurscode: env.SBK_DEMO_KURSCODE || null,
   aufbewahrungTage: Number(env.SBK_AUFBEWAHRUNG_TAGE ?? 180),
   minGruppe: Number(env.SBK_MIN_GRUPPE ?? 3),
@@ -34,7 +40,7 @@ const app = erstelleApp({
 const { geladen, unveraendert, abgelehnt } = app.bericht;
 console.log(`Szenarien: ${geladen.length} neu, ${unveraendert.length} unverändert, ${abgelehnt.length} abgelehnt`);
 app.server.listen(port, env.HOST ?? '0.0.0.0', () => {
-  console.log(`Spielbaukasten läuft: http://localhost:${port}  (Lehrende: http://localhost:${port}/lehrende)`);
+  console.log(`Spielbaukasten läuft: http://localhost:${port}  (Lehrende: /lehrende, Administration: /admin)`);
   if (env.SBK_DEMO_KURSCODE) console.log(`Kurscode des Demokurses: ${env.SBK_DEMO_KURSCODE}`);
 });
 

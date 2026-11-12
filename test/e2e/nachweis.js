@@ -1,18 +1,23 @@
-// Nachweis-Messung: Lasttest, dann Ende-zu-Ende im echten Browser (Chrome headless über CDP), auf Desktop- und
-// Telefonbreite, mit Barrierefreiheitsprüfung (axe-core) und Bildschirmfotos; zuletzt die Offline-Fassung (OER).
-// Schreibt nachweis/messwerte.json und nachweis/bilder/*.png. Aufruf über compose.nachweis.yaml.
+// Nachweis-Messung: Lasttest (allein, im Team, in der Kursrunde), dann Ende-zu-Ende im echten Browser (Chrome headless
+// über CDP), auf Desktop- und Telefonbreite, mit Barrierefreiheitsprüfung (axe-core) und Bildschirmfotos: Spiel,
+// Editor, Teamspiel, Kursrunde, Administration, Ton; zuletzt die Offline-Fassung (OER).
+// Schreibt nachweis/messwerte.json, nachweis/bilder/*.png und drei Bilder für die README (medien/). Aufruf über
+// compose.nachweis.yaml.
 
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { Cdp } from './cdp.js';
 import { lasttest } from '../last.js';
+import { lasttestTeams, lasttestRunde } from '../last-gruppen.js';
 import { neuerLoeser } from '../hilfe/loeser.js';
 
 const APP = process.env.APP_URL ?? 'http://spielbaukasten:8080';
 const AUSGABE = process.env.AUSGABE ?? 'nachweis';
+const MEDIEN = process.env.MEDIEN ?? 'medien';
 const EXPORT = process.env.EXPORT_DIR ?? '/export';
 const AXE_URL = 'https://cdn.jsdelivr.net/npm/axe-core@4.10.2/axe.min.js';
-const messwerte = { zeitpunkt: new Date().toISOString(), app: APP, umgebung: {}, last: [], browser: {}, barrierefreiheit: {}, offline: {} };
+const messwerte = { zeitpunkt: new Date().toISOString(), app: APP, umgebung: {}, last: [], browser: {}, barrierefreiheit: {}, offline: {}, editor: {}, team: {}, kursrunde: {}, admin: {}, ton: {} };
 mkdirSync(`${AUSGABE}/bilder`, { recursive: true });
+mkdirSync(MEDIEN, { recursive: true });
 
 let axeQuelle = null;
 try {
@@ -23,10 +28,15 @@ try {
   messwerte.umgebung.axe = `nicht geladen: ${e.message}`;
 }
 
+/** Wartet, bis alle Ein- und Überblendungen zu Ende sind (endlose wie das Pulsieren nicht). */
+async function ruhe(seite) {
+  await seite.werte(`Promise.all(document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations !== Infinity).map((a) => a.finished.catch(() => null))).then(() => true)`);
+}
+
 async function pruefeBarrierefreiheit(seite, name) {
   if (!axeQuelle) return;
-  // Gemessen wird der fertige Zustand: Ein- und Überblendungen erst zu Ende laufen lassen (endlose wie das Pulsieren nicht)
-  await seite.werte(`Promise.all(document.getAnimations().filter((a) => a.effect?.getComputedTiming().iterations !== Infinity).map((a) => a.finished.catch(() => null))).then(() => true)`);
+  // Gemessen wird der fertige Zustand
+  await ruhe(seite);
   if (!(await seite.werte('typeof axe !== "undefined"'))) await seite.werte(axeQuelle + ';true');
   const r = await seite.werte(`axe.run(document, { runOnly: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] })
     .then((r) => ({ verstoesse: r.violations.map((v) => ({ id: v.id, auswirkung: v.impact, stellen: v.nodes.length, beispiel: v.nodes[0]?.target?.join(' ') })), bestanden: r.passes.length }))`);
@@ -47,6 +57,47 @@ async function geraet(seite, art, schema = 'hell') {
   } else {
     await seite.sende('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
   }
+}
+
+/** Bild für die README: 1280 px breit, doppelte Pixeldichte, sichtbarer Ausschnitt, nach allen Einblendungen. */
+async function scharf(seite, datei, hoehe = 900) {
+  await seite.sende('Emulation.setDeviceMetricsOverride', { width: 1280, height: hoehe, deviceScaleFactor: 2, mobile: false });
+  await seite.werte(`document.documentElement.style.scrollbarWidth = 'none'; document.getElementById('meldung')?.classList.remove('sichtbar'); true`);
+  await new Promise((r) => setTimeout(r, 900));
+  await ruhe(seite);
+  writeFileSync(`${MEDIEN}/${datei}`, await seite.bild({ ganz: false }));
+  await seite.werte(`document.documentElement.style.scrollbarWidth = ''; true`);
+  await seite.sende('Emulation.setDeviceMetricsOverride', { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
+}
+
+/** Simulierte Person ohne Browser, über die Schnittstelle (für Kursrunde und Administration). */
+function apiSitzung() {
+  let cookie = '';
+  return async (methode, pfad, daten) => {
+    const r = await fetch(APP + pfad, { method: methode, headers: { ...(daten ? { 'Content-Type': 'application/json' } : {}), ...(cookie ? { Cookie: cookie } : {}) }, body: daten ? JSON.stringify(daten) : undefined });
+    const c = r.headers.get('set-cookie');
+    if (c) cookie = c.split(';')[0];
+    const text = await r.text();
+    if (!r.ok) throw new Error(`${methode} ${pfad}: ${r.status} ${text}`);
+    return text ? JSON.parse(text) : null;
+  };
+}
+
+const knopfMitText = (text) => `[...document.querySelectorAll('main button')].find((b) => b.textContent.includes(${JSON.stringify(text)}))`;
+
+async function beitreten(seite) {
+  await seite.gehe(`${APP}/`);
+  await seite.warte(`document.querySelector('#kurscode')`);
+  await seite.werte(`document.querySelector('#kurscode').value = 'DEMO'; document.querySelector('#kurscode').form.requestSubmit(); true`);
+  await seite.warte(`document.querySelector('.code-gross')`);
+  await seite.werte(`document.querySelector('main .knopf-haupt').click(); true`);
+  await seite.warte(`document.querySelector('.kacheln')`);
+}
+
+async function alsLehrende(seite, ziel) {
+  await seite.gehe(`${APP}/lehrende${ziel}`);
+  await seite.warte(`document.querySelector('#schluessel')`);
+  await seite.werte(`document.querySelector('#schluessel').value = 'nachweis'; document.querySelector('#schluessel').form.requestSubmit(); true`);
 }
 
 const ZUSTAND = `(() => {
@@ -98,6 +149,9 @@ async function spieleImBrowser(seite, praefix, { fotos = true, falschBei = 'diag
         }
       }
       await klickeUndWarte(seite, `document.querySelector('.reihe').closest('form').requestSubmit()`);
+    } else if (z.mechanik === 'auswahl') {
+      const ids = Array.isArray(e.antwort) ? e.antwort : [e.antwort];
+      await klickeUndWarte(seite, `(() => { const f = document.querySelector('fieldset.auswahl input').form; for (const i of f.querySelectorAll('input')) i.checked = ${JSON.stringify(ids)}.includes(i.value); f.requestSubmit(); })()`);
     } else {
       throw new Error(`Unbekannte Mechanik ${z.mechanik}`);
     }
@@ -193,6 +247,258 @@ async function lehrendeSitzung() {
   seite.browser.schliesse();
 }
 
+/** Editor: öffnen, Aufgabe wählen, Tippfehler prüfen lassen, „Zur Stelle“, speichern, Vorschau durchspielen. */
+async function editorSitzung() {
+  const kontext = await Cdp.neuerKontext();
+  const seite = await Cdp.neueSeite(undefined, kontext);
+  await geraet(seite, 'desktop');
+  await alsLehrende(seite, '#szenarien');
+  await seite.warte(`document.querySelector('a[href="#editor/spannungsteiler"]')`);
+  await seite.werte(`document.querySelector('a[href="#editor/spannungsteiler"]').click(); true`);
+  await seite.warte(`document.querySelector('.editor-ablauf [data-wahl="teilspannung"]') && document.querySelector('[data-pfad="titel"]')`);
+  await pruefeBarrierefreiheit(seite, 'editor-allgemein');
+  await seite.werte(`document.querySelector('[data-wahl="teilspannung"]').click(); true`);
+  await seite.warte(`document.querySelector('[data-pfad="knoten.teilspannung.loesung"]')`);
+  await seite.werte(`window.scrollTo(0, 0); document.activeElement?.blur(); true`);
+  await foto(seite, 'lehrende-04-editor');
+  await scharf(seite, 'editor.png', 1000);
+  await pruefeBarrierefreiheit(seite, 'editor-aufgabe');
+  const setze = (pfad, wert) => seite.werte(`(() => { const f = document.querySelector('[data-pfad="${pfad}"]'); f.value = ${JSON.stringify(wert)}; f.dispatchEvent(new Event('input', { bubbles: true })); f.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
+  const werkzeug = (text) => seite.werte(`[...document.querySelectorAll('.editor-werkzeuge button')].find((b) => b.textContent.includes(${JSON.stringify(text)})).click(); true`);
+  // Tippfehler in der Formel: „Prüfen“ meldet ihn mit Fundstelle, „Zur Stelle“ führt zum Feld
+  await setze('knoten.teilspannung.loesung', 'U * R2 / (R1 + R3)');
+  await werkzeug('Prüfen');
+  await seite.warte(`document.querySelector('.pruefergebnis.mit-fehlern')`);
+  messwerte.editor.fehlermeldung = await seite.werte(`document.querySelector('.pruefergebnis li').innerText.replace(/\\s*Zur Stelle.*$/s, '')`);
+  messwerte.editor.fehlerAmFeld = await seite.werte(`document.querySelector('[data-pfad="knoten.teilspannung.loesung"]').getAttribute('aria-invalid')`);
+  await foto(seite, 'lehrende-05-editor-fehler');
+  await pruefeBarrierefreiheit(seite, 'editor-fehler');
+  await seite.werte(`document.querySelector('.pruefergebnis li button').click(); true`);
+  messwerte.editor.zurStelleFokus = await seite.werte(`document.activeElement?.dataset.pfad ?? null`);
+  // Korrigieren, Titel ändern, als neue Version speichern
+  await setze('knoten.teilspannung.loesung', 'U * R2 / (R1 + R2)');
+  await seite.werte(`document.querySelector('[data-wahl="allgemein"]').click(); true`);
+  await seite.warte(`document.querySelector('[data-pfad="titel"]')`);
+  await setze('titel', 'Übung: Spannungsteiler im Praktikum');
+  await werkzeug('speichern');
+  await seite.warte(`document.querySelector('.pruefergebnis.ohne-fehler h2')?.textContent.includes('gespeichert')`);
+  messwerte.editor.gespeichert = await seite.werte(`document.querySelector('.pruefergebnis h2').textContent`);
+  messwerte.editor.versionen = await seite.werte(`fetch('/api/lehrende/szenarien/spannungsteiler').then((r) => r.json()).then((j) => j.versionen.map((v) => v.version + ' ' + v.quelle))`);
+  await geraet(seite, 'desktop', 'dunkel');
+  await pruefeBarrierefreiheit(seite, 'editor-dunkel');
+  await geraet(seite, 'telefon');
+  await pruefeBarrierefreiheit(seite, 'editor-telefon');
+  await foto(seite, 'telefon-10-editor');
+  await geraet(seite, 'desktop');
+  // Vorschau: das neue Fenster abfangen und die Adresse in einem Tab desselben Browserkontexts öffnen
+  await seite.werte(`window.open = () => ({ location: { set href(u) { window.__vorschau = u; } }, close() {} }); true`);
+  await werkzeug('Vorschau');
+  await seite.warte(`window.__vorschau`);
+  const vorschau = await Cdp.neueSeite(undefined, kontext);
+  await geraet(vorschau, 'desktop');
+  await vorschau.gehe(APP + await seite.werte(`window.__vorschau`));
+  await vorschau.warte(`document.querySelector('main article[data-knoten]')`);
+  messwerte.editor.vorschauTitel = await vorschau.werte('document.title');
+  messwerte.editor.vorschauErgebnis = (await spieleImBrowser(vorschau, 'vorschau', { fotos: false })).ergebnis;
+  await pruefeBarrierefreiheit(vorschau, 'editor-vorschau-ende');
+  vorschau.schliesse();
+  seite.schliesse();
+  seite.browser.schliesse();
+}
+
+/** Teamspiel: drei Personen in drei Browsern; Abstimmung, Entscheidung, alle an derselben Stelle. */
+async function teamSitzung() {
+  const seiten = [];
+  for (let i = 0; i < 3; i++) {
+    const s = await Cdp.neueSeite(undefined, await Cdp.neuerKontext());
+    await geraet(s, 'desktop');
+    await beitreten(s);
+    seiten.push(s);
+  }
+  const [a, b, c] = seiten;
+  await a.werte(`document.querySelector('a[href="#/team/fussgaengerbruecke"]').click(); true`);
+  await a.warte(knopfMitText('Neues Team gründen'));
+  await pruefeBarrierefreiheit(a, 'team-start');
+  await a.werte(`${knopfMitText('Neues Team gründen')}.click(); true`);
+  await a.warte(`document.querySelector('.gruppe-band .code') && document.querySelector('main article[data-knoten]')`);
+  const code = await a.werte(`document.querySelector('.gruppe-band .code').textContent`);
+  for (const s of [b, c]) {
+    await s.werte(`location.hash = '#/team/fussgaengerbruecke'; true`);
+    await s.warte(`document.querySelector('#teamcode')`);
+    await s.werte(`document.querySelector('#teamcode').value = ${JSON.stringify(code.toLowerCase())}; document.querySelector('#teamcode').form.requestSubmit(); true`);
+    await s.warte(`document.querySelector('main article[data-knoten]') && document.querySelector('.abstimmung')`);
+  }
+  await a.warte(`document.querySelector('.gruppe-band')?.innerText.includes('3 Personen')`);
+  await a.werte(`document.querySelector('[data-option="sperren"]').click(); true`);
+  await b.werte(`document.querySelector('[data-option="offen_lassen"]').click(); true`);
+  for (const s of seiten) await s.warte(`document.querySelector('.abstimmung-kopf')?.innerText.includes('2 von 3')`);
+  messwerte.team.abstimmungBeiC = await c.werte(`document.querySelector('.abstimmung').innerText.split('\\n').slice(0, 4).join(' | ')`);
+  await a.werte(`document.querySelector('.abstimmung-regel').open = true; window.scrollTo(0, 0); document.activeElement?.blur(); true`);
+  await foto(a, 'desktop-10-team-abstimmung');
+  const hoehe = await a.werte(`Math.min(1300, Math.ceil(document.querySelector('.abstimmung').getBoundingClientRect().bottom + window.scrollY + 28))`);
+  await scharf(a, 'teamspiel.png', Math.max(900, hoehe));
+  await pruefeBarrierefreiheit(a, 'team-abstimmung');
+  await geraet(b, 'telefon');
+  await pruefeBarrierefreiheit(b, 'team-abstimmung-telefon');
+  await foto(b, 'telefon-11-team-abstimmung');
+  await geraet(c, 'desktop', 'dunkel');
+  await pruefeBarrierefreiheit(c, 'team-abstimmung-dunkel');
+  // Die dritte Stimme entscheidet (2 : 1); gemessen wird, bis alle drei Browser die Rückmeldung zeigen (Abfrage alle 50 ms)
+  const t0 = Date.now();
+  await c.werte(`document.querySelector('[data-option="sperren"]').click(); true`);
+  await Promise.all(seiten.map((s) => s.warte(`document.querySelector('main article[data-typ="rueckmeldung"]')`)));
+  messwerte.team.dritteStimmeBisAlleDreiMs = Date.now() - t0;
+  messwerte.team.rueckmeldung = await Promise.all(seiten.map((s) => s.werte(`document.querySelector('.rueckmeldung-titel').innerText`)));
+  await pruefeBarrierefreiheit(a, 'team-rueckmeldung');
+  for (const s of seiten) await klickeUndWarte(s, `document.querySelector('main article .knopf-haupt').click()`);
+  messwerte.team.knotenDanach = await Promise.all(seiten.map((s) => s.werte(`document.querySelector('main article').dataset.knoten`)));
+  for (const s of seiten) { s.schliesse(); s.browser.schliesse(); }
+}
+
+/** Kursrunde: eine Lehrperson im Browser, 24 simulierte Studierende über die Schnittstelle, eine Person im Telefon-Browser. */
+async function kursrundeSitzung() {
+  const lehr = await Cdp.neueSeite(undefined, await Cdp.neuerKontext());
+  await geraet(lehr, 'desktop');
+  await alsLehrende(lehr, '#runde');
+  await lehr.warte(`document.querySelector('#runde-kurs') && document.querySelector('#runde-szenario option')`);
+  await pruefeBarrierefreiheit(lehr, 'kursrunde-start');
+  await lehr.werte(`(() => { const k = document.querySelector('#runde-kurs'); k.value = [...k.options].find((o) => o.textContent.startsWith('Demokurs')).value; k.dispatchEvent(new Event('change')); const s = document.querySelector('#runde-szenario'); s.value = 'fussgaengerbruecke'; s.form.requestSubmit(); return true; })()`);
+  await lehr.warte(`location.hash.split('/')[1]?.length === 36 && document.querySelector('.kennzahlen')`);
+  const rid = await lehr.werte(`location.hash.split('/')[1]`);
+  const sim = [];
+  for (let i = 0; i < 24; i++) {
+    const c = apiSitzung();
+    await c('POST', '/api/anmelden/studierende', { kurscode: 'DEMO' });
+    await c('POST', `/api/runden/${rid}/beitreten`, {});
+    sim.push(c);
+  }
+  const st = await Cdp.neueSeite(undefined, await Cdp.neuerKontext());
+  await geraet(st, 'telefon');
+  await beitreten(st);
+  await st.warte(`document.querySelector('.gemeinsam-zeile.live button')`);
+  await pruefeBarrierefreiheit(st, 'uebersicht-live-runde-telefon');
+  await st.werte(`document.querySelector('.gemeinsam-zeile.live button').click(); true`);
+  await st.warte(`document.querySelector('main article[data-knoten="meldung"]') && document.querySelector('.abstimmung')`);
+  const stand = () => sim[0]('GET', `/api/gruppen/${rid}`);
+  const alle = async (fn) => { const a = await stand(); await Promise.all(sim.map((c, i) => c('POST', `/api/gruppen/${rid}/stimmen`, { nr: a.nr, ereignis: fn(a, i) }))); return a; };
+  const schliessen = `[...document.querySelectorAll('main button')].find((b) => b.textContent.includes('Abstimmung schließen')).click()`;
+  // 1. Meldung: 20 sperren, 4 offen lassen; die Person im Browser stimmt als 25. und entscheidet damit
+  await alle((_, i) => ({ typ: 'wahl', knoten: 'meldung', option: i < 20 ? 'sperren' : 'offen_lassen' }));
+  await klickeUndWarte(st, `document.querySelector('[data-option="sperren"]').click()`);
+  await st.warte(`document.querySelector('main article[data-typ="rueckmeldung"]')`);
+  await klickeUndWarte(st, `document.querySelector('main article .knopf-haupt').click()`);
+  // 2. Prüfschritte: 21 richtig, 3 falsch; die Lehrperson schließt in der Oberfläche
+  const richtig = ['unterlagen', 'sicht', 'kraft', 'nachweis', 'massnahme'];
+  await alle((_, i) => ({ typ: 'antwort', knoten: 'pruefschritte', antwort: i < 21 ? richtig : ['sicht', 'unterlagen', 'kraft', 'nachweis', 'massnahme'] }));
+  await lehr.warte(`document.querySelector('.kennzahlen')?.innerText.includes('24 von 25')`);
+  await lehr.werte(`${schliessen}; true`);
+  await st.warte(`document.querySelector('main article[data-typ="rueckmeldung"]')`);
+  await klickeUndWarte(st, `document.querySelector('main article .knopf-haupt').click()`);
+  // 3. Modell
+  await alle(() => ({ typ: 'wahl', knoten: 'modell', option: 'rechnen' }));
+  await klickeUndWarte(st, `document.querySelector('[data-option="rechnen"]').click()`);
+  await st.warte(`document.querySelector('main article[data-knoten="diagonale"]')`);
+  // 4. Diagonale: aus den angezeigten Zahlen gerechnet; 15 richtig, 6 „zwei Diagonalen“ übersehen, 3 „F / 2“
+  const a = await stand();
+  const F = Number(/F = ([\d.,]+) kN/.exec(a.knoten.frage)[1].replace(/\./g, '').replace(',', '.'));
+  const sin = Math.sin((Number(/θ = ([\d.,]+)°/.exec(a.knoten.frage)[1].replace(',', '.')) * Math.PI) / 180);
+  const zahlText = (x) => String(Math.round(x * 100) / 100).replace('.', ',');
+  await alle((_, i) => ({ typ: 'antwort', knoten: 'diagonale', antwort: zahlText(i < 15 ? F / (2 * sin) : i < 21 ? F / sin : F / 2) }));
+  await lehr.warte(`document.querySelector('.kennzahlen')?.innerText.includes('24 von 25') && document.querySelectorAll('.runde-schritt.aktuell .balkenzeile').length === 3`);
+  await st.warte(`document.querySelector('.abstimmung-kopf')?.innerText.includes('24 von 25')`);
+  await lehr.werte(`window.scrollTo(0, 0); document.activeElement?.blur(); true`);
+  await new Promise((r) => setTimeout(r, 1200));
+  await foto(lehr, 'lehrende-06-kursrunde');
+  await scharf(lehr, 'kursrunde-lehrende.png');
+  await pruefeBarrierefreiheit(lehr, 'kursrunde-lehrende');
+  messwerte.kursrunde.verteilungJetzt = await lehr.werte(`[...document.querySelectorAll('.runde-schritt.aktuell .balkenzeile')].map((z) => z.innerText.replace(/\\s+/g, ' ').trim())`);
+  messwerte.kursrunde.schritte = await lehr.werte(`[...document.querySelectorAll('.runde-schritt')].map((z) => z.querySelector('h2, h3').textContent + ': ' + (z.querySelector('.runde-entscheidung')?.innerText.replace(/\\s+/g, ' ').trim() ?? 'offen'))`);
+  await geraet(lehr, 'desktop', 'dunkel');
+  await pruefeBarrierefreiheit(lehr, 'kursrunde-lehrende-dunkel');
+  await geraet(lehr, 'telefon');
+  await pruefeBarrierefreiheit(lehr, 'kursrunde-lehrende-telefon');
+  await geraet(lehr, 'desktop');
+  await foto(st, 'telefon-12-kursrunde');
+  await pruefeBarrierefreiheit(st, 'kursrunde-studierende-telefon');
+  messwerte.kursrunde.anzeigeTelefon = await st.werte(`document.querySelector('.abstimmung-kopf').innerText`);
+  const t0 = Date.now();
+  await lehr.werte(`${schliessen}; true`);
+  await st.warte(`document.querySelector('main article[data-typ="rueckmeldung"]')`);
+  messwerte.kursrunde.schliessenBisTelefonMs = Date.now() - t0;
+  messwerte.kursrunde.rueckmeldungTelefon = await st.werte(`document.querySelector('.rueckmeldung-titel').innerText`);
+  await lehr.werte(`window.confirm = () => true; [...document.querySelectorAll('main button')].find((b) => b.textContent.includes('Runde beenden')).click(); true`);
+  await lehr.warte(`document.querySelector('main')?.innerText.includes('Die Runde ist beendet')`);
+  messwerte.kursrunde.teilnehmende = '24 simuliert über die Schnittstelle, 1 im Browser auf Telefonbreite';
+  for (const s of [lehr, st]) { s.schliesse(); s.browser.schliesse(); }
+}
+
+/** Administration: Zugang anlegen, damit anmelden, sperren (abgemeldet, abgewiesen), entsperren; Einstellungen, Protokoll. */
+async function adminSitzung() {
+  const seite = await Cdp.neueSeite(undefined, await Cdp.neuerKontext());
+  await geraet(seite, 'desktop');
+  await seite.gehe(`${APP}/admin`);
+  await seite.warte(`document.querySelector('#schluessel')`);
+  await pruefeBarrierefreiheit(seite, 'admin-anmeldung');
+  await seite.werte(`document.querySelector('#schluessel').value = 'nachweis-admin'; document.querySelector('#schluessel').form.requestSubmit(); true`);
+  await seite.warte(`document.querySelector('table caption')`);
+  await pruefeBarrierefreiheit(seite, 'admin-zugaenge');
+  await seite.werte(`document.querySelector('#zugang-name').value = 'Lehrstuhl Baustatik'; document.querySelector('#zugang-name').form.requestSubmit(); true`);
+  await seite.warte(`document.querySelector('.schluessel-neu .code-gross')`);
+  const schluessel = await seite.werte(`document.querySelector('.schluessel-neu .code-gross').textContent`);
+  await seite.werte(`document.querySelector('.schluessel-neu .code-gross').textContent = 'XXXX-XXXX-XXXX-XXXX'; true`); // Schlüssel nicht im Bild
+  await foto(seite, 'admin-01-zugaenge');
+  await pruefeBarrierefreiheit(seite, 'admin-zugang-neu');
+  const lehr = apiSitzung();
+  messwerte.admin.anmeldungMitNeuemZugang = await lehr('POST', '/api/anmelden/lehrende', { schluessel }).then((r) => `200, Zugang „${r.zugang}“`, (e) => e.message.slice(0, 60));
+  const zeile = `[...document.querySelectorAll('tbody tr')].find((tr) => tr.innerText.includes('Lehrstuhl Baustatik'))`;
+  await seite.werte(`${zeile}.querySelector('button').click(); true`);
+  await seite.warte(`${zeile}?.innerText.includes('gesperrt')`);
+  messwerte.admin.nachSperrenSitzung = await lehr('GET', '/api/lehrende/kurse').then(() => 'noch angemeldet', (e) => (/: 401 /.test(e.message) ? '401: abgemeldet' : e.message.slice(0, 60)));
+  messwerte.admin.nachSperrenAnmeldung = await apiSitzung()('POST', '/api/anmelden/lehrende', { schluessel }).then(() => 'angemeldet', (e) => (/: 403 /.test(e.message) ? '403: abgewiesen, Zugang gesperrt' : e.message.slice(0, 60)));
+  await seite.werte(`${zeile}.querySelector('button').click(); true`);
+  await seite.warte(`${zeile}?.innerText.includes('aktiv')`);
+  messwerte.admin.nachEntsperren = await apiSitzung()('POST', '/api/anmelden/lehrende', { schluessel }).then(() => '200: angemeldet', (e) => e.message.slice(0, 60));
+  await seite.werte(`location.hash = '#einstellungen'; true`);
+  await seite.warte(`document.querySelector('#aufbewahrung')`);
+  await foto(seite, 'admin-02-einstellungen');
+  await pruefeBarrierefreiheit(seite, 'admin-einstellungen');
+  messwerte.admin.einstellungenZeilen = await seite.werte(`document.querySelectorAll('tbody tr').length`);
+  await seite.werte(`location.hash = '#protokoll'; true`);
+  await seite.warte(`document.querySelector('table caption')?.textContent.includes('Einträge')`);
+  await foto(seite, 'admin-03-protokoll');
+  await pruefeBarrierefreiheit(seite, 'admin-protokoll');
+  messwerte.admin.protokollAktionen = await seite.werte(`[...new Set([...document.querySelectorAll('tbody tr')].map((tr) => tr.children[3].textContent))]`);
+  await geraet(seite, 'desktop', 'dunkel');
+  await pruefeBarrierefreiheit(seite, 'admin-protokoll-dunkel');
+  await geraet(seite, 'telefon');
+  await pruefeBarrierefreiheit(seite, 'admin-protokoll-telefon');
+  seite.schliesse();
+  seite.browser.schliesse();
+}
+
+/** Ton: aus als Voreinstellung, Schalter, bleibt nach Neuladen an, Rückmeldung löst den passenden Ton aus. */
+async function tonSitzung() {
+  const seite = await Cdp.neueSeite(undefined, await Cdp.neuerKontext());
+  await geraet(seite, 'desktop');
+  await beitreten(seite);
+  messwerte.ton.voreinstellung = await seite.werte(`document.querySelector('.ton-schalter').getAttribute('aria-pressed')`);
+  await seite.werte(`document.querySelector('.ton-schalter').click(); true`);
+  await seite.warte(`document.querySelector('.ton-schalter').getAttribute('aria-pressed') === 'true'`);
+  await seite.warte(`fetch('/api/ich').then((r) => r.json()).then((j) => j.ton)`);
+  await seite.gehe(`${APP}/`);
+  await seite.warte(`document.querySelector('.ton-schalter') && document.querySelector('.kacheln')`);
+  messwerte.ton.nachNeuladen = await seite.werte(`document.querySelector('.ton-schalter').getAttribute('aria-pressed')`);
+  await pruefeBarrierefreiheit(seite, 'uebersicht-ton-an');
+  await seite.werte(`document.querySelector('a[href="#/spiel/fussgaengerbruecke"]').click(); true`);
+  await seite.warte(`document.querySelector('main article[data-knoten="meldung"]')`);
+  await klickeUndWarte(seite, `document.querySelector('[data-option="sperren"]').click()`);
+  messwerte.ton.gespieltNachGuterEntscheidung = await seite.werte(`import('/ton.js').then((m) => [...m.tonProtokoll])`);
+  messwerte.ton.textGleichzeitig = await seite.werte(`document.querySelector('.rueckmeldung-titel').innerText`);
+  messwerte.ton.webAudio = await seite.werte(`typeof AudioContext === 'function' ? 'AudioContext vorhanden' : 'fehlt'`);
+  seite.schliesse();
+  seite.browser.schliesse();
+}
+
 async function offline() {
   // OER-Export wie eine Lehrperson ihn herunterlädt, dann als Datei im Browser öffnen (file://, ohne Server)
   const anmeldung = await fetch(`${APP}/api/anmelden/lehrende`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ schluessel: 'nachweis' }) });
@@ -230,6 +536,14 @@ for (const p of PROFILE) {
   console.log(`Last ${JSON.stringify(p)}: ${JSON.stringify(r)}`);
   messwerte.last.push(r);
 }
+// Gemeinsam spielen: 50 Teams zu je drei simulierten Personen, dann eine Kursrunde mit 200 simulierten Personen
+if (process.env.LAST !== '0') {
+  for (const f of [() => lasttestTeams({ basis: APP, kurscode: 'DEMO', teams: 50, groesse: 3 }), () => lasttestRunde({ basis: APP, kurscode: 'DEMO', schluessel: 'nachweis', personen: 200 })]) {
+    const r = await f();
+    console.log(`Last ${r.art}: ${JSON.stringify(r)}`);
+    messwerte.last.push(r);
+  }
+}
 const probe = await Cdp.neueSeite();
 messwerte.umgebung.browser = probe.version.Browser;
 probe.schliesse();
@@ -239,9 +553,15 @@ await studierendeSitzung('telefon');
 await studierendeSitzung('desktop', 'dunkel');
 await riskanteEntscheidung();
 await lehrendeSitzung();
+await editorSitzung();
+await teamSitzung();
+await kursrundeSitzung();
+await adminSitzung();
+await tonSitzung();
 await offline();
 writeFileSync(`${AUSGABE}/messwerte.json`, JSON.stringify(messwerte, null, 2) + '\n');
 console.log(JSON.stringify(messwerte.browser, null, 2));
 console.log('Barrierefreiheit:', Object.entries(messwerte.barrierefreiheit).map(([k, v]) => `${k}: ${v.verstoesse.length} Verstöße`).join('; '));
 console.log('Offline:', JSON.stringify(messwerte.offline));
+console.log('Editor, Team, Kursrunde, Administration, Ton:', JSON.stringify({ editor: messwerte.editor, team: messwerte.team, kursrunde: messwerte.kursrunde, admin: messwerte.admin, ton: messwerte.ton }));
 process.exit(0);

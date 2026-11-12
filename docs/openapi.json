@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Spielbaukasten",
-    "version": "0.1.0",
-    "description": "Schnittstelle des Spielbaukastens. Anmeldung über ein HttpOnly-Cookie; schreibende Anfragen nur als application/json und von derselben Herkunft. Fehler kommen als {\"fehler\": \"…\"} auf Deutsch.",
+    "version": "0.2.0",
+    "description": "Schnittstelle des Spielbaukastens. Anmeldung über ein HttpOnly-Cookie; schreibende Anfragen nur als application/json und von derselben Herkunft. Fehler kommen als {\"fehler\": \"…\"} auf Deutsch. Drei Rollen: Studierende (Kurscode, Pseudonym), Lehrende (Schlüssel eines Zugangs), Administration (eigener Schlüssel). Live-Stände im Teamspiel und in der Kursrunde als Server-Sent Events (text/event-stream, Ereignis „stand“).",
     "license": {
       "name": "AGPL-3.0-only",
       "identifier": "AGPL-3.0-only"
@@ -103,7 +103,7 @@
     },
     "/api/anmelden/lehrende": {
       "post": {
-        "summary": "Anmeldung Lehrende mit dem Schlüssel der Instanz",
+        "summary": "Anmeldung als Lehrende mit dem gemeinsamen Schlüssel der Instanz oder einem persönlichen Zugang; gesperrte Zugänge werden abgewiesen",
         "tags": [
           "öffentlich"
         ],
@@ -634,6 +634,744 @@
             }
           }
         ],
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/anmelden/admin": {
+      "post": {
+        "summary": "Anmeldung der Administration mit ihrem Schlüssel",
+        "tags": [
+          "öffentlich"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/ich/einstellungen": {
+      "put": {
+        "summary": "Eigene Einstellungen ändern: {\"ton\": true|false} (Ton aus, bis man ihn einschaltet)",
+        "tags": [
+          "alle"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/szenarien/{id}": {
+      "get": {
+        "summary": "Szenario als JSON für den Editor, mit allen Versionen und den Bildern im Ordner",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/lehrende/szenarien/{id}/versionen": {
+      "post": {
+        "summary": "Im Editor bearbeitetes Szenario als neue Version speichern: {\"szenario\", \"basis\"}; Version = höchste + 1; 422 mit Fehlerliste, 409 wenn inzwischen eine neuere Version gespeichert wurde",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "201": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/lehrende/vorschau": {
+      "post": {
+        "summary": "Entwurf prüfen und für die Vorschau bereitstellen (nur im Speicher, 2 Stunden); liefert die Adresse",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "201": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/vorschau/{id}": {
+      "get": {
+        "summary": "Vorschau des Entwurfs als Offline-Fassung (HTML, Fortschritt wird nicht gespeichert)",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "HTML-Seite",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/teams": {
+      "post": {
+        "summary": "Team gründen: {\"szenario\"}; liefert id und Team-Code",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "201": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/teams/beitreten": {
+      "post": {
+        "summary": "Mit Team-Code einem Team des eigenen Kurses beitreten",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/gruppen": {
+      "get": {
+        "summary": "Laufende Kursrunden des eigenen Kurses und eigene Teams",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/runden/{id}/beitreten": {
+      "post": {
+        "summary": "Einer laufenden Kursrunde des eigenen Kurses beitreten",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/gruppen/{id}": {
+      "get": {
+        "summary": "Gemeinsamer Stand eines Teams oder einer Kursrunde mit Abstimmung und eigener Stimme",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/gruppen/{id}/live": {
+      "get": {
+        "summary": "Live-Stand des Teams oder der Kursrunde",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events: Ereignis „stand“ mit dem Stand als JSON",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/gruppen/{id}/stimmen": {
+      "post": {
+        "summary": "Stimme abgeben oder ändern: {\"nr\", \"ereignis\"}; „hinweis“ gilt sofort für alle; 409 wenn schon entschieden",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/gruppen/{id}/schliessen": {
+      "post": {
+        "summary": "Abstimmung im Team vorzeitig schließen (nur wer das Team gegründet hat): {\"nr\"}",
+        "tags": [
+          "studierende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/lehrende/runden": {
+      "get": {
+        "summary": "Kursrunden (laufende und beendete)",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Kursrunde starten: {\"kurs\", \"szenario\"}",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "201": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/lehrende/runden/{id}": {
+      "get": {
+        "summary": "Live-Ansicht einer Kursrunde: je Schritt Summen der Stimmen, erst ab der Mindestgruppe",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/lehrende/runden/{id}/live": {
+      "get": {
+        "summary": "Live-Ansicht einer Kursrunde",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events: Ereignis „stand“ mit dem Stand als JSON",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/lehrende/runden/{id}/schliessen": {
+      "post": {
+        "summary": "Abstimmung der Kursrunde schließen: {\"nr\"}; die Mehrheit entscheidet",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/lehrende/runden/{id}/beenden": {
+      "post": {
+        "summary": "Kursrunde für alle beenden",
+        "tags": [
+          "lehrende"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/admin/zugaenge": {
+      "get": {
+        "summary": "Zugänge für Lehrende",
+        "tags": [
+          "admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Zugang anlegen: {\"bezeichnung\"}; der Schlüssel erscheint nur in dieser Antwort",
+        "tags": [
+          "admin"
+        ],
+        "responses": {
+          "201": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/admin/zugaenge/{id}": {
+      "put": {
+        "summary": "Zugang sperren oder entsperren: {\"gesperrt\": true|false}; Sperren meldet sofort ab",
+        "tags": [
+          "admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/admin/einstellungen": {
+      "get": {
+        "summary": "Aufbewahrungsfrist und Einstellungen der Instanz (nur lesen)",
+        "tags": [
+          "admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Aufbewahrungsfrist setzen: {\"aufbewahrungTage\": 7–3650}; räumt sofort auf",
+        "tags": [
+          "admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "sitzung": []
+          }
+        ]
+      }
+    },
+    "/api/admin/protokoll": {
+      "get": {
+        "summary": "Protokoll der Verwaltung (letzte 200 Einträge)",
+        "tags": [
+          "admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ansicht oder Ergebnis als JSON"
+          }
+        },
         "security": [
           {
             "sitzung": []

@@ -1,9 +1,9 @@
-// Szenarien: Dateien unter inhalte/szenarien/<id>/szenario.json (mit Medien daneben) oder von Lehrenden über die
-// Oberfläche hochgeladen. Jede Version wird unverändert in der Datenbank abgelegt; ein Versuch bleibt an seine
+// Szenarien: Dateien unter inhalte/szenarien/<id>/szenario.json (mit Medien daneben), von Lehrenden hochgeladen oder
+// im Editor gespeichert. Jede Version wird unverändert in der Datenbank abgelegt; ein Versuch bleibt an seine
 // Version gebunden und lässt sich auch nach einer Überarbeitung des Szenarios noch nachrechnen.
 
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
-import { join, resolve, sep, extname } from 'node:path';
+import { join, resolve, sep, extname, relative } from 'node:path';
 import { pruefeSzenario } from '../engine/szenario.js';
 
 export const MEDIENTYPEN = { '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp' };
@@ -54,6 +54,39 @@ export function speichereHochgeladen(db, s) {
   db.prepare("INSERT INTO szenario (id, version, json, quelle, geladen) VALUES (?, ?, ?, 'hochgeladen', ?)")
     .run(s.id, s.version, JSON.stringify(s), new Date().toISOString());
   return { ok: true, fehler: [], warnungen };
+}
+
+/**
+ * Speichert eine im Editor bearbeitete Fassung als neue Version (höchste + 1). `basis` ist die Version, die im Editor
+ * geöffnet war (0 für ein neues Szenario); hat inzwischen jemand anderes gespeichert, wird nichts überschrieben.
+ */
+export function speichereVersion(db, s, { basis, quelle = 'editor' }) {
+  const hoechste = db.prepare('SELECT max(version) AS v FROM szenario WHERE id = ?').get(s.id).v ?? 0;
+  if (basis !== hoechste) {
+    const meldung = basis === 0 ? `Die Kennung „${s.id}“ ist schon vergeben. Bitte eine andere wählen.` : `Inzwischen gibt es Version ${hoechste}. Bitte das Szenario neu öffnen; Ihre Änderungen sind nicht gespeichert.`;
+    return { ok: false, konflikt: true, hoechste, fehler: [{ pfad: 'version', meldung }], warnungen: [] };
+  }
+  const neu = { ...s, version: hoechste + 1 };
+  const { fehler, warnungen } = pruefeSzenario(neu);
+  if (fehler.length) return { ok: false, fehler, warnungen };
+  db.prepare('INSERT INTO szenario (id, version, json, quelle, geladen) VALUES (?, ?, ?, ?, ?)')
+    .run(neu.id, neu.version, JSON.stringify(neu), quelle, new Date().toISOString());
+  return { ok: true, version: neu.version, fehler: [], warnungen };
+}
+
+/** Alle Versionen eines Szenarios, neueste zuerst. */
+export function versionen(db, id) {
+  return db.prepare('SELECT version, quelle, geladen FROM szenario WHERE id = ? ORDER BY version DESC').all(id);
+}
+
+/** Bilder im Ordner eines Szenarios (für die Bildauswahl im Editor), relativ zum Ordner. */
+export function medienListe(verzeichnis, szenarioId) {
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(szenarioId)) return [];
+  const basis = resolve(verzeichnis, szenarioId);
+  if (!existsSync(basis)) return [];
+  return readdirSync(basis, { recursive: true, withFileTypes: true })
+    .filter((e) => e.isFile() && MEDIENTYPEN[extname(e.name).toLowerCase()])
+    .map((e) => relative(basis, join(e.parentPath ?? e.path, e.name)).split(sep).join('/')).sort();
 }
 
 const cache = new Map();

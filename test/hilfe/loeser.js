@@ -10,13 +10,20 @@ const runde = (x) => String(Math.round(x * 100) / 100).replace('.', ',');
 export function neuerLoeser({ fehlerquote = 0, wahlStreuung = 0, zufall = Math.random } = {}) {
   const w = {};
   const falschZuerst = new Set();
-  return function naechstes(a) {
+  /** Zahlen aus dem angezeigten Text merken, wie eine Person, die mitliest (im Team auch, wenn andere entschieden haben). */
+  function lies(a) {
     const k = a.knoten;
     const text = `${k.text ?? ''} ${k.frage ?? ''}`;
     let m;
     if ((m = /F = ([\d.,]+) kN/.exec(text))) w.F = zahl(m[1]);
     if ((m = /θ = ([\d.,]+)°/.exec(text))) w.theta = zahl(m[1]);
     if ((m = /U = ([\d.,]+) V, oben R1 = ([\d.,]+) kΩ, unten R2 = ([\d.,]+) kΩ/.exec(text))) Object.assign(w, { U: zahl(m[1]), R1: zahl(m[2]), R2: zahl(m[3]) });
+  }
+  naechstes.lies = lies;
+  return naechstes;
+  function naechstes(a) {
+    const k = a.knoten;
+    lies(a);
 
     if (k.typ === 'szene') {
       const bevorzugt = ['sperren', 'reparatur', 'rechnen', 'los'];
@@ -36,5 +43,5 @@ export function neuerLoeser({ fehlerquote = 0, wahlStreuung = 0, zufall = Math.r
       antwort = runde(zahl(antwort) * 2);
     }
     return { typ: 'antwort', knoten: k.id, antwort };
-  };
+  }
 }

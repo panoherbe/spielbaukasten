@@ -1,23 +1,32 @@
 // Startpunkt der Offline-Fassung (OER-Export): Engine und Spieler laufen ganz im Browser, ohne Server und ohne
 // Anmeldung. Der Fortschritt bleibt nur auf diesem Gerät (localStorage). Für Übung und Selbststudium gedacht;
-// die Lösungen stehen in dieser Datei.
+// die Lösungen stehen in dieser Datei. Dieselbe Fassung dient als Vorschau im Editor; dann wird nichts gespeichert.
 
 import { starte, wende } from '../engine/ablauf.js';
 import { ansicht } from '../engine/ansicht.js';
 import { neuerSeed } from '../engine/zufall.js';
 import { spieler } from './spieler.js';
+import { setzeTon, tonSchalter } from './ton.js';
 
 const szenario = JSON.parse(document.getElementById('szenario-daten').textContent);
 const medien = JSON.parse(document.getElementById('medien-daten').textContent);
 const grafik = JSON.parse(document.getElementById('grafik-daten').textContent);
+const vorschau = JSON.parse(document.getElementById('vorschau-daten')?.textContent ?? 'false');
 const SPEICHER = `spielbaukasten:${szenario.id}:v${szenario.version}`;
+const TON = 'spielbaukasten:ton';
 
 function lade() {
+  if (vorschau) return null;
   try { return JSON.parse(localStorage.getItem(SPEICHER)); } catch { return null; }
 }
 function speichere(stand) {
+  if (vorschau) return;
   try { localStorage.setItem(SPEICHER, JSON.stringify(stand)); } catch { /* privates Fenster: dann ohne Fortsetzen */ }
 }
+
+// Ton: aus, bis jemand ihn einschaltet; die Einstellung bleibt auf diesem Gerät
+try { setzeTon(localStorage.getItem(TON) === 'an'); } catch { /* ohne Speicher: aus */ }
+document.getElementById('navigation')?.append(tonSchalter((an) => { try { localStorage.setItem(TON, an ? 'an' : 'aus'); } catch { /* egal */ } }));
 
 let stand = lade();
 let z;
