@@ -6,13 +6,15 @@ import { h, leere, fokus, melde, zahl } from './ui.js';
 import { symbol, ring } from './symbole.js';
 import { editor } from './editor.js';
 import { runden, rundeLive } from './kursrunde.js';
+import { VORLAGEN } from './vorlagen.js';
+import { ARTEN } from './klartext.js';
 
 const inhalt = document.getElementById('inhalt');
 const navigation = document.getElementById('navigation');
 const BEREICHE = [['kurse', 'Kurse'], ['szenarien', 'Szenarien'], ['runde', 'Live-Runde'], ['auswertung', 'Auswertung']];
 let offenerEditor = null; // fragt vor dem Verlassen, wenn Änderungen nicht gespeichert sind
 let aufraeumen = null; // schließt die Live-Verbindung einer Runde
-let neuerEntwurf = null; // Kennung und Titel für „Neues Szenario“
+let neuerEntwurf = null; // Vorlage, Titel und Name für „Neues Szenario aus Vorlage“
 let letzteAdresse = location.hash;
 
 function nav(aktiv) {
@@ -71,48 +73,76 @@ function fehlerliste(r) {
     h('ul', {}, r.warnungen.map((f) => h('li', {}, h('code', {}, f.pfad), ' ', f.meldung))));
 }
 
+const QUELLE = { datei: 'mitgeliefert', hochgeladen: 'hochgeladen', editor: 'im Editor' };
+
 async function szenarien() {
   const liste = await api('GET', '/api/lehrende/szenarien');
-  const neuId = h('input', { id: 'neu-id', required: true, autocomplete: 'off', spellcheck: 'false', pattern: '[a-z0-9][a-z0-9-]{1,60}', placeholder: 'z. B. fachwerk-knoten', 'aria-describedby': 'neu-id-h' });
-  const neuTitel = h('input', { id: 'neu-titel', required: true, autocomplete: 'off', placeholder: 'z. B. Übung: Knotenpunktverfahren' });
   const datei = h('input', { id: 'datei', type: 'file', accept: '.json,application/json' });
   const ergebnis = h('div', { 'aria-live': 'polite' });
   const lies = async () => { const f = datei.files[0]; if (!f) throw new Error('Bitte eine Datei wählen'); return JSON.parse(await f.text()); };
   const titel = h('h1', {}, 'Szenarien');
   leere(inhalt, titel,
+    h('div', { class: 'knopfreihe szenarien-kopf' },
+      h('a', { class: 'knopf knopf-haupt', href: '#vorlage' }, symbol('plus'), 'Neues Szenario aus Vorlage'),
+      h('p', { class: 'gedaempft' }, 'Entscheidungsspiel, Rechenübung oder Quiz: Sie ändern nur noch die Texte.')),
     h('div', { class: 'tabelle-rahmen' }, h('table', {},
-      h('thead', {}, h('tr', {}, ['Titel', 'id', 'Version', 'Quelle', 'Aufgaben', 'Lizenz', ''].map((t) => h('th', { scope: 'col' }, t)))),
+      h('caption', { class: 'nur-vorlesen' }, 'Szenarien dieser Installation'),
+      h('thead', {}, h('tr', {}, ['Titel', 'Version', 'Herkunft', 'Aufgaben', 'Lizenz', ''].map((t) => h('th', { scope: 'col' }, t)))),
       h('tbody', {}, liste.map((s) => h('tr', {},
-        h('td', {}, s.titel), h('td', {}, h('code', {}, s.id)), h('td', {}, s.version), h('td', {}, s.quelle), h('td', {}, s.aufgaben),
+        h('td', {}, s.titel), h('td', {}, s.version), h('td', {}, QUELLE[s.quelle] ?? s.quelle), h('td', {}, s.aufgaben),
         h('td', {}, s.lizenz.replace(/-/g, ' ')),
         h('td', { class: 'knopfreihe' },
           h('a', { class: 'knopf-klein', href: `#editor/${encodeURIComponent(s.id)}` }, symbol('stift'), 'Bearbeiten', h('span', { class: 'nur-vorlesen' }, `: ${s.titel}`)),
-          h('a', { class: 'knopf-klein', href: `/#/spiel/${s.id}` }, 'Vorschau'),
-          h('a', { class: 'knopf-klein', href: `/api/lehrende/oer/${s.id}`, download: `${s.id}-v${s.version}.html` }, 'OER-Export'),
-          h('button', { class: 'knopf-klein', type: 'button', onclick: async () => herunterladen(`${s.id}-v${s.version}.metadaten.json`, JSON.stringify(await api('GET', `/api/lehrende/oer/${s.id}/metadaten`), null, 2)) }, 'Metadaten'))))))),
-    h('section', { class: 'karte schmal' }, h('h2', {}, 'Neues Szenario anlegen'),
-      h('p', {}, 'Öffnet den Editor mit einer Vorlage aus Szene, Aufgabe und Ende. Gespeichert wird erst, wenn Sie „Als neue Version speichern“ wählen.'),
-      h('form', { class: 'stapel', onsubmit: (e) => {
-        e.preventDefault();
-        if (liste.some((s) => s.id === neuId.value)) return melde(`Die Kennung „${neuId.value}“ gibt es schon.`, 'fehler');
-        neuerEntwurf = { id: neuId.value, titel: neuTitel.value };
-        location.hash = '#editor/neu';
-      } },
-      h('label', { for: 'neu-titel', class: 'beschriftung' }, 'Titel'), neuTitel,
-      h('label', { for: 'neu-id', class: 'beschriftung' }, 'Kennung'),
-      h('p', { class: 'feld-hilfe', id: 'neu-id-h' }, 'Kleinbuchstaben, Ziffern und Bindestrich; bleibt über alle Versionen gleich.'), neuId,
-      h('button', { class: 'knopf knopf-haupt', type: 'submit' }, symbol('plus'), 'Im Editor anlegen'))),
-    h('section', { class: 'karte' }, h('h2', {}, 'Szenario-Datei prüfen oder hochladen (Fortgeschritten)'),
-      h('p', {}, 'Eine Datei szenario.json (Format: docs/INHALTE.md im Repository). Hochladen legt eine neue Version an; laufende Versuche bleiben bei ihrer Version.'),
-      h('div', { class: 'stapel' }, h('label', { for: 'datei', class: 'beschriftung' }, 'Datei'), datei),
-      h('div', { class: 'knopfreihe' },
-        h('button', { class: 'knopf', type: 'button', onclick: async () => { try { leere(ergebnis, fehlerliste(await api('POST', '/api/lehrende/szenarien/pruefen', await lies()))); } catch (e) { melde(e.message, 'fehler'); } } }, 'Nur prüfen'),
-        h('button', { class: 'knopf knopf-haupt', type: 'button', onclick: async () => {
-          try { const r = await api('POST', '/api/lehrende/szenarien', await lies()); leere(ergebnis, fehlerliste(r)); melde('Neue Version gespeichert.'); szenarien(); } catch (e) {
-            if (e instanceof ApiFehler && e.status === 422) leere(ergebnis, fehlerliste(e.daten)); else melde(e.message, 'fehler');
-          }
-        } }, 'Hochladen')),
-      ergebnis));
+          h('a', { class: 'knopf-klein', href: `/#/spiel/${s.id}` }, 'Vorschau', h('span', { class: 'nur-vorlesen' }, `: ${s.titel}`)),
+          h('a', { class: 'knopf-klein', href: `/api/lehrende/oer/${s.id}`, download: `${s.id}-v${s.version}.html` }, 'OER-Export', h('span', { class: 'nur-vorlesen' }, `: ${s.titel}`)),
+          h('button', { class: 'knopf-klein', type: 'button', onclick: async () => herunterladen(`${s.id}-v${s.version}.metadaten.json`, JSON.stringify(await api('GET', `/api/lehrende/oer/${s.id}/metadaten`), null, 2)) }, 'Metadaten', h('span', { class: 'nur-vorlesen' }, `: ${s.titel}`)))))))),
+    h('details', { class: 'karte fortgeschritten' }, h('summary', {}, symbol('einstellungen'), 'Für Fortgeschrittene: Szenario-Datei prüfen oder hochladen'),
+      h('div', { class: 'fortgeschritten-inhalt' },
+        h('p', {}, 'Eine Datei szenario.json (Format: docs/INHALTE.md im Repository). Hochladen legt eine neue Version an; laufende Versuche bleiben bei ihrer Version.'),
+        h('div', { class: 'stapel' }, h('label', { for: 'datei', class: 'beschriftung' }, 'Datei'), datei),
+        h('div', { class: 'knopfreihe' },
+          h('button', { class: 'knopf', type: 'button', onclick: async () => { try { leere(ergebnis, fehlerliste(await api('POST', '/api/lehrende/szenarien/pruefen', await lies()))); } catch (e) { melde(e.message, 'fehler'); } } }, 'Nur prüfen'),
+          h('button', { class: 'knopf knopf-haupt', type: 'button', onclick: async () => {
+            try { const r = await api('POST', '/api/lehrende/szenarien', await lies()); leere(ergebnis, fehlerliste(r)); melde('Neue Version gespeichert.'); szenarien(); } catch (e) {
+              if (e instanceof ApiFehler && e.status === 422) leere(ergebnis, fehlerliste(e.daten)); else melde(e.message, 'fehler');
+            }
+          } }, 'Hochladen')),
+        ergebnis)));
+  fokus(titel);
+}
+
+/** Neues Szenario aus einer Vorlage: Vorlage wählen, Titel und Name eintragen, im Editor öffnen. */
+async function vorlage() {
+  const liste = await api('GET', '/api/lehrende/szenarien');
+  let gewaehlt = VORLAGEN[0];
+  const neuTitel = h('input', { id: 'vorlage-titel', required: true, autocomplete: 'off', maxlength: 120, value: gewaehlt.titel, 'aria-describedby': 'vorlage-titel-h' });
+  const urheber = h('input', { id: 'vorlage-urheber', required: true, autocomplete: 'organization', maxlength: 200, 'aria-describedby': 'vorlage-urheber-h' });
+  let titelSelbst = false;
+  neuTitel.addEventListener('input', () => { titelSelbst = true; });
+  // Jede Vorlage eine Karte mit einem echten Optionsfeld (Pfeiltasten wählen); die Beschriftung deckt die ganze Karte ab
+  const karten = VORLAGEN.map((v, i) => h('div', { class: 'vorlage-karte' },
+    h('input', { type: 'radio', name: 'vorlage', id: `vorlage-${v.art}`, value: v.art, checked: i === 0, 'aria-describedby': `vorlage-${v.art}-b`,
+      onchange: () => { gewaehlt = v; if (!titelSelbst) neuTitel.value = v.titel; } }),
+    h('label', { for: `vorlage-${v.art}`, class: 'vorlage-name' }, h('span', { class: 'vorlage-zeichen', 'aria-hidden': 'true' }, symbol(v.zeichen)), v.name),
+    h('p', { class: 'vorlage-text', id: `vorlage-${v.art}-b` }, v.beschreibung),
+    h('p', { class: 'vorlage-ablauf' }, h('span', { class: 'nur-vorlesen' }, 'Ablauf: '), v.ablauf.map((x, j) => [j ? h('span', { class: 'vorlage-pfeil', 'aria-hidden': 'true' }, '→') : null, h('span', { class: 'chip' }, x)]))));
+  const titel = h('h1', {}, 'Neues Szenario aus Vorlage');
+  leere(inhalt,
+    h('p', { class: 'chips' }, h('a', { class: 'chip zurueck', href: '#szenarien' }, symbol('pfeil'), 'Zurück zu den Szenarien')),
+    titel,
+    h('p', { class: 'einleitung' }, 'Wählen Sie eine Vorlage. Sie öffnet sich im Editor und ist sofort spielbar; Sie ändern nur noch die Texte. Gespeichert wird erst, wenn Sie „Als neue Version speichern“ wählen.'),
+    h('form', { class: 'stapel vorlage-form', onsubmit: (e) => {
+      e.preventDefault();
+      neuerEntwurf = { vorlage: gewaehlt.art, titel: neuTitel.value.trim(), urheber: urheber.value.trim(), vorhanden: liste.map((s) => s.id) };
+      location.hash = '#editor/neu';
+    } },
+    h('fieldset', { class: 'vorlagen' }, h('legend', { class: 'beschriftung' }, '1. Vorlage wählen'), h('div', { class: 'vorlagen-raster' }, karten)),
+    h('div', { class: 'karte vorlage-angaben' },
+      h('label', { for: 'vorlage-titel', class: 'beschriftung' }, '2. Titel des Szenarios'),
+      h('p', { class: 'feld-hilfe', id: 'vorlage-titel-h' }, 'So sehen Studierende es in der Übersicht. Später unter „Allgemein“ änderbar.'), neuTitel,
+      h('label', { for: 'vorlage-urheber', class: 'beschriftung' }, '3. Ihr Name oder Ihre Einrichtung'),
+      h('p', { class: 'feld-hilfe', id: 'vorlage-urheber-h' }, 'Für die Lizenzangabe (CC BY 4.0), z. B. Lehrstuhl für Baustatik.'), urheber,
+      h('button', { class: 'knopf knopf-haupt', type: 'submit' }, symbol('stift'), 'Im Editor öffnen'))));
   fokus(titel);
 }
 
@@ -216,10 +246,10 @@ async function auswertung() {
         diagrammErgebnisse(r), diagrammErsterVersuch(r), diagrammFehler(r), diagrammEntscheidungen(r)),
       h('details', { class: 'karte alle-zahlen' }, h('summary', {}, 'Alle Zahlen als Tabelle'),
         h('div', { class: 'tabelle-rahmen' }, h('table', {},
-          h('caption', {}, 'Wo stehen die Studierenden? Je Knoten'),
-          h('thead', {}, h('tr', {}, ['Knoten', 'Typ', 'beantwortet', '1. Versuch richtig', 'aufgelöst', 'typische Fehler / Entscheidungen'].map((t) => h('th', { scope: 'col' }, t)))),
+          h('caption', {}, 'Wo stehen die Studierenden? Je Schritt'),
+          h('thead', {}, h('tr', {}, ['Schritt', 'Art', 'beantwortet', '1. Versuch richtig', 'aufgelöst', 'typische Fehler / Entscheidungen'].map((t) => h('th', { scope: 'col' }, t)))),
           h('tbody', {}, r.knoten.map((k) => h('tr', {},
-            h('td', {}, k.titel), h('td', {}, k.typ), h('td', {}, k.typ === 'aufgabe' ? k.versuche : '–'),
+            h('td', {}, k.titel), h('td', {}, ARTEN[k.typ] ?? k.typ), h('td', {}, k.typ === 'aufgabe' ? k.versuche : '–'),
             h('td', {}, k.typ === 'aufgabe' ? pz(k.ersterVersuchRichtig, k.versuche) : '–'), h('td', {}, k.typ === 'aufgabe' ? k.aufgeloest : '–'),
             h('td', {}, Object.entries(k.typ === 'szene' ? k.optionen : k.fehlerarten).map(([a, n]) => `${k.optionenText?.[a] ?? a}: ${n}`).join(' · ') || '–'))))))),
       h('button', { class: 'knopf', type: 'button', onclick: async () => herunterladen(`xapi-${wahlS.value}.json`, JSON.stringify(await api('GET', `/api/lehrende/xapi?${q}`), null, 2)) }, symbol('herunterladen'), 'xAPI-Statements herunterladen'));
@@ -244,12 +274,13 @@ async function zeige() {
   offenerEditor = null;
   const adresse = location.hash.replace('#', '') || 'kurse';
   const [bereich, id] = adresse.split('/');
-  nav(bereich === 'editor' ? 'szenarien' : bereich);
+  nav(bereich === 'editor' || bereich === 'vorlage' ? 'szenarien' : bereich);
   try {
     if (bereich === 'editor' && id === 'neu') {
-      if (!neuerEntwurf) { location.hash = '#szenarien'; return; }
+      if (!neuerEntwurf) { location.hash = '#vorlage'; return; }
       offenerEditor = await editor(inhalt, null, { neu: neuerEntwurf });
-    } else if (bereich === 'editor' && id) offenerEditor = await editor(inhalt, decodeURIComponent(id));
+    } else if (bereich === 'vorlage') await vorlage();
+    else if (bereich === 'editor' && id) offenerEditor = await editor(inhalt, decodeURIComponent(id));
     else if (bereich === 'runde' && id) aufraeumen = rundeLive(inhalt, id);
     else if (bereich === 'runde') await runden(inhalt);
     else await ({ kurse, szenarien, auswertung }[bereich] ?? kurse)();

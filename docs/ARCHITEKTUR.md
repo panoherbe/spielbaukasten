@@ -45,7 +45,9 @@ in ein Verzeichnis eintragen.
 | `server/gruppen.js` | Teamspiel und Live-Runde: gemeinsamer Ereignisstrom je Gruppe, Abstimmung, Live-Stände (Server-Sent Events), Live-Ansicht mit Mindestgruppe | z. B. WebSockets, wenn Rückkanal nötig |
 | `server/app.js` | HTTP-Schnittstelle (docs/openapi.json), Rollen, Zugänge, Protokoll, Vorschau, Auslieferung | — |
 | `web/spieler.js` | zeigt eine Ansicht als Spielbühne (Spielanzeige, Kapitelkarte, Szenenbild, Figur, Rückmeldung, Ergebnis) und meldet Ereignisse an ein Backend (Server, Gruppe oder lokale Engine) | — |
-| `web/editor.js` | Szenario-Editor: Ablauf und Formulare, Prüfung mit „Zur Stelle“, Vorschau, Speichern als neue Version | — |
+| `web/editor.js` | Szenario-Editor: Ablauf und Formulare, Prüfung mit „Zur Stelle“, Vorschau, Speichern als neue Version; Umbenennen, erster Schritt und JSON unter „Für Fortgeschrittene“ | — |
+| `web/vorlagen.js` | drei Vorlagen für neue Szenarien (Entscheidungsspiel, Rechenübung, Quiz), sofort fehlerfrei und spielbar | weitere Vorlagen |
+| `web/klartext.js` | interne Kennungen aus Titeln; Meldungen der Prüfung im Klartext (Schritt beim Titel, Feld wie im Formular) für den Editor | — |
 | `web/gruppe.js`, `web/kursrunde.js` | Teamspiel und Live-Runde für Studierende; Live-Runde für Lehrende | — |
 | `web/admin.js` | Administration: Zugänge, Aufbewahrungsfrist, Einstellungen, Protokoll | — |
 | `web/ton.js` | kurze Töne mit der Web Audio API, Schalter in der Kopfzeile | — |
@@ -116,6 +118,16 @@ Kurse, Freigaben, gespeicherte Szenarien, Live-Runden, Exporte), nie Spielschrit
 
 ## Editor und Vorschau
 
+Für Lehrende ohne Programmierkenntnisse heißt im Editor alles so, wie man es sieht: Schritte statt Knoten, Möglichkeiten
+statt Optionen, Spielanzeige statt Indikatoren. Ein neues Szenario beginnt mit einer von drei Vorlagen
+(`web/vorlagen.js`), die die Prüfung ohne Fehler und Hinweise bestehen. Interne Kennungen (des Szenarios und jedes
+Schritts) entstehen aus dem Titel (`kennung()` in `web/klartext.js`: Kleinbuchstaben, Ziffern, Bindestrich, eindeutig);
+solange ein Schritt nie gespeichert war, folgt seine Kennung dem Titel, danach bleibt sie, damit Auswertungen über
+Versionen hinweg zusammenpassen. Die Prüfung (`engine/szenario.js`) meldet weiter Fundstellen wie
+`knoten.teilspannung.loesung`, die für Dateien und `tools/pruefe.js` gelten; der Editor schreibt sie mit
+`klartext()` um („Aufgabe „Teilspannung“, Lösung (Formel): …“) und führt mit „Zur Stelle“ genau in das Feld, auch wenn
+es unter „Für Fortgeschrittene“ liegt.
+
 Der Editor bearbeitet dasselbe JSON, das auch als Datei hochgeladen werden kann, und speichert es über
 `POST /api/lehrende/szenarien/{id}/versionen` als nächste Version; die Prüfung ist dieselbe wie beim Hochladen. Der
 Editor schickt mit, welche Version er geöffnet hatte: Hat inzwischen jemand anderes gespeichert, wird nichts
@@ -139,12 +151,13 @@ Speicher (zwei Stunden). Sie hat Stil und Skript in der Seite; die Content-Secur
 
 ## Qualität
 
-- 62 automatische Tests (`node --test`): Formelrechner, Prüfung von Szenarien, Ablauf über hunderte Startwerte,
+- 67 automatische Tests (`node --test`): Formelrechner, Prüfung von Szenarien, Ablauf über hunderte Startwerte,
   Schnittstelle mit drei Rollen, Manipulationsversuchen, Datenschutzfunktionen, OER-Export, Sterne und
   Auszeichnungen, Kapitelkarte, Bilder mit Alternativtext, Kopfzeilen und Kompression der Auslieferung; Editor
   (Speichern als neue Version, Konflikt, Vorschau), Teamspiel (Mehrheit, Gleichstand, Schließen, Live-Stände),
   Live-Runde (Summen erst ab drei Stimmen), Administration (Sperren, Aufbewahrungsfrist, Protokoll), Übernahme einer
-  Datenbank von Version 0.1.
+  Datenbank von Version 0.1; Vorlagen (jede sofort fehlerfrei, jeder Weg bis zu einem Ende, über die Schnittstelle von
+  Studierenden gespielt), interne Kennungen aus Titeln, Prüfmeldungen im Klartext.
 - Lasttest (allein, 50 Teams, Live-Runde mit 200 simulierten Studierenden) und Browsertest mit Chrome über das
   DevTools-Protokoll, Barrierefreiheitsprüfung mit axe-core (`compose.nachweis.yaml`, Ergebnisse in `nachweis/`).
 - Keine Laufzeitabhängigkeiten: nichts zu aktualisieren außer Node.js selbst.

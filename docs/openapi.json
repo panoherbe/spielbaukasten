@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Spielbaukasten",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "Schnittstelle des Spielbaukastens. Anmeldung über ein HttpOnly-Cookie; schreibende Anfragen nur als application/json und von derselben Herkunft. Fehler kommen als {\"fehler\": \"…\"} auf Deutsch. Drei Rollen: Studierende (Kurscode, Pseudonym), Lehrende (Schlüssel eines Zugangs), Administration (eigener Schlüssel). Live-Stände im Teamspiel und in der Live-Runde als Server-Sent Events (text/event-stream, Ereignis „stand“).",
     "license": {
       "name": "AGPL-3.0-only",

@@ -1,4 +1,4 @@
-// Spielt die mitgelieferten Szenarien so, wie eine Person es täte: Zahlen werden aus dem angezeigten Text gelesen,
+// Spielt die mitgelieferten Szenarien (und die Rechenübung aus der Vorlage) so, wie eine Person es täte: Zahlen werden aus dem angezeigten Text gelesen,
 // nicht aus dem Szenario. Benutzt von Last- und Browsertest. `fehlerquote` streut absichtlich falsche erste
 // Antworten ein, damit die Messung auch Rückmeldungen und zweite Versuche enthält.
 
@@ -18,6 +18,7 @@ export function neuerLoeser({ fehlerquote = 0, wahlStreuung = 0, zufall = Math.r
     if ((m = /F = ([\d.,]+) kN/.exec(text))) w.F = zahl(m[1]);
     if ((m = /θ = ([\d.,]+)°/.exec(text))) w.theta = zahl(m[1]);
     if ((m = /U = ([\d.,]+) V, oben R1 = ([\d.,]+) kΩ, unten R2 = ([\d.,]+) kΩ/.exec(text))) Object.assign(w, { U: zahl(m[1]), R1: zahl(m[2]), R2: zahl(m[3]) });
+    if ((m = /A = ([\d.,]+) mm²/.exec(text))) w.A = zahl(m[1]);
   }
   naechstes.lies = lies;
   return naechstes;
@@ -37,6 +38,7 @@ export function neuerLoeser({ fehlerquote = 0, wahlStreuung = 0, zufall = Math.r
     else if (k.id === 'spannung') antwort = runde((1.5 * w.F / (2 * tand(w.theta)) * 1000) / 160);
     else if (k.id === 'teilspannung') antwort = runde((w.U * w.R2) / (w.R1 + w.R2));
     else if (k.id === 'last') antwort = 'sinkt';
+    else if (k.mechanik === 'zahl' && w.A && w.F) antwort = runde((w.F * 1000) / w.A); // Vorlage „Rechenübung“: σ = F / A
     else throw new Error(`Unbekannter Knoten ${k.id}`);
     if (k.mechanik === 'zahl' && !falschZuerst.has(k.id) && zufall() < fehlerquote) {
       falschZuerst.add(k.id);

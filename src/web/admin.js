@@ -92,7 +92,7 @@ async function protokoll() {
   const liste = await api('GET', '/api/admin/protokoll');
   const titel = h('h1', {}, 'Protokoll');
   leere(inhalt, titel,
-    h('p', { class: 'gedaempft' }, 'Was in der Verwaltung geschehen ist: Anmeldungen von Lehrenden und Administration, Zugänge, Kurse, Freigaben, gespeicherte Szenarien, Kursrunden, Exporte. Keine Spielschritte von Studierenden, keine IP-Adressen. Einträge werden nach der Aufbewahrungsfrist gelöscht.'),
+    h('p', { class: 'gedaempft' }, 'Was in der Verwaltung geschehen ist: Anmeldungen von Lehrenden und Administration, Zugänge, Kurse, Freigaben, gespeicherte Szenarien, Live-Runden, Exporte. Keine Spielschritte von Studierenden, keine IP-Adressen. Einträge werden nach der Aufbewahrungsfrist gelöscht.'),
     // Auf schmalen Bildschirmen scrollt die Tabelle seitlich; der Rahmen ist dafür mit der Tastatur erreichbar
     h('div', { class: 'tabelle-rahmen', tabindex: '0', role: 'region', 'aria-label': 'Protokoll, seitlich scrollbar' }, h('table', {},
       h('caption', {}, `Die letzten ${liste.length} Einträge`),

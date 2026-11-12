@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { starteApp, studierende, lehrende } from './hilfe/app.js';
 import { szenario as ladeSzenario } from '../src/server/inhalte.js';
 import { pruefeSzenario } from '../src/engine/szenario.js';
-import { vorlage } from '../src/web/editor.js';
+import { ausVorlage } from '../src/web/vorlagen.js';
 
 let t;
 before(async () => { t = await starteApp(); });
@@ -59,27 +59,23 @@ test('Editor: Fehler mit Fundstelle, nichts gespeichert; veraltete Grundlage erg
   assert.match(spaet.json.fehler[0].meldung, /Inzwischen gibt es Version 3/);
 });
 
-test('Editor: neues Szenario aus der Vorlage; Kennung lässt sich nicht doppelt vergeben', async () => {
+test('Editor: neues Szenario aus einer Vorlage; dieselbe Kennung lässt sich nicht doppelt vergeben', async () => {
   const l = await lehrende(t.basis);
-  const neu = vorlage('fachwerk-knoten', 'Übung: Knotenpunktverfahren');
-  const leer = pruefeSzenario(neu);
-  assert.ok(leer.fehler.some((f) => f.pfad === 'urheber'), 'Vorlage verlangt Urheber');
-  neu.kurzbeschreibung = 'Kräfte an einem Knoten.';
-  neu.urheber = ['Lehrstuhl Statik'];
-  neu.lernziele[0].text = 'Gleichgewicht am Knoten aufstellen';
-  neu.knoten.start.text = 'Ein Knoten eines Fachwerks.';
-  neu.knoten['aufgabe-1'].frage = 'Welche Bedingung gilt am Knoten?';
-  neu.knoten['aufgabe-1'].optionen[0].text = 'Summe der Kräfte gleich null';
-  neu.knoten['aufgabe-1'].optionen[1].text = 'Summe der Momente gleich eins';
-  assert.deepEqual(pruefeSzenario(neu), { fehler: [], warnungen: [] }, 'ausgefüllte Vorlage ist fehlerfrei');
-  const r = await l('POST', '/api/lehrende/szenarien/fachwerk-knoten/versionen', { szenario: neu, basis: 0 });
+  const vorhanden = (await l('GET', '/api/lehrende/szenarien')).json.map((x) => x.id);
+  const neu = ausVorlage('quiz', { titel: 'Quiz: Knotenpunktverfahren', urheber: 'Lehrstuhl Statik', vorhanden });
+  assert.equal(neu.id, 'quiz-knotenpunktverfahren', 'Kennung aus dem Titel');
+  assert.deepEqual(pruefeSzenario(neu), { fehler: [], warnungen: [] }, 'Vorlage ist sofort fehlerfrei');
+  const r = await l('POST', `/api/lehrende/szenarien/${neu.id}/versionen`, { szenario: neu, basis: 0 });
   assert.equal(r.status, 201, r.text);
   assert.equal(r.json.version, 1);
-  const doppelt = await l('POST', '/api/lehrende/szenarien/fachwerk-knoten/versionen', { szenario: neu, basis: 0 });
+  const doppelt = await l('POST', `/api/lehrende/szenarien/${neu.id}/versionen`, { szenario: neu, basis: 0 });
   assert.equal(doppelt.status, 409);
   assert.match(doppelt.json.fehler[0].meldung, /schon vergeben/);
   const liste = (await l('GET', '/api/lehrende/szenarien')).json;
-  assert.equal(liste.find((x) => x.id === 'fachwerk-knoten').quelle, 'editor');
+  assert.equal(liste.find((x) => x.id === neu.id).quelle, 'editor');
+  // Ein zweites Szenario mit demselben Titel bekommt eine eigene Kennung
+  const zweites = ausVorlage('quiz', { titel: 'Quiz: Knotenpunktverfahren', urheber: 'Lehrstuhl Statik', vorhanden: liste.map((x) => x.id) });
+  assert.equal(zweites.id, 'quiz-knotenpunktverfahren-2');
 });
 
 test('Vorschau: Entwurf als Offline-Fassung im neuen Tab, ohne Speichern, mit Content-Security-Policy über Prüfsummen', async () => {

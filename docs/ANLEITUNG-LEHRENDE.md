@@ -6,50 +6,65 @@ Sie brauchen die Adresse Ihrer Installation und einen Schlüssel für Lehrende. 
 http://localhost:8080/lehrende mit dem Schlüssel `demo-lehrende`; einen persönlichen Schlüssel vergibt die
 Administration.
 
-Das Beispiel auf dieser Seite: Aus der „Übung: Spannungsteiler am Sensor“ wird die „Übung: Spannungsteiler im
-Praktikum“, freigegeben nur für einen Praktikumskurs.
+Zwei Beispiele auf dieser Seite: Ein neues Spiel entsteht aus der Vorlage „Rechenübung“; und aus der „Übung:
+Spannungsteiler am Sensor“ wird die „Übung: Spannungsteiler im Praktikum“, freigegeben nur für einen Praktikumskurs.
 
-## 1. Szenario im Editor öffnen
+## 1. Neues Szenario aus Vorlage oder vorhandenes öffnen
 
-Melden Sie sich unter `/lehrende` an und öffnen Sie **Szenarien**. In der Tabelle steht bei jedem Lernspiel
-**Bearbeiten**. Für ein ganz neues Spiel tragen Sie unter „Neues Szenario anlegen“ einen Titel und eine Kennung ein
-(Kleinbuchstaben, Ziffern, Bindestrich) und wählen **Im Editor anlegen**; der Editor beginnt dann mit einer Vorlage aus
-einer Szene, einer Aufgabe und einem Ende.
+Melden Sie sich unter `/lehrende` an und öffnen Sie **Szenarien**.
 
-![Szenario-Editor: links der Ablauf mit Allgemein, Kapitel und allen Knoten (Szene „Der Aufbau“ als Start, Aufgabe „Teilspannung“ gewählt, Aufgabe „Belastung“), rechts das Formular der Aufgabe mit Titel, Kapitel, Kennung, Art der Aufgabe, Frage und Lösung; oben Prüfen, Vorschau im neuen Tab, Als neue Version speichern](../medien/editor.png)
+- **Neues Spiel:** Wählen Sie oben **Neues Szenario aus Vorlage**. Es gibt drei Vorlagen:
+  **Entscheidungsspiel** (eine Szene, zwei Möglichkeiten mit Folgen, zwei Enden), **Rechenübung** (eine Rechenaufgabe
+  mit eigenen Zahlen je Person, Einheit, Toleranz und Rückmeldung zu einem typischen Fehler) und **Quiz** (zwei Fragen
+  mit Antworten zur Auswahl und Rückmeldung zu jeder Antwort). Wählen Sie eine, tragen Sie den Titel und Ihren Namen
+  oder Ihre Einrichtung ein (für die Lizenzangabe) und klicken Sie auf **Im Editor öffnen**. Die Vorlage ist sofort
+  spielbar: „Prüfen“ meldet keine Fehler, die Vorschau läuft bis zum Ende. Sie ändern nur noch die Texte.
+- **Vorhandenes Spiel:** In der Tabelle steht bei jedem Lernspiel **Bearbeiten**.
+
+![Neues Szenario aus Vorlage: drei Karten Entscheidungsspiel, Rechenübung und Quiz mit ihrem Ablauf, darunter Titel des Szenarios, Ihr Name oder Ihre Einrichtung und „Im Editor öffnen“](../medien/vorlage.png)
+
+![Szenario-Editor mit der Rechenübung aus der Vorlage: links der Ablauf mit Allgemein, Kapitel, der Aufgabe „Spannung im Zugstab“ (gewählt, Start) und dem Ende „Geschafft“; rechts das Formular der Aufgabe mit „Für Fortgeschrittene“ (geschlossen), Titel, Art der Aufgabe, Frage, Lösung als Formel mit einer Hilfe in einem Satz, Einheit und Toleranz; oben Prüfen, Vorschau im neuen Tab, Als neue Version speichern und der Stand „Keine Änderungen“](../medien/editor.png)
 
 **Links steht der Ablauf:** „Allgemein“ (Titel, Lizenz, Lernziele, Zahlen je Person), „Kapitel“ und darunter jeder
-Knoten des Spiels in seiner Reihenfolge, mit Art (Szene, Aufgabe, Verzweigung, Ende), Titel und den Wegen, die von
-ihm weiterführen („→ Belastung“). **Rechts steht das Formular** des gewählten Teils.
+Schritt des Spiels in seiner Reihenfolge, mit Art (Szene, Aufgabe, Verzweigung, Ende), Titel und den Wegen, die von
+ihm weiterführen („→ Geschafft“). **Rechts steht das Formular** des gewählten Teils. Oben rechts steht, ob es
+ungespeicherte Änderungen gibt.
 
 ## 2. Ändern, was Studierende lesen und entscheiden
 
-Wählen Sie links einen Knoten und ändern Sie rechts die Felder. Im Beispiel unter „Allgemein“ den **Titel** und im
-ersten Knoten den **Text der Szene**.
+Wählen Sie links einen Schritt und ändern Sie rechts die Felder, zum Beispiel unter „Allgemein“ den **Titel** und im
+ersten Schritt den **Text der Szene** oder die **Frage**.
 
-| Knoten | Was Sie im Formular einstellen |
+| Schritt | Was Sie im Formular einstellen |
 |---|---|
-| Szene | Text, Sprechblase der Figur; je Entscheidung: Text, **Führt zu**, Bewertung (gut, vertretbar, riskant), Rückmeldung, Lernziel, Wirkung auf die Anzeige (z. B. Sicherheit +20) |
+| Szene | Text, Sprechblase der Figur; je Möglichkeit: Text, **Führt zu**, Bewertung (gut, vertretbar, riskant), Rückmeldung, Lernziel, Wirkung auf die Spielanzeige (z. B. Sicherheit +20) |
 | Aufgabe | Art (**Rechenaufgabe** mit Lösung als Formel, **Einheit** und **Toleranz**; **Auswahl**; **Reihenfolge**), Frage, typische Fehler mit gezielter Rückmeldung, Punkte, Versuche, Hinweis, Rechenweg, Rückmeldung bei richtig und falsch, **Weiter zu** |
 | Verzweigung | Regeln „Wenn … dann weiter zu …“ und „Sonst weiter zu“ (unsichtbar für Studierende) |
 | Ende | Ergebnis (Erfolg, Teilerfolg, Misserfolg), Text |
 
-- **Neuer Knoten:** unten links Art wählen, **Hinzufügen**. Er erscheint nach dem gewählten Knoten; verbinden Sie ihn
-  über „Führt zu“ oder „Weiter zu“ mit dem Ablauf.
-- **Reihenfolge und Entfernen:** im Formular **Nach oben**, **Nach unten**, **Knoten entfernen**; Entscheidungen,
+- **Neuer Schritt:** unten links Art wählen, **Hinzufügen**. Er erscheint nach dem gewählten Schritt; verbinden Sie
+  ihn über „Führt zu“ oder „Weiter zu“ mit dem Ablauf.
+- **Reihenfolge und Entfernen:** im Formular **Nach oben**, **Nach unten**, **Schritt entfernen**; Möglichkeiten,
   Antworten und Regeln haben eigene Knöpfe zum Verschieben und Entfernen.
-- **Kennung umbenennen** passt alle Verweise im Spiel an.
-- **Zahlen je Person** (unter „Allgemein“, z. B. `F` von 30 bis 60 in Schritten von 5) setzen Sie in Texte mit
-  `{F}` ein, gerechnete Zahlen mit `{= F / 2 : 1}`. Die Lösung einer Rechenaufgabe ist eine Formel mit diesen Namen.
-- **Bilder:** Für Titelbild und Knoten wählen Sie ein Bild aus dem Ordner des Szenarios und schreiben den
+- **Zahlen je Person** (unter „Allgemein“, z. B. `F` von 10 bis 50 in Schritten von 5) setzen Sie in Texte mit
+  `{F}` ein, gerechnete Zahlen mit `{= F / 2 : 1}`. Die Lösung einer Rechenaufgabe ist eine Formel mit diesen Namen,
+  geschrieben wie auf dem Papier; das Feld zeigt dazu ein Beispiel aus Ihrem Szenario (in der Rechenübung
+  `F * 1000 / A`).
+- **Für Fortgeschrittene** (zu Beginn geschlossen, mit Maus oder Tastatur zu öffnen): Jeder Schritt hat eine interne
+  Kennung, die von selbst aus dem Titel entsteht; Sie brauchen sie nicht. Dort lässt sie sich umbenennen (alle
+  Verweise werden angepasst), und dort legen Sie fest, mit welchem Schritt das Spiel beginnt („Als Start
+  festlegen“).
+- **Bilder:** Für Titelbild und Schritte wählen Sie ein Bild aus dem Ordner des Szenarios und schreiben den
   Alternativtext dazu. Neue Bilder hochladen kann der Editor noch nicht; die legt Ihre IT in den Ordner.
 
 ## 3. Prüfen, Vorschau, speichern
 
-- **Prüfen** meldet jeden Fehler auf Deutsch, mit der Stelle; **Zur Stelle** öffnet den Knoten und setzt den Cursor
-  in das Feld, das Feld selbst ist rot markiert. Hier ein Tippfehler in einer Formel:
+- **Prüfen** meldet jeden Fehler in klaren Worten: mit dem Titel des Schritts und dem Namen des Felds, so wie sie im
+  Formular stehen. **Zur Stelle** öffnet den Schritt und setzt den Cursor in das Feld, das Feld selbst ist rot
+  markiert. Hier ein Tippfehler in einer Formel („R3“ statt „R2“); die Meldung lautet: „Aufgabe „Teilspannung“, Lösung
+  (Formel): „R3“ kennt das Spiel nicht. Erlaubt sind: U, R1, R2.“
 
-  ![Editor nach „Prüfen“: oben „1 Fehler: knoten.teilspannung.loesung „R3“ ist kein Parameter des Szenarios“ mit „Zur Stelle“; links ist die Aufgabe Teilspannung mit „1 Fehler“ markiert](../nachweis/bilder/lehrende-05-editor-fehler.png)
+  ![Editor nach „Prüfen“: oben „1 Fehler: Aufgabe „Teilspannung“, Lösung (Formel): „R3“ kennt das Spiel nicht. Erlaubt sind: U, R1, R2.“ mit „Zur Stelle“; links ist die Aufgabe Teilspannung mit „1 Fehler“ markiert](../nachweis/bilder/lehrende-05-editor-fehler.png)
 
 - **Vorschau im neuen Tab** spielt den Entwurf so, wie Studierende ihn sehen, ohne ihn zu speichern. Neu laden
   beginnt von vorn.
@@ -57,8 +72,9 @@ ersten Knoten den **Text der Szene**.
   gerade spielt, spielt in seiner Version zu Ende, neue Versuche beginnen mit der neuen. Hat inzwischen jemand anderes
   dasselbe Szenario gespeichert, überschreibt der Editor nichts und sagt es Ihnen.
 
-Oben rechts steht immer, ob es **ungespeicherte Änderungen** gibt; verlassen Sie den Editor mit ungespeicherten
-Änderungen, fragt er nach.
+Oben rechts steht immer der Stand: **Keine Änderungen**, **Ungespeicherte Änderungen**, **Noch nicht gespeichert** (neues
+Szenario) oder nach dem Speichern **Version … gespeichert**. Verlassen Sie den Editor mit ungespeicherten Änderungen,
+fragt er nach.
 
 ## 4. Kurs anlegen, freigeben, spielen und auswerten
 
@@ -100,9 +116,10 @@ beendet sie für alle.
 ## Fortgeschritten: das Szenario als Datei
 
 Hinter dem Editor steht eine JSON-Datei `szenario.json`; das Format beschreibt [Szenarien schreiben](INHALTE.md).
-Im Editor zeigt „Allgemein“ → „Fortgeschritten: JSON ansehen und bearbeiten“ die Datei; **JSON herunterladen**
-speichert den Entwurf. Unter **Szenarien** → „Szenario-Datei prüfen oder hochladen“ laden Sie eine Datei wieder hoch
-(die Versionsnummer muss dann höher sein als die geladene). Ihre IT kann eine Datei auch ohne Oberfläche prüfen:
+Im Editor zeigt „Allgemein“ → „Für Fortgeschrittene“ die interne Kennung des Szenarios, den ersten Schritt und die
+Datei; **JSON übernehmen** ersetzt den Entwurf, **JSON herunterladen** speichert ihn. Unter **Szenarien** → „Für
+Fortgeschrittene: Szenario-Datei prüfen oder hochladen“ laden Sie eine Datei wieder hoch (die Versionsnummer muss dann
+höher sein als die geladene); dort nennt die Prüfung die Fundstelle in der Datei (z. B. `knoten.teilspannung.loesung`). Ihre IT kann eine Datei auch ohne Oberfläche prüfen:
 `node tools/pruefe.js pfad/zur/szenario.json`.
 
 ## Gut zu wissen
@@ -112,6 +129,6 @@ speichert den Entwurf. Unter **Szenarien** → „Szenario-Datei prüfen oder ho
   **JSON herunterladen** herunter.
 - Was die Prüfung als Fehler oder Hinweis meldet, steht in [Szenarien schreiben](INHALTE.md#was-die-prüfung-meldet).
 
-Die Bilder des Editors, der Fehlermeldung und der Live-Runde sind am 12.11.2026 mit dem Browsertest dieses
-Repositorys (Chromium, headless) entstanden; die Bilder zu Kursen und der Sicht der Studierenden am 09.11.2026 mit
-Playwright (Chromium, Sprache Deutsch).
+Die Bilder der Vorlagen, des Editors, der Fehlermeldung und der Live-Runde sind am 12.11.2026 mit dem Browsertest
+dieses Repositorys entstanden (Chromium, headless, Version 0.2.1); die Bilder zu Kursen und der Sicht der Studierenden
+am 09.11.2026 mit Playwright (Chromium, Sprache Deutsch).

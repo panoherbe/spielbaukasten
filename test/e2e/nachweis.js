@@ -1,8 +1,8 @@
-// Nachweis-Messung: Lasttest (allein, im Team, in der Kursrunde), dann Ende-zu-Ende im echten Browser (Chrome headless
+// Nachweis-Messung: Lasttest (allein, im Team, in der Live-Runde), dann Ende-zu-Ende im echten Browser (Chrome headless
 // über CDP), auf Desktop- und Telefonbreite, mit Barrierefreiheitsprüfung (axe-core) und Bildschirmfotos: Spiel,
-// Editor, Teamspiel, Kursrunde, Administration, Ton; zuletzt die Offline-Fassung (OER).
-// Schreibt nachweis/messwerte.json, nachweis/bilder/*.png und drei Bilder für die README (medien/). Aufruf über
-// compose.nachweis.yaml.
+// Editor, neues Szenario aus Vorlage, Teamspiel, Live-Runde, Administration, Ton; zuletzt die Offline-Fassung (OER).
+// Schreibt nachweis/messwerte.json, nachweis/bilder/*.png und vier Bilder für die README (medien/). Aufruf über
+// compose.nachweis.yaml. Jede Person im Browser wird von diesem Skript gesteuert, ist also simuliert.
 
 import { mkdirSync, writeFileSync, readFileSync } from 'node:fs';
 import { Cdp } from './cdp.js';
@@ -15,7 +15,15 @@ const AUSGABE = process.env.AUSGABE ?? 'nachweis';
 const MEDIEN = process.env.MEDIEN ?? 'medien';
 const EXPORT = process.env.EXPORT_DIR ?? '/export';
 const AXE_URL = 'https://cdn.jsdelivr.net/npm/axe-core@4.10.2/axe.min.js';
-const messwerte = { zeitpunkt: new Date().toISOString(), app: APP, umgebung: {}, last: [], browser: {}, barrierefreiheit: {}, offline: {}, editor: {}, team: {}, kursrunde: {}, admin: {}, ton: {} };
+const messwerte = { zeitpunkt: new Date().toISOString(), app: APP, umgebung: {}, tests: null, last: [], browser: {}, barrierefreiheit: {}, offline: {}, editor: {}, vorlage: {}, team: {}, kursrunde: {}, admin: {}, ton: {} };
+// Ergebnis der automatischen Tests aus demselben Lauf (TESTS_DATEI: Ausgabe von `node --test --test-reporter=tap`)
+if (process.env.TESTS_DATEI) {
+  try {
+    const tap = readFileSync(process.env.TESTS_DATEI, 'utf8');
+    const zahl = (n) => Number(new RegExp(`^# ${n} (\\d+)`, 'm').exec(tap)?.[1] ?? NaN);
+    messwerte.tests = { bestanden: zahl('pass'), gesamt: zahl('tests'), fehlgeschlagen: zahl('fail'), dauerMs: Math.round(zahl('duration_ms')) };
+  } catch (e) { messwerte.tests = { fehler: e.message }; }
+}
 mkdirSync(`${AUSGABE}/bilder`, { recursive: true });
 mkdirSync(MEDIEN, { recursive: true });
 
@@ -82,6 +90,20 @@ function apiSitzung() {
     return text ? JSON.parse(text) : null;
   };
 }
+
+/** Eine Taste wie auf der Tastatur (Eingabe-, Leer-, Pfeiltaste) an das Element mit dem Fokus. */
+async function taste(seite, name) {
+  const t = { Enter: { key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, text: '\r' }, Leer: { key: ' ', code: 'Space', windowsVirtualKeyCode: 32, text: ' ' },
+    Rechts: { key: 'ArrowRight', code: 'ArrowRight', windowsVirtualKeyCode: 39 }, Tab: { key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9 } }[name];
+  await seite.sende('Input.dispatchKeyEvent', { type: 'keyDown', ...t });
+  await seite.sende('Input.dispatchKeyEvent', { type: 'keyUp', ...t, text: undefined });
+  await new Promise((r) => setTimeout(r, 150));
+}
+
+/** Felder im Editor setzen wie beim Tippen (input und change). */
+const setzeFeld = (seite, pfad, wert) => seite.werte(`(() => { const f = document.querySelector('[data-pfad="${pfad}"]'); f.value = ${JSON.stringify(wert)}; f.dispatchEvent(new Event('input', { bubbles: true })); f.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
+const werkzeug = (seite, text) => seite.werte(`[...document.querySelectorAll('.editor-werkzeuge button')].find((b) => b.textContent.includes(${JSON.stringify(text)})).click(); true`);
+const statusText = (seite) => seite.werte(`document.querySelector('.editor-status').textContent`);
 
 const knopfMitText = (text) => `[...document.querySelectorAll('main button')].find((b) => b.textContent.includes(${JSON.stringify(text)}))`;
 
@@ -238,7 +260,7 @@ async function lehrendeSitzung() {
   await geraet(seite, 'desktop');
   messwerte.browser.auswertungKennzahlen = await seite.werte(`[...document.querySelectorAll('.kennzahl')].map((k) => k.innerText.replace('\\n', ' '))`);
   await seite.werte(`location.hash = '#szenarien'; true`);
-  await seite.warte(`document.querySelector('table code')`);
+  await seite.warte(`document.querySelector('table a[href^="#editor/"]')`);
   await foto(seite, 'lehrende-02-szenarien');
   await seite.werte(`location.hash = '#kurse'; true`);
   await seite.warte(`document.querySelector('.kachel .code')`);
@@ -256,18 +278,39 @@ async function editorSitzung() {
   await seite.warte(`document.querySelector('a[href="#editor/spannungsteiler"]')`);
   await seite.werte(`document.querySelector('a[href="#editor/spannungsteiler"]').click(); true`);
   await seite.warte(`document.querySelector('.editor-ablauf [data-wahl="teilspannung"]') && document.querySelector('[data-pfad="titel"]')`);
+  messwerte.editor.statusBeimOeffnen = await statusText(seite);
   await pruefeBarrierefreiheit(seite, 'editor-allgemein');
   await seite.werte(`document.querySelector('[data-wahl="teilspannung"]').click(); true`);
   await seite.warte(`document.querySelector('[data-pfad="knoten.teilspannung.loesung"]')`);
   await seite.werte(`window.scrollTo(0, 0); document.activeElement?.blur(); true`);
   await foto(seite, 'lehrende-04-editor');
-  await scharf(seite, 'editor.png', 1000);
   await pruefeBarrierefreiheit(seite, 'editor-aufgabe');
-  const setze = (pfad, wert) => seite.werte(`(() => { const f = document.querySelector('[data-pfad="${pfad}"]'); f.value = ${JSON.stringify(wert)}; f.dispatchEvent(new Event('input', { bubbles: true })); f.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
-  const werkzeug = (text) => seite.werte(`[...document.querySelectorAll('.editor-werkzeuge button')].find((b) => b.textContent.includes(${JSON.stringify(text)})).click(); true`);
+  // Interne Kennungen sind verborgen: im sichtbaren Text des Editors (Ablauf, Formular, Auswahllisten) steht keine
+  messwerte.editor.interneKennungenSichtbar = await seite.werte(`(() => {
+    // ohne die Bildauswahl: Dort stehen Dateinamen von Bildern, keine Kennungen von Schritten
+    const bilder = [...document.querySelectorAll('.editor .feldgruppe.bild')];
+    bilder.forEach((b) => { b.style.display = 'none'; });
+    const text = document.querySelector('.editor').innerText + ' ' + [...document.querySelectorAll('.editor select option')].filter((o) => !o.closest('.feldgruppe.bild')).map((o) => o.textContent).join(' ');
+    bilder.forEach((b) => { b.style.display = ''; });
+    return ['aufbau', 'teilspannung', 'last', 'ende'].map((id) => [id, new RegExp('(^|[^\\\\wäöüß-])' + id + '($|[^\\\\wäöüß-])').exec(text)]).filter(([, m]) => m)
+      .map(([id, m]) => id + ' in „' + text.slice(Math.max(0, m.index - 30), m.index + 30).replace(/\\s+/g, ' ') + '“');
+  })()`);
+  messwerte.editor.formelHilfe = await seite.werte(`document.getElementById(document.querySelector('[data-pfad="knoten.teilspannung.loesung"]').getAttribute('aria-describedby').split(' ')[0]).textContent`);
+  // „Für Fortgeschrittene“: geschlossen; mit der Tastatur öffnen (Eingabetaste) und schließen (Leertaste)
+  messwerte.editor.fortgeschrittenBeimOeffnen = await seite.werte(`document.querySelector('.fortgeschritten.schritt').open ? 'offen' : 'geschlossen'`);
+  await seite.werte(`document.querySelector('.fortgeschritten.schritt summary').focus(); true`);
+  await taste(seite, 'Enter');
+  const offen = await seite.werte(`document.querySelector('.fortgeschritten.schritt').open`);
+  await pruefeBarrierefreiheit(seite, 'editor-fortgeschritten');
+  messwerte.editor.fortgeschrittenInhalt = await seite.werte(`document.querySelector('.fortgeschritten.schritt .fortgeschritten-inhalt').innerText.replace(/\\s+/g, ' ').trim()`);
+  await taste(seite, 'Leer');
+  const zu = await seite.werte(`!document.querySelector('.fortgeschritten.schritt').open`);
+  messwerte.editor.fortgeschrittenTastatur = `Eingabetaste: ${offen ? 'geöffnet' : 'nicht geöffnet'}; Leertaste: ${zu ? 'geschlossen' : 'nicht geschlossen'}`;
+  const setze = (pfad, wert) => setzeFeld(seite, pfad, wert);
+  const werkzeug1 = (text) => werkzeug(seite, text);
   // Tippfehler in der Formel: „Prüfen“ meldet ihn mit Fundstelle, „Zur Stelle“ führt zum Feld
   await setze('knoten.teilspannung.loesung', 'U * R2 / (R1 + R3)');
-  await werkzeug('Prüfen');
+  await werkzeug1('Prüfen');
   await seite.warte(`document.querySelector('.pruefergebnis.mit-fehlern')`);
   messwerte.editor.fehlermeldung = await seite.werte(`document.querySelector('.pruefergebnis li').innerText.replace(/\\s*Zur Stelle.*$/s, '')`);
   messwerte.editor.fehlerAmFeld = await seite.werte(`document.querySelector('[data-pfad="knoten.teilspannung.loesung"]').getAttribute('aria-invalid')`);
@@ -280,8 +323,9 @@ async function editorSitzung() {
   await seite.werte(`document.querySelector('[data-wahl="allgemein"]').click(); true`);
   await seite.warte(`document.querySelector('[data-pfad="titel"]')`);
   await setze('titel', 'Übung: Spannungsteiler im Praktikum');
-  await werkzeug('speichern');
+  await werkzeug1('speichern');
   await seite.warte(`document.querySelector('.pruefergebnis.ohne-fehler h2')?.textContent.includes('gespeichert')`);
+  messwerte.editor.statusNachSpeichern = await statusText(seite);
   messwerte.editor.gespeichert = await seite.werte(`document.querySelector('.pruefergebnis h2').textContent`);
   messwerte.editor.versionen = await seite.werte(`fetch('/api/lehrende/szenarien/spannungsteiler').then((r) => r.json()).then((j) => j.versionen.map((v) => v.version + ' ' + v.quelle))`);
   await geraet(seite, 'desktop', 'dunkel');
@@ -292,7 +336,7 @@ async function editorSitzung() {
   await geraet(seite, 'desktop');
   // Vorschau: das neue Fenster abfangen und die Adresse in einem Tab desselben Browserkontexts öffnen
   await seite.werte(`window.open = () => ({ location: { set href(u) { window.__vorschau = u; } }, close() {} }); true`);
-  await werkzeug('Vorschau');
+  await werkzeug1('Vorschau');
   await seite.warte(`window.__vorschau`);
   const vorschau = await Cdp.neueSeite(undefined, kontext);
   await geraet(vorschau, 'desktop');
@@ -302,6 +346,106 @@ async function editorSitzung() {
   messwerte.editor.vorschauErgebnis = (await spieleImBrowser(vorschau, 'vorschau', { fotos: false })).ergebnis;
   await pruefeBarrierefreiheit(vorschau, 'editor-vorschau-ende');
   vorschau.schliesse();
+  seite.schliesse();
+  seite.browser.schliesse();
+}
+
+/** Ein neues Szenario aus Vorlage öffnen (Seite mit drei Vorlagen); liefert die Seite im Editor. */
+async function ausVorlageOeffnen(seite, art, { titel = null, urheber = 'Lehrstuhl Baustatik', mitTastatur = false } = {}) {
+  await seite.werte(`window.confirm = () => true; location.hash = '#vorlage'; true`); // ein ungespeicherter Entwurf darf verworfen werden
+  await seite.warte(`document.querySelector('#vorlage-urheber') && document.querySelector('#vorlage-entscheidung')`);
+  if (mitTastatur) {
+    // wie mit der Tastatur: erste Vorlage fokussieren, Pfeiltaste nach rechts wählt die nächste
+    await seite.werte(`document.querySelector('#vorlage-entscheidung').focus(); true`);
+    await taste(seite, 'Rechts');
+    messwerte.vorlage.pfeiltasteWaehlt = await seite.werte(`document.querySelector('input[name="vorlage"]:checked').value`);
+  } else {
+    await seite.werte(`(() => { const r = document.querySelector('#vorlage-${art}'); r.checked = true; r.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
+  }
+  if (titel) await seite.werte(`(() => { const f = document.querySelector('#vorlage-titel'); f.value = ${JSON.stringify(titel)}; f.dispatchEvent(new Event('input')); return true; })()`);
+  const gewaehlterTitel = await seite.werte(`document.querySelector('#vorlage-titel').value`);
+  await seite.werte(`(() => { const f = document.querySelector('#vorlage-urheber'); f.value = ${JSON.stringify(urheber)}; f.form.requestSubmit(); return true; })()`);
+  await seite.warte(`location.hash === '#editor/neu' && document.querySelector('.editor-ablauf .ablauf-eintrag[aria-current="true"]') && document.querySelector('.editor-karte h2')`);
+  return gewaehlterTitel;
+}
+
+/** Neues Szenario aus Vorlage: Seite mit drei Vorlagen, jede sofort fehlerfrei, die Rechenübung ändern, Vorschau, speichern. */
+async function vorlageSitzung() {
+  const kontext = await Cdp.neuerKontext();
+  const seite = await Cdp.neueSeite(undefined, kontext);
+  await geraet(seite, 'desktop');
+  await alsLehrende(seite, '#szenarien');
+  await seite.warte(`document.querySelector('a[href="#vorlage"]')`);
+  messwerte.vorlage.knopf = await seite.werte(`document.querySelector('a[href="#vorlage"]').textContent`);
+  await seite.werte(`document.querySelector('a[href="#vorlage"]').click(); true`);
+  await seite.warte(`document.querySelector('#vorlage-titel') && document.querySelectorAll('.vorlage-karte').length`);
+  messwerte.vorlage.vorlagen = await seite.werte(`[...document.querySelectorAll('.vorlage-karte')].map((k) => k.querySelector('.vorlage-name').textContent + ': ' + k.querySelector('.vorlage-ablauf').innerText.replace(/\\s+/g, ' ').replace('Ablauf: ', ''))`);
+  await pruefeBarrierefreiheit(seite, 'vorlage');
+  await seite.werte(`window.scrollTo(0, 0); document.activeElement?.blur(); true`);
+  await foto(seite, 'lehrende-07-vorlage');
+  const hoehe = await seite.werte(`Math.ceil(document.querySelector('.vorlage-form').getBoundingClientRect().bottom + window.scrollY + 32)`);
+  await scharf(seite, 'vorlage.png', Math.min(1300, Math.max(760, hoehe)));
+  await geraet(seite, 'desktop', 'dunkel');
+  await pruefeBarrierefreiheit(seite, 'vorlage-dunkel');
+  await geraet(seite, 'telefon');
+  await pruefeBarrierefreiheit(seite, 'vorlage-telefon');
+  await foto(seite, 'telefon-13-vorlage');
+  await geraet(seite, 'desktop');
+
+  // Jede Vorlage besteht „Prüfen“ sofort (im Browser, ohne Änderung)
+  messwerte.vorlage.pruefenSofort = {};
+  for (const art of ['entscheidung', 'quiz', 'rechnen']) {
+    const titel = await ausVorlageOeffnen(seite, art, { mitTastatur: art === 'rechnen' });
+    if (art === 'rechnen') {
+      messwerte.vorlage.titelVorgeschlagen = titel;
+      messwerte.vorlage.statusNeu = await statusText(seite);
+      messwerte.vorlage.geoeffneterSchritt = await seite.werte(`document.querySelector('.editor-karte h2').innerText.replace(/\\s+/g, ' ').trim()`);
+      messwerte.vorlage.formelHilfe = await seite.werte(`(() => { const f = document.querySelector('[data-pfad$=".loesung"]'); return document.getElementById(f.getAttribute('aria-describedby').split(' ')[0]).textContent; })()`);
+      await pruefeBarrierefreiheit(seite, 'vorlage-editor');
+    }
+    await werkzeug(seite, 'Prüfen');
+    await seite.warte(`document.querySelector('.pruefergebnis')`);
+    messwerte.vorlage.pruefenSofort[art] = await seite.werte(`document.querySelector('.pruefergebnis').innerText.replace(/\\s+/g, ' ').replace('Ergebnis der Prüfung ', '').trim()`);
+  }
+  // Rechenübung: einen Text ändern (die Frage), Vorschau durchspielen, speichern
+  const frage = await seite.werte(`document.querySelector('[data-pfad$=".frage"]').value`);
+  await setzeFeld(seite, (await seite.werte(`document.querySelector('[data-pfad$=".frage"]').dataset.pfad`)), frage.replace('Ein Zugstab aus Stahl', 'Ein Zugstab aus Baustahl S235'));
+  messwerte.vorlage.statusNachAenderung = await statusText(seite);
+  await seite.werte(`window.open = () => ({ location: { set href(u) { window.__vorschau = u; } }, close() {} }); true`);
+  await werkzeug(seite, 'Vorschau');
+  await seite.warte(`window.__vorschau`);
+  const vorschau = await Cdp.neueSeite(undefined, kontext);
+  await geraet(vorschau, 'desktop');
+  await vorschau.gehe(APP + await seite.werte(`window.__vorschau`));
+  await vorschau.warte(`document.querySelector('main article[data-knoten]')`);
+  messwerte.vorlage.vorschauTitel = await vorschau.werte('document.title');
+  messwerte.vorlage.vorschauFrage = await vorschau.werte(`document.querySelector('main article .frage').innerText.slice(0, 60)`);
+  await pruefeBarrierefreiheit(vorschau, 'vorlage-vorschau-aufgabe');
+  messwerte.vorlage.vorschauErgebnis = (await spieleImBrowser(vorschau, 'vorlage-vorschau', { fotos: false })).ergebnis;
+  vorschau.schliesse();
+  await werkzeug(seite, 'speichern');
+  await seite.warte(`document.querySelector('.pruefergebnis.ohne-fehler h2')?.textContent.includes('gespeichert')`);
+  messwerte.vorlage.gespeichert = await seite.werte(`document.querySelector('.pruefergebnis h2').textContent`);
+  messwerte.vorlage.adresse = await seite.werte(`location.hash`);
+  const id = decodeURIComponent(messwerte.vorlage.adresse.split('/')[1]);
+  messwerte.vorlage.interneKennung = id;
+  messwerte.vorlage.schritte = await seite.werte(`fetch('/api/lehrende/szenarien/${id}').then((r) => r.json()).then((j) => Object.keys(j.szenario.knoten))`);
+
+  // Wieder öffnen, die Aufgabe wählen: neutraler Status, „Für Fortgeschrittene“ geschlossen (Bild für die README)
+  await seite.werte(`location.hash = '#szenarien'; true`);
+  await seite.warte(`document.querySelector('a[href="#editor/${id}"]')`);
+  await seite.werte(`document.querySelector('a[href="#editor/${id}"]').click(); true`);
+  await seite.warte(`document.querySelector('.editor-ablauf [data-wahl]:not([data-wahl="allgemein"]):not([data-wahl="kapitel"])') && document.querySelector('[data-pfad="titel"]')`);
+  messwerte.vorlage.statusWiederGeoeffnet = await statusText(seite);
+  await seite.werte(`document.querySelector('.editor-ablauf [data-wahl]:not([data-wahl="allgemein"]):not([data-wahl="kapitel"])').click(); true`);
+  await seite.warte(`document.querySelector('[data-pfad$=".loesung"]')`);
+  await seite.werte(`window.scrollTo(0, 0); document.activeElement?.blur(); true`);
+  await foto(seite, 'lehrende-08-editor-rechenuebung');
+  await scharf(seite, 'editor.png', 1000);
+  await pruefeBarrierefreiheit(seite, 'editor-rechenuebung');
+  await geraet(seite, 'desktop', 'dunkel');
+  await pruefeBarrierefreiheit(seite, 'editor-rechenuebung-dunkel');
+  await geraet(seite, 'desktop');
   seite.schliesse();
   seite.browser.schliesse();
 }
@@ -554,6 +698,7 @@ await studierendeSitzung('desktop', 'dunkel');
 await riskanteEntscheidung();
 await lehrendeSitzung();
 await editorSitzung();
+await vorlageSitzung();
 await teamSitzung();
 await kursrundeSitzung();
 await adminSitzung();
@@ -563,5 +708,5 @@ writeFileSync(`${AUSGABE}/messwerte.json`, JSON.stringify(messwerte, null, 2) + 
 console.log(JSON.stringify(messwerte.browser, null, 2));
 console.log('Barrierefreiheit:', Object.entries(messwerte.barrierefreiheit).map(([k, v]) => `${k}: ${v.verstoesse.length} Verstöße`).join('; '));
 console.log('Offline:', JSON.stringify(messwerte.offline));
-console.log('Editor, Team, Kursrunde, Administration, Ton:', JSON.stringify({ editor: messwerte.editor, team: messwerte.team, kursrunde: messwerte.kursrunde, admin: messwerte.admin, ton: messwerte.ton }));
+console.log('Editor, Vorlage, Team, Live-Runde, Administration, Ton:', JSON.stringify({ editor: messwerte.editor, vorlage: messwerte.vorlage, team: messwerte.team, kursrunde: messwerte.kursrunde, admin: messwerte.admin, ton: messwerte.ton }));
 process.exit(0);

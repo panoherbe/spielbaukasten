@@ -613,6 +613,7 @@ th { background: var(--flaeche-2); font-size: 0.85rem; }
 .editor-status .symbol { width: 18px; height: 18px; }
 .editor-status.offen { color: var(--neutral); }
 .editor-status.gespeichert { color: var(--gut); }
+.editor-status.neutral { color: var(--gedaempft); font-weight: 600; }
 .editor { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 18px; align-items: start; }
 .editor-ablauf { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow: auto; padding: 16px; border-radius: var(--radius); background: var(--flaeche); border: 1px solid var(--linie); box-shadow: var(--schatten); }
 .editor-ablauf h2 { font-size: 1.15rem; }
@@ -630,7 +631,6 @@ th { background: var(--flaeche-2); font-size: 0.85rem; }
 .ablauf-typ .symbol { width: 16px; height: 16px; color: var(--akzent); }
 .ablauf-start { margin-left: auto; padding: 0 8px; border-radius: 99px; background: var(--akzent); color: var(--akzent-text); letter-spacing: 0; text-transform: none; }
 .ablauf-titel { font-weight: 700; line-height: 1.3; }
-.ablauf-id { font-family: var(--mono); font-size: 0.8rem; color: var(--gedaempft); }
 .ablauf-wege { display: flex; flex-direction: column; font-size: 0.82rem; color: var(--gedaempft); }
 .ablauf-wege .fehlt { color: var(--schlecht); font-weight: 700; }
 .ablauf-fehler { display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; font-weight: 800; color: var(--schlecht); }
@@ -661,8 +661,43 @@ textarea:focus-visible { border-color: var(--akzent); }
 .knopf-klein.gefahr { color: var(--schlecht); border-color: var(--schlecht); }
 .bild-vorschau { width: 220px; aspect-ratio: 2 / 1; object-fit: contain; border-radius: 10px; background: #0b1a33; border: 1px solid var(--linie); }
 .feldgruppe.bild { align-items: end; }
-.editor-json { margin-top: 18px; }
 .editor-json textarea { min-height: 260px; }
+/* „Für Fortgeschrittene“: zu Beginn geschlossen; die Zusammenfassung ist ein Knopf (Tab, Eingabe- oder Leertaste) */
+.fortgeschritten { margin: 14px 0; border: 1px dashed var(--linie); border-radius: 14px; padding: 0 14px; background: var(--flaeche-2); }
+.fortgeschritten > summary { display: flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--gedaempft); border-radius: 10px; }
+.fortgeschritten > summary .symbol { width: 18px; height: 18px; }
+.fortgeschritten[open] { padding-bottom: 12px; }
+.fortgeschritten[open] > summary { margin-bottom: 4px; color: var(--text); }
+.fortgeschritten-inhalt > .feld, .fortgeschritten-inhalt > .feld-hilfe { margin-bottom: 10px; }
+.fortgeschritten-inhalt .feld-hilfe .symbol { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; color: var(--akzent); }
+details.karte.fortgeschritten { padding: 4px 22px; background: var(--flaeche); border-style: solid; }
+details.karte.fortgeschritten[open] { padding-bottom: 22px; }
+
+/* Szenarien und „Neues Szenario aus Vorlage“ */
+.szenarien-kopf { margin: 4px 0 18px; }
+.szenarien-kopf p { margin: 0; }
+.einleitung { max-width: 760px; color: var(--gedaempft); }
+.vorlage-form { gap: 18px; }
+.vorlagen { border: none; padding: 0; margin: 0; min-width: 0; }
+.vorlagen legend { margin-bottom: 10px; }
+.vorlagen-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.vorlage-karte { position: relative; display: grid; grid-template-columns: auto 1fr; align-items: start; align-content: start; gap: 6px 12px; padding: 18px 18px 16px; border-radius: var(--radius);
+  background: var(--flaeche); border: 2px solid var(--linie); box-shadow: var(--schatten); }
+.vorlage-karte:hover { border-color: var(--akzent); }
+.vorlage-karte:has(input:checked) { border-color: var(--akzent); background: var(--akzent-hell); box-shadow: 0 0 0 2px var(--akzent), var(--schatten); }
+.vorlage-karte:has(input:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 3px; }
+.vorlage-karte input { width: 22px; height: 22px; margin: 4px 0 0; accent-color: var(--akzent); }
+.vorlage-name { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; }
+.vorlage-name::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); } /* die ganze Karte wählt */
+.vorlage-zeichen { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--akzent-hell); color: var(--akzent); }
+.vorlage-karte:has(input:checked) .vorlage-zeichen, .vorlage-karte:has(input:checked) .chip { background: var(--flaeche); }
+.vorlage-zeichen .symbol { width: 24px; height: 24px; }
+.vorlage-text, .vorlage-ablauf { grid-column: 2; margin: 0; }
+.vorlage-text { color: var(--gedaempft); font-size: 0.95rem; }
+.vorlage-ablauf { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin-top: 6px; }
+.vorlage-pfeil { color: var(--gedaempft); font-weight: 700; }
+.vorlage-angaben { display: flex; flex-direction: column; gap: 8px; max-width: 640px; margin: 0; }
+.vorlage-angaben .knopf { align-self: flex-start; margin-top: 8px; }
 .editor-ergebnis .pruefergebnis h2 { font-size: 1.15rem; }
 .pruefergebnis p { display: flex; align-items: center; gap: 6px; }
 .pruefergebnis ul { margin: 0 0 10px; padding-left: 20px; }

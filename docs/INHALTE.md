@@ -1,7 +1,7 @@
 # Szenarien schreiben
 
-Lehrende bearbeiten Szenarien im **Szenario-Editor** im Browser (`/lehrende` → Szenarien → Bearbeiten); der Weg bis
-zum Kurs, mit Bildern: [Anleitung für Lehrende](ANLEITUNG-LEHRENDE.md). Diese Seite beschreibt die Datei dahinter, für
+Lehrende bearbeiten Szenarien im **Szenario-Editor** im Browser (`/lehrende` → Szenarien → Bearbeiten, oder ganz neu
+über „Neues Szenario aus Vorlage“); der Weg bis zum Kurs, mit Bildern: [Anleitung für Lehrende](ANLEITUNG-LEHRENDE.md). Diese Seite beschreibt die Datei dahinter, für
 den fortgeschrittenen Weg (Datei hochladen, „JSON ansehen und bearbeiten“) und für Ihre IT.
 
 Ein Szenario ist ein Ordner unter `inhalte/szenarien/<id>/` mit einer Datei `szenario.json` und optional Bildern
@@ -75,6 +75,9 @@ In Texten: `{F}` setzt einen Wert ein, `{= F / 2 : 1}` eine gerechnete Zahl mit 
 und Leerzeilen für Absätze; HTML wird nicht ausgewertet.
 
 ## Was die Prüfung meldet
+
+Die Fundstellen unten (`knoten.<id>.loesung` usw.) nennt die Prüfung für Dateien und auf der Kommandozeile. Im Editor
+erscheinen dieselben Meldungen im Klartext, mit dem Titel des Schritts und dem Namen des Felds.
 
 Fehlende Pflichtfelder, unbekannte Ziele, Indikatoren und Parameter, unlesbare Formeln, Mechaniken ohne richtige
 Antwort, nicht offene Lizenzen, Knoten ohne Weg zum Ende (Endlosschleife), kein erreichbares Ende; als Hinweis:
