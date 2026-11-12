@@ -4,14 +4,24 @@
 Lehrende bauen neue Spiele im Editor, ohne zu programmieren, und sehen, wo die Gruppe hängt. Das läuft heute –
 ansehen, selbst ausprobieren, nachprüfen.**
 
+**Beide Rundgänge im Player ansehen** und das Brückenspiel zum Anklicken, ohne Installation: **[panoherbe.com/projekte/spielbaukasten](https://www.panoherbe.com/projekte/spielbaukasten)**.
+
+### Für Lehrende: so bauen Sie ein Spiel
+
 ![Rundgang aus Sicht der Lehrenden: neues Szenario aus der Vorlage Rechenübung, eine Frage im Editor ändern, Prüfen ohne Fehler, Vorschau mit Rückmeldung zu einem typischen Fehler, das Spiel auf dem Telefon, Abstimmung im Team, Live-Runde mit der Verteilung der Stimmen, gemessene Zahlen](medien/rundgang.gif)
 
 <sub>Rundgang, 85 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 12.11.2026 an einer laufenden Installation
 (Version 0.2.1). Alle Personen im Teamspiel und in der Live-Runde sind simuliert.
 [Video herunterladen (MP4, 1,9 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
 
-**Ohne Installation ansehen:** beide Rundgänge im Player (für Lehrende und für Studierende) und das Brückenspiel
-zum Anklicken: **[panoherbe.com/projekte/spielbaukasten](https://www.panoherbe.com/projekte/spielbaukasten)**.
+### Für Studierende: so spielt es sich
+
+![Rundgang aus Sicht der Studierenden: eine Entscheidung an der Fußgängerbrücke mit sichtbaren Folgen, Beitritt mit Kurscode, Prüfschritte ordnen, Rechenaufgabe mit erkanntem typischem Fehler, Ergebnis mit Sternen und Auszeichnungen, Telefon, Diagramme für Lehrende, Prüfung einer Spieldatei, Offline-Datei](medien/rundgang-studierende.gif)
+
+<sub>Rundgang, 89 Sekunden, ohne Ton, mit Untertiteln; aufgenommen am 09.11.2026 an Version 0.1.0. Das Spiel selbst ist seitdem
+gleich geblieben; neu sind Vorlagen, Editor, Teamspiel und Live-Runde (Rundgang oben). Die Zahlen am Ende stammen aus dem
+[Messprotokoll vom 09.11.2026](https://github.com/panoherbe/spielbaukasten/blob/edbc7f3/nachweis/PROTOKOLL.md).
+[Video herunterladen (MP4, 2,6 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang-studierende.mp4)</sub>
 
 ## Was Sie brauchen → läuft hier schon
 
