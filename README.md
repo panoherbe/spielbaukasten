@@ -10,6 +10,9 @@ ansehen, selbst ausprobieren, nachprüfen.**
 (Version 0.2.1). Alle Personen im Teamspiel und in der Live-Runde sind simuliert.
 [Video herunterladen (MP4, 1,9 MB)](https://github.com/panoherbe/spielbaukasten/raw/main/medien/rundgang.mp4) · Text des Rundgangs weiter unten.</sub>
 
+**Ohne Installation ansehen:** beide Rundgänge im Player (für Lehrende und für Studierende) und das Brückenspiel
+zum Anklicken: **[panoherbe.com/projekte/spielbaukasten](https://www.panoherbe.com/projekte/spielbaukasten)**.
+
 ## Was Sie brauchen → läuft hier schon
 
 | Was Sie brauchen | läuft hier schon |
